@@ -1,0 +1,11 @@
+.activeLink a{
+     font-size: 18px;
+     text-decoration: none;
+     margin: 0px 20px;
+}
+.noActive{
+     color: #282626;
+}
+.active{
+     color: rgb(255, 38, 0);
+}

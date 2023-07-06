@@ -1,0 +1,31 @@
+.footer{
+     background: #1B2B4D;
+ }
+.sm h2{
+ width: 220px;
+ border-bottom: 4px solid white;
+}
+.icon:hover{
+ color: rgb(237, 64, 64) !important;
+}
+.followUs a{
+ color: aliceblue;
+}
+ .sa {
+     width: 50px;
+     text-align: center;
+     font-size: 30px;
+ }
+ .sa a:hover{
+     color: #e73e3e !important;
+
+ }
+ .linkStyle li{
+    margin-bottom: 10px;
+ }
+ .linkStyle a{
+    color: aliceblue;
+ }
+ .linkStyle a:hover{
+    color: #e73e3e !important;
+}
