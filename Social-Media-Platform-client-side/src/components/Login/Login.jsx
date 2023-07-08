@@ -7,17 +7,27 @@ import { AuthContext } from '../../AuthProvider/AuthProvider';
 import Swal from 'sweetalert2';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
 
 const Login = () => {
      useTitle('Login')
+     const [error, setError] = useState('')
+     const [user, setUser] = useState('')
+     const [passwordShown, setPasswordShown] = useState(false);
+     const [passwordIcon, setPasswordIcon] = useState(false)
+
      const location = useLocation()
      const navigate = useNavigate()
 
+     const { signIn, resetPassword, googlSignIn } = useContext(AuthContext)
      const from = location.state?.from?.pathname || '/';
      const emailRef = useRef();
 
-
+     const togglePassword = () => {
+          setPasswordShown(!passwordShown);
+          setPasswordIcon(!passwordIcon)
+     };
      //  captcha part start 
      const captchaRef = useRef(null)
      const [disable, setDisable] = useState(true)
@@ -37,16 +47,13 @@ const Login = () => {
 
      }
      //  captcha part ends
-     
-
-     const { signIn } = useContext(AuthContext)
 
      const handelForm = (event) => {
           event.preventDefault();
+          setError('')
           const form = event.target
           const email = form.email.value;
           const password = form.password.value;
-          console.log(email, password);
 
           // Signed in part start
           signIn(email, password)
@@ -66,9 +73,51 @@ const Login = () => {
                })
                .catch((error) => {
                     const errorMessage = error.message;
+                    setError(errorMessage)
+                    console.log(error);
                });
           // Signed in part end
      }
+     // handelGoogleRegister part start
+     const handelGoogleRegister = () => {
+          googlSignIn()
+               .then((result) => {
+                    const user = result.user;
+
+                    // user information post data page start 
+                    const saveUser = { name: user.displayName, email: user.email }
+                    // fetch('https://assignment12-server-site.vercel.app/users',{
+                    //      method: 'POST',
+                    //      headers: {
+                    //           'content-type':'application/json'
+                    //      },
+                    //      body: JSON.stringify(saveUser)
+                    // })
+                    // .then(res => res.json())
+                    // .then(data => {
+                    //      if (data.insertedId) {
+
+                    //           // Verification(currentUser)
+                    //      }
+                    if (user) {
+                         Swal.fire({
+                              title: 'Success!',
+                              text: 'Login Success !!',
+                              icon: 'success',
+                              confirmButtonText: 'Ok'
+                         })
+                    }
+                    setUser(user)
+                    navigate(from, { replace: true })
+                    // })
+                    // user information data post data page end
+
+               }).catch((error) => {
+                    const errorMessage = error.message;
+                    setError(errorMessage)
+               });
+     }
+     // handelGoogleRegister part end
      return (
           <div>
                <div className="hero min-h-screen bg-base-200">
@@ -86,10 +135,23 @@ const Login = () => {
                                         <input type="email" name='email' placeholder="email" className="input input-bordered" />
                                    </div>
                                    <div className="form-control">
-                                        <label className="label">
-                                             <span className="label-text">Password</span>
-                                        </label>
-                                        <input type="password" name='password' placeholder="password" className="input input-bordered" />
+                                        <div className="form-control">
+                                             <label className="label">
+                                                  <span className="label-text">Password</span>
+                                             </label>
+                                             <div className=' relative '>
+                                                  <input type={passwordShown ? "text" : "password"}
+                                                       placeholder="password" {...("password", {
+                                                            required: true,
+                                                       })} name='password' className="input input-bordered w-full" />
+                                                  <div className=' absolute end-4 top-4'>
+                                                       <p className=' text-lg' onClick={togglePassword} >{
+                                                            passwordIcon ? <AiFillEye /> : <AiFillEyeInvisible />
+                                                       }</p>
+                                                  </div>
+                                             </div>
+                                             <p className=' text-red-400'>{error}</p>
+                                        </div>
                                         <label className="label">
                                              <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
                                         </label>
@@ -103,6 +165,9 @@ const Login = () => {
                                    </div>
                                    <div className="form-control mt-6">
                                         <input disabled={disable} type='submit' className="btn btn-primary" value='Login' />
+                                   </div>
+                                   <div className="form-control mt-6">
+                                        <button onClick={handelGoogleRegister} className="btn btn-wide mx-auto">Googl Sign In</button>
                                    </div>
                               </form>
                               <p> <small>New Here?</small> <Link to='/signUp'>Create an account</Link></p>

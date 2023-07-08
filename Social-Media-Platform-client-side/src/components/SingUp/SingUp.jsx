@@ -9,7 +9,6 @@ import { updateProfile } from 'firebase/auth';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
 
-
 const SingUp = () => {
      useTitle('Register')
      const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
@@ -41,8 +40,8 @@ const SingUp = () => {
 
      // main form part start 
      const onSubmit = (data) => {
-          setError('')
-          setSuccess('')
+          setError(' ')
+          setSuccess(' ')
 
           if (data.password !== data.conformPassword) {
                setError("Don't mach this password")
@@ -101,19 +100,6 @@ const SingUp = () => {
      }
      // main form part end
 
-     // valid email function start 
-     const handelEmail = (event) => {
-          const emailInput = event.target.value
-          if (! /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(emailInput)) {
-               setEmailError('Please provide a valid email')
-          }
-          else {
-               setEmailError('')
-          }
-          setEmail(emailInput)
-     }
-     // valid email function end
-
      const upDataUser = (user, name, photoUrl) => {
           updateProfile(user, {
                displayName: name,
@@ -135,6 +121,7 @@ const SingUp = () => {
                               <h1 className="text-5xl font-bold">Resister now!</h1>
                               <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
                          </div>
+
                          <div className="card flex-shrink-0 w-full lg:w-6/12 shadow-2xl bg-base-100">
                               <form onSubmit={handleSubmit(onSubmit)} className="card-body">
 
@@ -142,7 +129,8 @@ const SingUp = () => {
                                         <label className="label">
                                              <span className="label-text">Name</span>
                                         </label>
-                                        <input type="text" placeholder="Name" {...register("name", { required: true })} name='name' className="input input-bordered" />
+                                        <input type="text" 
+                                        placeholder="Name" {...register("name", { required: true })} name='name' className="input input-bordered" />
                                         {errors.name && <span className=' text-red-500 mt-1'>Name is required</span>}
                                    </div>
 
@@ -150,7 +138,8 @@ const SingUp = () => {
                                         <label className="label">
                                              <span className="label-text">Photo URL</span>
                                         </label>
-                                        <input type="text" placeholder="Photo URL" {...register("photo")} name='photo' className="input input-bordered" />
+                                        <input type="text" 
+                                        placeholder="Photo URL" {...register("photo")} name='photo' className="input input-bordered" />
                                    </div>
 
                                    <div className="form-control">
@@ -159,7 +148,7 @@ const SingUp = () => {
                                         </label>
                                         <input type="email" placeholder="email" name='email'
                                              defaultValue={email}
-                                             onChange={handelEmail} {...register("email", { required: true })} className="input input-bordered" />
+                                             {...register("email", { required: true })} className="input input-bordered" />
                                         {errors.email && <span className=' text-red-500 mt-1'>Email is required</span>}
 
                                    </div>
@@ -169,7 +158,8 @@ const SingUp = () => {
                                              <span className="label-text">Password</span>
                                         </label>
                                         <div className=' relative '>
-                                             <input type={passwordShown ? "text" : "password"} placeholder="password" {...register("password", {
+                                             <input type={passwordShown ? "text" : "password"}
+                                             placeholder="password" {...register("password", {
                                                   required: true,
                                                   minLength: 6,
                                                   maxLength: 10,
@@ -191,7 +181,8 @@ const SingUp = () => {
                                              <span className="label-text">Conform Password</span>
                                         </label>
                                         <div className=' relative '>
-                                             <input type={conformPasswordShown ? "text" : "password"} placeholder="Conform Password" {...register("conformPassword", {
+                                             <input type={conformPasswordShown ? "text" : "password"} 
+                                             placeholder="Conform Password" {...register("conformPassword", {
                                                   required: true,
                                                   minLength: 6,
                                                   maxLength: 10,
@@ -207,6 +198,7 @@ const SingUp = () => {
 
                                    <div className="form-control mt-6">
                                         <button className="btn btn-primary">Sign Up</button>
+                                        
                                    </div>
                               </form>
                               <div className=' mt-2 mb-8 text-center'>

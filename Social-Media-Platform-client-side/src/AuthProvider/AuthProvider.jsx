@@ -57,9 +57,9 @@ const AuthProvider = ({ children }) => {
           return signOut(auth)
      }
 
-     // const resetPassword = (email) => {
-     //      return sendPasswordResetEmail(auth, email)
-     // }
+     const resetPassword = (email) => {
+          return sendPasswordResetEmail(auth, email)
+     }
 
      const authInfo = {
           user,
@@ -68,7 +68,7 @@ const AuthProvider = ({ children }) => {
           createUser,
           signIn,
           googlSignIn,
-          // resetPassword,
+          resetPassword,
      }
      return (
           <div>
