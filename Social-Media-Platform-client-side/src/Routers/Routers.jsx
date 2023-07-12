@@ -6,7 +6,6 @@ import Home from "../components/Home/Home";
 import OurMenu from "../components/OurMenu/OurMenu";
 import Orders from "../components/Orders/Orders";
 import Login from "../components/Login/Login";
-import SingUp from "../components/SingUp/SingUp";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 import Secret from "../shared/Secret/Secret";
 import Dashboard from "../Laout/Dashboard";
@@ -14,6 +13,7 @@ import MyCard from "../components/Dashboard/MyCard/MyCard";
 import AllUsers from "../components/AllUsers/AllUsers";
 import AddItem from "../components/Dashboard/AddItem/AddItem";
 import AdminRoute from "../PrivateRoute/AdminRoute";
+import Register from "../components/Register/Register";
 
 export const router = createBrowserRouter([
   {
@@ -41,8 +41,8 @@ export const router = createBrowserRouter([
         element: <Login></Login>
       },
       {
-        path: 'signUp',
-        element: <SingUp></SingUp>
+        path: 'resister',
+        element: <Register></Register>
       },
       {
         path: 'secret',

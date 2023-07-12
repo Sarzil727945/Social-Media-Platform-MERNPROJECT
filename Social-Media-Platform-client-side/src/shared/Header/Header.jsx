@@ -61,9 +61,9 @@ const Header = () => {
                               user ? <div className=' flex'>
                                    <img title={user.displayName} className=' imgStyle me-3' src={user.photoURL} alt="" />
                                    <div className=' mt-2'>
-                                        <button onClick={handelLogOut} variant="info" className=' lg:me-5  btn btn-error'>Log Out</button>
+                                        <button onClick={handelLogOut} variant="info" className=' lg:me-5  btn btn-active btn-secondary text-[17px]'>Log Out</button>
                                    </div>
-                              </div> : <button className='btn btn-success lg:me-5'><ActiveLink to="/login">Login</ActiveLink></button> 
+                              </div> :  <ActiveLink to="/login"><button className='btn btn-success lg:me-5 text-[17px] text-white'>Log in</button></ActiveLink> 
                          }
                     </div>
                </div>

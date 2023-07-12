@@ -6,10 +6,10 @@ import { useContext } from 'react';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
 import Swal from 'sweetalert2';
 import { updateProfile } from 'firebase/auth';
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import { AiFillBackward, AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
 
-const SingUp = () => {
+const Register = () => {
      useTitle('Register')
      const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
 
@@ -63,7 +63,7 @@ const SingUp = () => {
                     const currentUser = userCredential.user;
                     setSuccess('Create user account successFull')
                     upDataUser(currentUser, data.name, data.photo)
-                    
+
                     // user information post data page start 
                     const saveUser = { name: data.name, email: data.email, img: data.photoUrl }
                     // fetch('https://assignment12-server-site.vercel.app/users', {
@@ -117,7 +117,7 @@ const SingUp = () => {
           <div>
                <div className="hero min-h-screen bg-base-200">
                     <div className="hero-content flex-col lg:flex-row">
-                         <div className="text-center lg:text-left w-6/12">
+                         <div className="text-center lg:text-left lg:w-6/12">
                               <h1 className="text-5xl font-bold">Resister now!</h1>
                               <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
                          </div>
@@ -129,8 +129,8 @@ const SingUp = () => {
                                         <label className="label">
                                              <span className="label-text">Name</span>
                                         </label>
-                                        <input type="text" 
-                                        placeholder="Name" {...register("name", { required: true })} name='name' className="input input-bordered" />
+                                        <input type="text"
+                                             placeholder="Name" {...register("name", { required: true })} name='name' className="input input-bordered" />
                                         {errors.name && <span className=' text-red-500 mt-1'>Name is required</span>}
                                    </div>
 
@@ -138,8 +138,8 @@ const SingUp = () => {
                                         <label className="label">
                                              <span className="label-text">Photo URL</span>
                                         </label>
-                                        <input type="text" 
-                                        placeholder="Photo URL" {...register("photo")} name='photo' className="input input-bordered" />
+                                        <input type="text"
+                                             placeholder="Photo URL" {...register("photo")} name='photo' className="input input-bordered" />
                                    </div>
 
                                    <div className="form-control">
@@ -159,11 +159,11 @@ const SingUp = () => {
                                         </label>
                                         <div className=' relative '>
                                              <input type={passwordShown ? "text" : "password"}
-                                             placeholder="password" {...register("password", {
-                                                  required: true,
-                                                  minLength: 6,
-                                                  maxLength: 10,
-                                             })} name='password' className="input input-bordered w-full" />
+                                                  placeholder="password" {...register("password", {
+                                                       required: true,
+                                                       minLength: 6,
+                                                       maxLength: 10,
+                                                  })} name='password' className="input input-bordered w-full" />
                                              <div className=' absolute end-4 top-4'>
                                                   <p className=' text-lg' onClick={togglePassword} >{
                                                        passwordIcon ? <AiFillEye /> : <AiFillEyeInvisible />
@@ -181,12 +181,12 @@ const SingUp = () => {
                                              <span className="label-text">Conform Password</span>
                                         </label>
                                         <div className=' relative '>
-                                             <input type={conformPasswordShown ? "text" : "password"} 
-                                             placeholder="Conform Password" {...register("conformPassword", {
-                                                  required: true,
-                                                  minLength: 6,
-                                                  maxLength: 10,
-                                             })} name='conformPassword' className="input input-bordered w-full" />
+                                             <input type={conformPasswordShown ? "text" : "password"}
+                                                  placeholder="Conform Password" {...register("conformPassword", {
+                                                       required: true,
+                                                       minLength: 6,
+                                                       maxLength: 10,
+                                                  })} name='conformPassword' className="input input-bordered w-full" />
                                              <div className=' absolute end-4 top-4'>
                                                   <p className=' text-lg' onClick={toggleConformPassword} >{
                                                        conformPasswordIcon ? <AiFillEye /> : <AiFillEyeInvisible />
@@ -196,15 +196,16 @@ const SingUp = () => {
                                    </div>
                                    <p className='text-red-500'>{error}</p>
 
-                                   <div className="form-control mt-6">
-                                        <button className="btn btn-primary">Sign Up</button>
-                                        
+                                   <div className="form-control mt-2">
+                                        <button className="btn btn-active btn-secondary text-xl">Sign Up</button>
+
+                                   </div>
+                                   <div className=' text-end'>
+                                        <Link to='/login' className=' mt-2 italic font-semibold text-blue-600  text-[17px] underline flex justify-end'>
+                                             <span className=' me-1 mt-1 font-semibold'><AiFillBackward /></span>
+                                             <span>Back To Login</span></Link>
                                    </div>
                               </form>
-                              <div className=' mt-2 mb-8 text-center'>
-                                   <span className='me-1'>Have an account? </span>
-                                   <Link to='/login' className=' text-decoration-none text-red-500 font-semibold text-xl'>Login</Link>
-                              </div>
                          </div>
                     </div>
                </div>
@@ -212,4 +213,4 @@ const SingUp = () => {
      );
 };
 
-export default SingUp;
+export default Register;

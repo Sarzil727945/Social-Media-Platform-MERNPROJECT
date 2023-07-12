@@ -2,51 +2,35 @@ import React, { useContext } from 'react';
 import { useState } from 'react';
 import { useRef } from 'react';
 import { useEffect } from 'react';
-import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
 import Swal from 'sweetalert2';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import { FcGoogle } from 'react-icons/fc';
+import ReCAPTCHA from "react-google-recaptcha";
 
 
 const Login = () => {
      useTitle('Login')
+     const location = useLocation()
+     const navigate = useNavigate()
+     const emailRef = useRef();
+
      const [error, setError] = useState('')
      const [user, setUser] = useState('')
      const [passwordShown, setPasswordShown] = useState(false);
-     const [passwordIcon, setPasswordIcon] = useState(false)
-
-     const location = useLocation()
-     const navigate = useNavigate()
+     const [passwordIcon, setPasswordIcon] = useState(false);
+     const [disable, setDisable] = useState(true)
 
      const { signIn, resetPassword, googlSignIn } = useContext(AuthContext)
      const from = location.state?.from?.pathname || '/';
-     const emailRef = useRef();
 
      const togglePassword = () => {
           setPasswordShown(!passwordShown);
           setPasswordIcon(!passwordIcon)
      };
-     //  captcha part start 
-     const captchaRef = useRef(null)
-     const [disable, setDisable] = useState(true)
 
-     useEffect(() => {
-          loadCaptchaEnginge(6);
-     }, [])
-
-     const handelCaptcha = (e) => {
-          const user_captcha_value = captchaRef.current.value;
-          if (validateCaptcha(user_captcha_value)) {
-               setDisable(false)
-          }
-          else {
-               setDisable(true)
-          }
-
-     }
-     //  captcha part ends
 
      const handelForm = (event) => {
           event.preventDefault();
@@ -78,8 +62,10 @@ const Login = () => {
                });
           // Signed in part end
      }
+
      // handelGoogleRegister part start
      const handelGoogleRegister = () => {
+
           googlSignIn()
                .then((result) => {
                     const user = result.user;
@@ -118,21 +104,52 @@ const Login = () => {
                });
      }
      // handelGoogleRegister part end
+
+     // Reset Password part start
+     const handelResetPassword = () => {
+          const email = emailRef.current.value;
+          if (!email) {
+               alert('Please provide your email')
+               return
+          }
+
+          resetPassword(email)
+               .then(() => {
+                    alert('Please check you email')
+               })
+               .catch((error) => {
+                    const errorMessage = error.message;
+                    setError(errorMessage)
+               });
+
+     }
+     // Reset Password part end
+
+     // google recaptcha start
+     function onChange(value) {
+          console.log("Captcha value:", value);
+          setDisable(false)
+     }
+     // google recaptcha start
+
+
      return (
           <div>
                <div className="hero min-h-screen bg-base-200">
                     <div className="hero-content flex-col lg:flex-row-reverse">
-                         <div className="text-center md:w-1/2 lg:text-left">
+                         <div className="text-center lg:w-6/12 lg:text-left lg:ps-5">
                               <h1 className="text-5xl font-bold">Login now!</h1>
                               <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
                          </div>
-                         <div className="card md:w-1/2 max-w-sm shadow-2xl bg-base-100">
+                         <div className="card lg:w-5/12 w-full shadow-2xl bg-base-100">
                               <form className="card-body" onSubmit={handelForm}>
                                    <div className="form-control">
                                         <label className="label">
                                              <span className="label-text">Email</span>
                                         </label>
-                                        <input type="email" name='email' placeholder="email" className="input input-bordered" />
+                                        <input type="email" name='email' placeholder="email" {...("email", {
+                                             required: true,
+                                        })} className="input input-bordered" ref={emailRef} />
                                    </div>
                                    <div className="form-control">
                                         <div className="form-control">
@@ -151,26 +168,35 @@ const Login = () => {
                                                   </div>
                                              </div>
                                              <p className=' text-red-400'>{error}</p>
+                                             <label className="label">
+                                                  <button onClick={handelResetPassword} className='  text-[15px] font-semibold text-blue-600 underline'>Forgot Password?</button>
+                                             </label>
                                         </div>
-                                        <label className="label">
-                                             <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
-                                        </label>
                                    </div>
-                                   <div className="form-control">
-                                        <label className="label">
-                                             <LoadCanvasTemplate />
-                                        </label>
-                                        <input type="text" ref={captchaRef} name='captcha' placeholder="Type the captcha above" className="input input-bordered" />
-                                        <button onClick={handelCaptcha} className="btn btn-outline btn-info btn-xs mt-1" >captcha</button>
+                                   <div>
+                                        <ReCAPTCHA
+                                             sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                                             onChange={onChange}
+                                        />
                                    </div>
-                                   <div className="form-control mt-6">
-                                        <input disabled={disable} type='submit' className="btn btn-primary" value='Login' />
-                                   </div>
-                                   <div className="form-control mt-6">
-                                        <button onClick={handelGoogleRegister} className="btn btn-wide mx-auto">Googl Sign In</button>
+                                   <div className="form-control mt-2">
+                                        <input disabled={disable} type='submit' className="btn btn-active btn-secondary text-xl" value='Log in' />
                                    </div>
                               </form>
-                              <p> <small>New Here?</small> <Link to='/signUp'>Create an account</Link></p>
+                              <div className="form-control flex">
+                                   <button onClick={handelGoogleRegister} className="btn btn-square mx-auto w-36"> <span className='text-[40px]'><FcGoogle /></span> <span className=' ms-1 text-[18px] text-purple-500'>Sing in</span></button>
+                              </div>
+                              <div className=' text-center mt-4'>
+                                   or
+                              </div>
+                              <div className=' mt-3 flex justify-center'>
+                                   <hr className=' w-[25%] my-auto' />
+                                   <p className=' text-center font-semibold px-2'> Don't have an account? </p>
+                                   <hr className=' w-[25%] my-auto' />
+                              </div>
+                              <Link to='/resister' className="form-control mt-3 pb-8">
+                                   <button className="btn btn-wide btn-success text-white mx-auto text-[17px]">Create new account</button>
+                              </Link>
                          </div>
                     </div>
                </div>
