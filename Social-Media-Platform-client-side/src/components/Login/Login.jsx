@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import './Login.css';
 import { useState } from 'react';
 import { useRef } from 'react';
 import { useEffect } from 'react';
@@ -8,7 +9,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
+import { GiCheckMark } from 'react-icons/gi';
 import ReCAPTCHA from "react-google-recaptcha";
+import img from '../../assets/reCaptcha.jpg'
+import { PiCheckBold } from 'react-icons/pi';
 
 
 const Login = () => {
@@ -21,7 +25,7 @@ const Login = () => {
      const [user, setUser] = useState('')
      const [passwordShown, setPasswordShown] = useState(false);
      const [passwordIcon, setPasswordIcon] = useState(false);
-     const [disable, setDisable] = useState(true)
+     const [captchaToken, setCaptchaToken] = useState("");
 
      const { signIn, resetPassword, googlSignIn } = useContext(AuthContext)
      const from = location.state?.from?.pathname || '/';
@@ -125,14 +129,6 @@ const Login = () => {
      }
      // Reset Password part end
 
-     // google recaptcha start
-     function onChange(value) {
-          console.log("Captcha value:", value);
-          setDisable(false)
-     }
-     // google recaptcha start
-
-
      return (
           <div>
                <div className="hero min-h-screen bg-base-200">
@@ -173,14 +169,29 @@ const Login = () => {
                                              </label>
                                         </div>
                                    </div>
-                                   <div>
-                                        <ReCAPTCHA
-                                             sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-                                             onChange={onChange}
-                                        />
-                                   </div>
+                                   <ReCAPTCHA className=' w-1'
+                                        sitekey="6LehVRsnAAAAAMM4EXD3v1mqKve9NARW_qzmnoQe"
+                                        onChange={(token) => setCaptchaToken(token)}
+                                   />
+
+                                   {/* <div onClick={onChange} className=' bg-[#F9F9F9] lg:me-[33%] Border1 flex justify-between items-center'>
+                                             <div>
+                                                  <Link className=' flex items-center'>{
+                                                       disable ? <>
+                                                            <span className=' mx-3 px-4 py-4 bg-white Border2'></span>
+                                                       </> : <>
+                                                            <span className=' ms-3 me-1 text-[33px] text-green-600'><PiCheckBold /></span>
+                                                       </>
+                                                  }
+                                                       <span className='font-medium'>I'm not a robot</span>
+                                                  </Link>
+                                             </div>
+                                             <div>
+                                                  <img className=' w-20 h-20 p-1' src={img} alt="" />
+                                             </div>
+                                        </div> */}
                                    <div className="form-control mt-2">
-                                        <input disabled={disable} type='submit' className="btn btn-active btn-secondary text-xl" value='Log in' />
+                                        <input disabled={!captchaToken} type='submit' className="btn btn-active btn-secondary text-xl" value='Log in' />
                                    </div>
                               </form>
                               <div className="form-control flex">
@@ -190,9 +201,9 @@ const Login = () => {
                                    or
                               </div>
                               <div className=' mt-3 flex justify-center'>
-                                   <hr className=' w-[25%] my-auto' />
+                                   <hr className=' w-1/4 my-auto' />
                                    <p className=' text-center font-semibold px-2'> Don't have an account? </p>
-                                   <hr className=' w-[25%] my-auto' />
+                                   <hr className=' w-1/4 my-auto' />
                               </div>
                               <Link to='/resister' className="form-control mt-3 pb-8">
                                    <button className="btn btn-wide btn-success text-white mx-auto text-[17px]">Create new account</button>

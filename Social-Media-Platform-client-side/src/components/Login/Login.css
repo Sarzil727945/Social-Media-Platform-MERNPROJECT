@@ -1,0 +1,8 @@
+.Border1 {
+    border: 1px solid rgb(220 215 215);
+    border-radius: 4px;
+}
+.Border2 {
+    border: 2px solid rgb(220 215 215);
+    border-radius: 4px;
+}

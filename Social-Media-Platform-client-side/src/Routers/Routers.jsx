@@ -14,11 +14,12 @@ import AllUsers from "../components/AllUsers/AllUsers";
 import AddItem from "../components/Dashboard/AddItem/AddItem";
 import AdminRoute from "../PrivateRoute/AdminRoute";
 import Register from "../components/Register/Register";
-
+import ErrorPage from "../shared/ErrorPage";
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Main></Main>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "/",
