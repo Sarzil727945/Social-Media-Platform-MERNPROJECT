@@ -17,7 +17,6 @@ const Register = () => {
      const [error, setError] = useState('')
      const [success, setSuccess] = useState('')
      const [email, setEmail] = useState("")
-     const [emailError, setEmailError] = useState('')
      const [passwordShown, setPasswordShown] = useState(false);
 
      const { createUser } = useContext(AuthContext)
@@ -63,20 +62,20 @@ const Register = () => {
                .then((userCredential) => {
                     const currentUser = userCredential.user;
                     setSuccess('Create user account successFull')
-                    upDataUser(currentUser, data.name, data.photo)
+                    upDataUser(currentUser, data.name, data.photoUrl)
 
-                    // user information post data page start 
+                    // user information post data page start
                     const saveUser = { name: data.name, email: data.email, img: data.photoUrl }
-                    // fetch('https://assignment12-server-site.vercel.app/users', {
-                    //      method: 'POST',
-                    //      headers: {
-                    //           'content-type': 'application/json'
-                    //      },
-                    //      body: JSON.stringify(saveUser)
-                    // })
-                    //      .then(res => res.json())
-                    //      .then(data => {
-                    //           if (data.insertedId) {
+                    fetch('http://localhost:5000/users', {
+                         method: 'POST',
+                         headers: {
+                              'content-type': 'application/json'
+                         },
+                         body: JSON.stringify(saveUser)
+                    })
+                         .then(res => res.json())
+                         .then(data => {
+                              if (data.insertedId) {
                     if (currentUser) {
                          Swal.fire({
                               title: 'Success!',
@@ -89,8 +88,8 @@ const Register = () => {
                     // Verification(currentUser)
                     navigate('/')
                     setEmail('')
-                    //      }
-                    // })
+                         }
+                    })
                     // user information post data page end
                })
                .catch((error) => {
@@ -143,7 +142,7 @@ const Register = () => {
                                              <span className="label-text">Photo URL</span>
                                         </label>
                                         <input type="text"
-                                             placeholder="Photo URL" {...register("photo")} name='photo' className="input input-bordered" />
+                                             placeholder="Photo URL" {...register("photoUrl")} name='photoUrl' className="input input-bordered" />
                                    </div>
 
                                    <div className="form-control">

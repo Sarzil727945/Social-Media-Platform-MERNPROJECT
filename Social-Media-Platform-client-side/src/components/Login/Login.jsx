@@ -21,7 +21,6 @@ const Login = () => {
      const emailRef = useRef();
 
      const [error, setError] = useState('')
-     const [user, setUser] = useState('')
      const [passwordShown, setPasswordShown] = useState(false);
      const [passwordIcon, setPasswordIcon] = useState(false);
      const [captchaToken, setCaptchaToken] = useState("");
@@ -74,31 +73,30 @@ const Login = () => {
                     const user = result.user;
 
                     // user information post data page start 
-                    const saveUser = { name: user.displayName, email: user.email }
-                    // fetch('https://assignment12-server-site.vercel.app/users',{
-                    //      method: 'POST',
-                    //      headers: {
-                    //           'content-type':'application/json'
-                    //      },
-                    //      body: JSON.stringify(saveUser)
-                    // })
-                    // .then(res => res.json())
-                    // .then(data => {
-                    //      if (data.insertedId) {
+                    const saveUser = { name: user.displayName, email: user.email, img: user.photoURL }
+                    fetch('http://localhost:5000/users', {
+                         method: 'POST',
+                         headers: {
+                              'content-type': 'application/json'
+                         },
+                         body: JSON.stringify(saveUser)
+                    })
+                         .then(res => res.json())
+                         .then(data => {
+                              if (data.insertedId) {
 
-                    //           // Verification(currentUser)
-                    //      }
-                    if (user) {
-                         Swal.fire({
-                              title: 'Success!',
-                              text: 'Login Success !!',
-                              icon: 'success',
-                              confirmButtonText: 'Ok'
+                                   // Verification(currentUser)
+                              }
+                              if (user) {
+                                   Swal.fire({
+                                        title: 'Success!',
+                                        text: 'Login Success !!',
+                                        icon: 'success',
+                                        confirmButtonText: 'Ok'
+                                   })
+                              }
+                              navigate(from, { replace: true })
                          })
-                    }
-                    setUser(user)
-                    navigate(from, { replace: true })
-                    // })
                     // user information data post data page end
 
                }).catch((error) => {

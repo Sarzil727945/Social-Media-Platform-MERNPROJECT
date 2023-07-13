@@ -9,8 +9,8 @@ import './Header.css'
 
 const Header = () => {
      const { user, logOut } = useContext(AuthContext)
-     console.log(user);
      const [card] = useCard()
+
      // logOut part start
      const handelLogOut = () => {
           logOut()
@@ -22,7 +22,6 @@ const Header = () => {
                });
      }
      // logOut part end
-
 
      return (
           <div>

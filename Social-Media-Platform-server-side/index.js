@@ -1,11 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-// jwt
+// // jwt
 const jwt = require('jsonwebtoken');
 const app = express();
 const port = process.env.PORT || 5000;
-// const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-require('dotenv').config();
 
 // middleware 
 app.use(cors());
@@ -17,187 +16,261 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
-     serverApi: {
-          version: ServerApiVersion.v1,
-          strict: true,
-          deprecationErrors: true,
-     }
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
 });
 
 
 // jwt verify start 
 const verifyJwt = (req, res, next) => {
-     const authorization = req.headers.authorization;
+  const authorization = req.headers.authorization;
 
-     if (!authorization) {
-          return res.status(401).send({ error: true, message: 'unauthorized access' })
-     }
-     const token = authorization.split(' ')[1];
-     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-          if (err) {
-               return res.status(403).send({ error: true, message: 'unauthorized access' })
-          }
-          req.decoded = decoded;
-          next();
-     })
+  if (!authorization) {
+    return res.status(401).send({ error: true, message: 'unauthorized access' })
+  }
+  const token = authorization.split(' ')[1];
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(403).send({ error: true, message: 'unauthorized access' })
+    }
+    req.decoded = decoded;
+    next();
+  })
 }
 // jwt verify end
 
 
 async function run() {
-     try {
-          // Connect the client to the server	(optional starting in v4.7)
-          // await client.connect();
+  try {
 
-          const menuCollection = client.db('bistroDB').collection('menu');
-          const reviewCollection = client.db('bistroDB').collection('reviews');
-          const cardCollection = client.db('bistroDB').collection('cards');
-          const usersCollection = client.db('bistroDB').collection('users');
+    // server link start
+    const serverCollection = client.db('dbAssignment12').collection('cltAssignment12');
+    const selectedCollection = client.db('dbAssignment12').collection('selected');
+    const usersCollection = client.db('SocialMediaPlatform').collection('users');
+    // server link end 
 
-          // jwt localhost start
-          app.post('/jwt', (req, res) => {
-               const user = req.body;
-               const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-                    expiresIn: '2h'
-               });
-               res.send({ token });
-          })
-          // jwt localhost end
+    // jwt localhost start
+    app.post('/jwt', (req, res) => {
+      const user = req.body;
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: '1d'
+      });
+      res.send({ token });
+    })
+    // jwt localhost end
 
-          app.get('/menu', async (req, res) => {
-               const cursor = menuCollection.find();
-               const result = await cursor.toArray();
-               res.send(result);
-          })
+    // Warning: use verifyJWT before using verifyAdmin
+    const verifyAdmin = async (req, res, next) => {
+      const email = req.decoded.email;
+      const query = { email: email }
+      const user = await usersCollection.findOne(query);
+      if (user?.role !== 'admin') {
+        return res.status(403).send({ error: true, message: 'forbidden message' });
+      }
+      next();
+    }
 
-          app.get('/reviews', async (req, res) => {
-               const cursor = reviewCollection.find();
-               const result = await cursor.toArray();
-               res.send(result);
-          })
+    // Warning: use verifyJWT before using verifyInstructors
+    const verifyInstructors = async (req, res, next) => {
+      const email = req.decoded.email;
+      const query = { email: email }
+      const user = await usersCollection.findOne(query);
+      if (user?.role !== 'Instructors') {
+        return res.status(403).send({ error: true, message: 'forbidden message' });
+      }
+      next();
+    }
 
-          // Warning: use verifyJWT before using verifyAdmin
-          const verifyAdmin = async (req, res, next) => {
-               const email = req.decoded.email;
-               const query = { email: email }
-               const user = await usersCollection.findOne(query);
-               if (user?.role !== 'admin') {
-                    return res.status(403).send({ error: true, message: 'forbidden message' });
-               }
-               next();
-          }
+    // class added post mongoDB start
+    app.post('/class', verifyJwt, verifyInstructors, async (req, res) => {
+      const newAdd = req.body;
+      const result = await serverCollection.insertOne(newAdd)
+      res.send(result);
+    });
+    // class added post mongoDB end
 
-          app.get('/users', verifyJwt, verifyAdmin, async (req, res) => {
-               const cursor = usersCollection.find();
-               const result = await cursor.toArray();
-               res.send(result);
-          })
+    // get class data server start
+    app.get('/class', async (req, res) => {
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email }
+      }
+      const result = await serverCollection.find(query).toArray();
+      res.send(result);
+    })
+    //  get class data server end 
 
-          // user information post dataBD start 
-          app.post('/users', async (req, res) => {
-               const user = req.body;
-               const result = await usersCollection.insertOne(user)
-               res.send(result);
-          });
-          // user information post dataBD exit
+    //  class data patch start 
+    app.patch('/class/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) }
+      const updatedClasses = req.body;
 
-          // user admin check start
-          app.get('/users/admin/:email', verifyJwt, async (req, res) => {
-               const email = req.params.email;
-
-               if (req.decoded.email !== email) {
-                    res.send({ admin: false })
-               }
-
-               const query = { email: email }
-               const user = await usersCollection.findOne(query);
-               const result = { admin: user?.role === 'admin' }
-               res.send(result);
-          })
-          // user admin check end
-
-          // user admin role added start
-          app.patch('/users/admin/:id', async (req, res) => {
-               const id = req.params.id;
-               console.log(id);
-               const filter = { _id: new ObjectId(id) };
-               const updateDoc = {
-                    $set: {
-                         role: 'admin'
-                    },
-               };
-               const result = await usersCollection.updateOne(filter, updateDoc);
-               res.send(result);
-          })
-          // user admin role added exit
+      const updateDoc = {
+        $set: {
+          status: updatedClasses.status
+        }
+      }
+      const result = await serverCollection.updateOne(filter, updateDoc)
+      res.send(result)
+    })
+    //  class data patch end
 
 
-          // added card collection
-          app.get('/cards', verifyJwt, async (req, res) => {
+    // selected data added post mongoDB start
+    app.post('/selected', async (req, res) => {
+      const newAdd = req.body;
+      const result = await selectedCollection.insertOne(newAdd)
+      res.send(result);
+    });
+    // selected data added post mongoDB end
 
-               const email = req.query.email;
-               if (!email) {
-                    res.send([]);
-               }
+    // selected data added get mongoDB start
+    app.get('/selected', async (req, res) => {
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email }
+      }
+      const result = await selectedCollection.find(query).toArray();
+      res.send(result);
+    })
+    // selected data added get mongoDB end
 
-               // jwt verifyJwt start
-               const decodedEmail = req.decoded.email;
-               if (email !== decodedEmail) {
-                    return res.status(403).send({ error: true, message: 'forbidden access' })
-               }
-               // jwt verifyJwt end
+    // selected data delete mongoDB start
+    app.delete('/selected/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await selectedCollection.deleteOne(query);
+      res.send(result);
+    })
+    // selected data delete mongoDB  exit
 
-               const query = { email: email };
-               const result = await cardCollection.find(query).toArray();
-               res.send(result);
-          });
 
-          app.post('/cards', async (req, res) => {
-               const item = req.body;
-               const result = await cardCollection.insertOne(item);
-               res.send(result);
-          });
+    // user data post dataBD start 
+    app.post('/users', async (req, res) => {
+      const user = req.body;
 
-          //jwt card data delete start
-          app.delete('/cards/:id', async (req, res) => {
-               const id = req.params.id;
-               const query = { _id: new ObjectId(id) }
-               const result = await cardCollection.deleteOne(query);
-               res.send(result);
-          })
-          // card data delete exit
+      // google sign up part start
+      const query = { email: user.email }
+      const existingUser = await usersCollection.findOne(query);
+      if (existingUser) {
+        return res.send({ message: 'user already exists' })
+      }
+      // google sign up part start
 
-          // Send a ping to confirm a successful connection
-          await client.db("admin").command({ ping: 1 });
-          console.log("Pinged your deployment. You successfully connected to MongoDB!");
-     } finally {
-          // Ensures that the client will close when you finish/error
-          //     await client.close();
-     }
+      const result = await usersCollection.insertOne(user)
+      res.send(result);
+    });
+    // user data post dataBD exit
+
+    // user data delete mongoDB start
+    app.delete('/users/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await usersCollection.deleteOne(query);
+      res.send(result);
+    })
+    // user data delete mongoDB  exit
+
+    // admin user information get  start
+    app.get('/users', async (req, res) => {
+      const cursor = usersCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+    // admin user information get end
+
+    // user admin check start
+    app.get('/users/admin/:email', verifyJwt, async (req, res) => {
+      const email = req.params.email;
+
+      if (req.decoded.email !== email) {
+        res.send({ admin: false })
+      }
+
+      // jwt verifyJwt start
+      const decodedEmail = req.decoded.email;
+      if (email !== decodedEmail) {
+        return res.status(403).send({ error: true, message: 'forbidden access' })
+      }
+      // jwt verifyJwt end
+
+      const query = { email: email }
+      const user = await usersCollection.findOne(query);
+      const result = { admin: user?.role === 'admin' }
+      res.send(result);
+    })
+    // user admin check end
+
+    // user Instructors check start
+    app.get('/users/Instructors/:email', verifyJwt, async (req, res) => {
+      const email = req.params.email;
+
+      if (req.decoded.email !== email) {
+        res.send({ Instructors: false })
+      }
+
+      // jwt verifyJwt start
+      const decodedEmail = req.decoded.email;
+      if (email !== decodedEmail) {
+        return res.status(403).send({ error: true, message: 'forbidden access' })
+      }
+      // jwt verifyJwt end
+
+      const query = { email: email }
+      const user = await usersCollection.findOne(query);
+      const result = { Instructors: user?.role === 'Instructors' }
+      res.send(result);
+    })
+    // user Instructors check end
+
+    // user admin role added start
+    app.patch('/users/admin/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          role: 'admin'
+        },
+      };
+      const result = await usersCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    })
+    // user admin role added exit
+
+    // user Instructors role added start
+    app.patch('/users/Instructors/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          role: 'Instructors'
+        },
+      };
+      const result = await usersCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    })
+    // user Instructors role added exit
+
+
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+  }
 }
 run().catch(console.dir);
 
 
+
 app.get('/', (req, res) => {
-     res.send('Restaurant server running')
+  res.send('Assignment12 server running')
 })
 
 app.listen(port, () => {
-     console.log(`server is running on port: ${port}`);
+  console.log(`server is running on port: ${port}`);
 })
 
-/*
------------------------------------------------
-                  NAMING CONVENTION
------------------------------------------------
-users : userCollection
-* app.post('/users')
-* app.get('/users')
-* app.get('/users/:id')
-* app.put('/users/:id')
-* app.patch('/users/:id')
-* app.delete('/users/:id')
-
-
-
-*/
