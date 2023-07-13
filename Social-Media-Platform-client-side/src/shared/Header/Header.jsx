@@ -38,7 +38,7 @@ const Header = () => {
                                    <li><ActiveLink to='order'>Our Order</ActiveLink></li>
                               </ul>
                          </div>
-                         <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
+                         <a className="btn btn-ghost normal-case text-xl font-bold lg:text-[35px]  text-[#4eb0d6] ">PlatFrom</a>
                     </div>
                     <div className="navbar-center hidden lg:flex">
                          <ul className="menu menu-horizontal px-1">
@@ -61,9 +61,9 @@ const Header = () => {
                               user ? <div className=' flex'>
                                    <img title={user.displayName} className=' imgStyle me-3' src={user.photoURL} alt="" />
                                    <div className=' mt-2'>
-                                        <button onClick={handelLogOut} variant="info" className=' lg:me-5  btn btn-active btn-secondary text-[17px]'>Log Out</button>
+                                        <button onClick={handelLogOut} variant="info" className=' lg:me-5  btn bg-[#a119ae] hover:bg-[#a119ae]  text-[17px] text-white'>Log Out</button>
                                    </div>
-                              </div> :  <ActiveLink to="/login"><button className='btn btn-success lg:me-5 text-[17px] text-white'>Log in</button></ActiveLink> 
+                              </div> :  <ActiveLink to="/login"><button className='btn btn-primary lg:me-5 text-[17px] text-white'>Log in</button></ActiveLink> 
                          }
                     </div>
                </div>

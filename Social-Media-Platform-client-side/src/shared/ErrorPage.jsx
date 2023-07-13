@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useRouteError } from 'react-router-dom'
-import img from '../assets/error.avif'
+import img from '../assets/Sing@Nav@Error/error.avif'
 import { AiFillBackward } from 'react-icons/ai';
 
 const ErrorPage = () => {

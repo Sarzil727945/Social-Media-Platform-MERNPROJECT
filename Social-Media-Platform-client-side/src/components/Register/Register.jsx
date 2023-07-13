@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import img from '../../assets/Sing@Nav@Error/register.jpg'
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
@@ -114,15 +115,18 @@ const Register = () => {
      }
 
      return (
-          <div>
-               <div className="hero min-h-screen bg-base-200">
-                    <div className="hero-content flex-col lg:flex-row">
-                         <div className="text-center lg:text-left lg:w-6/12">
-                              <h1 className="text-5xl font-bold">Resister now!</h1>
-                              <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
+          <div className='hero bg-base-200 min-h-screen'>
+               <div className="hero min-h-screen ">
+                    <div className="hero-content flex-col lg:flex-row w-full card shadow-2xl bg-base-100">
+                         <div className=" text-center lg:text-left lg:relative">
+                              <div className=' lg:absolute lg:top-1 lg:bottom-0 lg:start-36 start-2 text-[#0C87B9] text-center'>
+                                   <p className=' text-[20px]'>Please Resister to continue</p>
+                                   <h3 className="text-[33px] font-bold">WELCOME TO INCAM !</h3>
+                              </div>
+                              <img src={img} className=' lg:h-[500px] lg:w-[625px] w-full' alt="" />
                          </div>
 
-                         <div className="card flex-shrink-0 w-full lg:w-6/12 shadow-2xl bg-base-100">
+                         <div className=" flex-shrink-0 w-full lg:w-5/12 ">
                               <form onSubmit={handleSubmit(onSubmit)} className="card-body">
 
                                    <div className="form-control">
@@ -197,13 +201,14 @@ const Register = () => {
                                    <p className='text-red-500'>{error}</p>
 
                                    <div className="form-control mt-2">
-                                        <button className="btn btn-active btn-secondary text-xl">Sign Up</button>
+                                        <button className="btn bg-[#0C87B9] hover:bg-[#0C87B9] text-xl">Sign Up</button>
 
                                    </div>
                                    <div className=' text-end'>
                                         <Link to='/login' className=' mt-2 italic font-semibold text-blue-600  text-[17px] underline flex justify-end'>
                                              <span className=' me-1 mt-1 font-semibold'><AiFillBackward /></span>
-                                             <span>Back To Login</span></Link>
+                                             <span>Back To Login</span>
+                                        </Link>
                                    </div>
                               </form>
                          </div>

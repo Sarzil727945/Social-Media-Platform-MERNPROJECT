@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import './Login.css';
+import img from '../../assets/Sing@Nav@Error/login.avif'
 import { useState } from 'react';
 import { useRef } from 'react';
 import { useEffect } from 'react';
@@ -9,10 +10,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
-import { GiCheckMark } from 'react-icons/gi';
+import { PiCaretDoubleRightFill } from 'react-icons/pi';
 import ReCAPTCHA from "react-google-recaptcha";
-import img from '../../assets/reCaptcha.jpg'
-import { PiCheckBold } from 'react-icons/pi';
 
 
 const Login = () => {
@@ -130,31 +129,27 @@ const Login = () => {
      // Reset Password part end
 
      return (
-          <div>
-               <div className="hero min-h-screen bg-base-200">
-                    <div className="hero-content flex-col lg:flex-row-reverse">
-                         <div className="text-center lg:w-6/12 lg:text-left lg:ps-5">
-                              <h1 className="text-5xl font-bold">Login now!</h1>
-                              <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
+          <div className='hero bg-base-200 min-h-screen'>
+               <div className="card  shadow-2xl bg-base-100  lg:w-9/12 mx-auto my-auto mt-8">
+                    <div className="hero-content flex-col lg:flex-row w-full">
+                         <div className="text-center  w-full relative">
+                              <div>
+                                   <img src={img} className=' w-full  lg:h-[500px]' alt="" />
+                              </div>
                          </div>
-                         <div className="card lg:w-5/12 w-full shadow-2xl bg-base-100">
+                         <div className=" w-full lg:w-11/12">
+                              <h1 className="text-4xl font-bold text-center text-[#96238e] pt-5">SIGN IN</h1>
                               <form className="card-body" onSubmit={handelForm}>
                                    <div className="form-control">
-                                        <label className="label">
-                                             <span className="label-text">Email</span>
-                                        </label>
-                                        <input type="email" name='email' placeholder="email" {...("email", {
+                                        <input type="email" name='email' placeholder="User Email" {...("email", {
                                              required: true,
                                         })} className="input input-bordered" ref={emailRef} />
                                    </div>
-                                   <div className="form-control">
+                                   <div className="form-control mt-2">
                                         <div className="form-control">
-                                             <label className="label">
-                                                  <span className="label-text">Password</span>
-                                             </label>
                                              <div className=' relative '>
                                                   <input type={passwordShown ? "text" : "password"}
-                                                       placeholder="password" {...("password", {
+                                                       placeholder="Password" {...("password", {
                                                             required: true,
                                                        })} name='password' className="input input-bordered w-full" />
                                                   <div className=' absolute end-4 top-4'>
@@ -173,42 +168,28 @@ const Login = () => {
                                         sitekey="6LehVRsnAAAAAMM4EXD3v1mqKve9NARW_qzmnoQe"
                                         onChange={(token) => setCaptchaToken(token)}
                                    />
-
-                                   {/* <div onClick={onChange} className=' bg-[#F9F9F9] lg:me-[33%] Border1 flex justify-between items-center'>
-                                             <div>
-                                                  <Link className=' flex items-center'>{
-                                                       disable ? <>
-                                                            <span className=' mx-3 px-4 py-4 bg-white Border2'></span>
-                                                       </> : <>
-                                                            <span className=' ms-3 me-1 text-[33px] text-green-600'><PiCheckBold /></span>
-                                                       </>
-                                                  }
-                                                       <span className='font-medium'>I'm not a robot</span>
-                                                  </Link>
-                                             </div>
-                                             <div>
-                                                  <img className=' w-20 h-20 p-1' src={img} alt="" />
-                                             </div>
-                                        </div> */}
                                    <div className="form-control mt-2">
-                                        <input disabled={!captchaToken} type='submit' className="btn btn-active btn-secondary text-xl" value='Log in' />
+                                        <input disabled={!captchaToken} type='submit' className="btn bg-[#9d2b95] hover:bg-[#9d2b95] text-white text-xl" value='Log in' />
                                    </div>
                               </form>
                               <div className="form-control flex">
-                                   <button onClick={handelGoogleRegister} className="btn btn-square mx-auto w-36"> <span className='text-[40px]'><FcGoogle /></span> <span className=' ms-1 text-[18px] text-purple-500'>Sing in</span></button>
+                                   <button onClick={handelGoogleRegister} className="btn bg-[#682e9e] hover:bg-[#682e9e] mx-auto w-36"> <span className='text-[40px]'><FcGoogle /></span> <span className=' ms-1 text-[18px] text-white'>Sing in</span></button>
                               </div>
                               <div className=' text-center mt-4'>
                                    or
                               </div>
-                              <div className=' mt-3 flex justify-center'>
+                              <div className='mt-3 flex justify-center mx-8'>
                                    <hr className=' w-1/4 my-auto' />
-                                   <p className=' text-center font-semibold px-2'> Don't have an account? </p>
+                                   <p className=' text-center font-semibold lg:px-2'> Don't have an account? </p>
                                    <hr className=' w-1/4 my-auto' />
                               </div>
-                              <Link to='/resister' className="form-control mt-3 pb-8">
-                                   <button className="btn btn-wide btn-success text-white mx-auto text-[17px]">Create new account</button>
+
+                              <Link to='/resister' className=' mt-2 italic font-semibold text-blue-600  text-[17px] underline flex justify-end pb-8 me-5'>
+                                   <span>Create new account</span>
+                                   <span className=' ms-1 mt-[6px] font-semibold'><PiCaretDoubleRightFill /></span>
                               </Link>
                          </div>
+
                     </div>
                </div>
           </div>
