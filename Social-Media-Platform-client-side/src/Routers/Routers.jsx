@@ -6,11 +6,11 @@ import Home from "../components/Home/Home";
 import OurMenu from "../components/OurMenu/OurMenu";
 import Orders from "../components/Orders/Orders";
 import Login from "../components/Login/Login";
-import PrivateRoute from "../PrivateRoute/PrivateRoute";
-import Secret from "../shared/Secret/Secret";
 import Register from "../components/Register/Register";
 import ErrorPage from "../shared/ErrorPage";
 import Profile from "../Laout/Profile";
+import AuthProvider from "../AuthProvider/AuthProvider";
+import PrivateRoute from "./PrivateRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -41,7 +41,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "profile",
-    element: <Profile></Profile>,
+    element: <PrivateRoute><Profile></Profile></PrivateRoute>,
     children: [
       // {
       //   path: 'myCard',

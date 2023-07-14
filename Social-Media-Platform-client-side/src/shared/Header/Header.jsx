@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import ActiveLink from '../../ActiveLink/ActiveLink';
-import { FaShoppingCart } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
-import useCard from '../../hooks/useCard';
 import './Header.css'
 import { AiFillHome, AiFillSetting, AiTwotoneHome } from 'react-icons/ai';
 
@@ -62,17 +60,17 @@ const Header = () => {
                                    <div className="flex gap-2">
                                         <div className="dropdown dropdown-end">
                                              <label tabIndex={0} className="btn btn-ghost btn-circle w-[66px] lg:me-5">
-                                                  <img title={user.displayName} className=' imgStyle me-3' src={user.photoURL} alt="" />
+                                                  <img title={user?.displayName} className=' imgStyle me-3' src={user?.photoURL} alt="" />
                                              </label>
                                              <ul tabIndex={0} className="menu menu-compact dropdown-content lg:mt-5 mt-5 shadow bg-opacity-90 bg-black rounded-box w-72 lg:w-80 lg:me-2 lg:pb-10 lg:pt-5">
                                                   <li>
                                                        <ActiveLink to='/profile'><div className=' flex items-center'> <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                                                             <div className="w-10 rounded-full ">
-                                                                 <img src={user.photoURL} />
+                                                                 <img src={user?.photoURL} />
                                                             </div>
                                                        </label>
                                                             <div className=' ms-2'>
-                                                                 <p>{user.displayName}</p>
+                                                                 <p>{user?.displayName}</p>
                                                                  <small className=' text-[#a4a0a0]'>See your profile</small>
                                                             </div>
                                                        </div></ActiveLink>
@@ -90,7 +88,6 @@ const Header = () => {
                                    <ActiveLink to="/login"><button className='btn bg-[#9d2b95] hover:bg-[#9d2b95] lg:me-5 text-[17px] text-white'>Log in</button></ActiveLink>
                               </>
                          }
-
                     </div>
                </div>
           </div>
