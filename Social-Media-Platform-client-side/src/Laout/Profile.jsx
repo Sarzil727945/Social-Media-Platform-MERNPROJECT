@@ -39,23 +39,23 @@ const Profile = () => {
                          <div className="tabs">
                               <div className="tabs">
                                    <Link>
-                                        <button className={toggleState === 1 ? "tab btn btn-outline  btn-ghost border-0 border-b-4 hover:bg-white hover:text-[#2461bd] text-[#2461bd] hover:border-[#2461bd] font-bold" : "tab btn btn-outline  border-0 hover:bg-opacity-70 font-semibold"}
+                                        <button className={toggleState === 1 ? "tab btn btn-outline  btn-ghost border-0 border-b-4 hover:bg-opacity-0 hover:text-[#2461bd] text-[#2461bd] hover:border-[#2461bd] font-bold" : "tab btn btn-outline  border-0 hover:bg-opacity-70 font-semibold"}
                                         onClick={() => toggleTab(1)}
                                         >Posts</button>
                                    </Link>
                                    <Link>
-                                        <button className={toggleState === 2 ? "tab btn btn-outline  btn-ghost border-0 border-b-4 mx-5 hover:bg-white hover:text-[#2461bd] text-[#2461bd] hover:border-[#2461bd] font-bold" : "tab btn btn-outline mx-5 border-0 hover:bg-opacity-70 font-semibold"}
+                                        <button className={toggleState === 2 ? "tab btn btn-outline  btn-ghost border-0 border-b-4 lg:mx-5 hover:bg-opacity-0 hover:bg-none hover:text-[#2461bd] text-[#2461bd] hover:border-[#2461bd] font-bold" : "tab btn btn-outline lg:mx-5 border-0 hover:bg-opacity-70 font-semibold"}
                                         onClick={() => toggleTab(2)}
                                         >Photos</button>
                                    </Link>
                                    <Link>
-                                        <button className={toggleState === 3 ? "tab btn btn-outline  btn-ghost border-0 border-b-4 hover:bg-white hover:text-[#2461bd] text-[#2461bd] hover:border-[#2461bd] font-bold" : "tab btn btn-outline border-0 hover:bg-opacity-70 font-semibold"}
+                                        <button className={toggleState === 3 ? "tab btn btn-outline  btn-ghost border-0 border-b-4 hover:bg-none hover:bg-opacity-0 hover:text-[#2461bd] text-[#2461bd] hover:border-[#2461bd] font-bold" : "tab btn btn-outline border-0 hover:bg-opacity-70 font-semibold"}
                                         onClick={() => toggleTab(3)}
                                         >Videos</button>
                                    </Link>
-                                   <div className="dropdown dropdown-bottom ms-5">
+                                   <div className="dropdown lg:ms-5 relative">
                                         <label tabIndex={0} className="btn btn-outline border-none hover:bg-opacity-70">More</label>
-                                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-60">
+                                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-60 absolute right-0  lg:left-0">
                                              <li><a>Item 1</a></li>
                                              <li><a>Item 2</a></li>
                                         </ul>

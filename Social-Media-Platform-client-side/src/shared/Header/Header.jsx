@@ -31,8 +31,8 @@ const Header = () => {
                                    <svg className="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" /></svg>
                               </label>
                               <ul tabIndex={0} className="menu menu-compact dropdown-content mt-8 p-2 shadow bg-opacity-90 bg-black rounded-box w-72">
-                                   <div className="form-control text-black">
-                                        <input type="text" placeholder="Search SA" className="input input-bordered input-info w-full" />
+                                   <div className="form-control">
+                                        <input type="text" placeholder="Search SA" className="input input-bordered input-info w-full bg-[#434243]" />
                                    </div>
                                    <li className=' mt-1'><ActiveLink to='/'><div className=' flex items-center'>
                                         <span className=' text-[22px]'><AiTwotoneHome /></span> <span className=' ms-2'> Home</span>
@@ -46,8 +46,8 @@ const Header = () => {
                     <div className="navbar-center hidden lg:flex">
                          <ul className="menu menu-horizontal px-1">
                               <></>
-                              <div className="form-control text-black mt-3 lg:me-36">
-                                   <input type="text" placeholder="Search SA" className="input input-bordered input-info w-[333px]" />
+                              <div className="form-control mt-3 lg:me-36">
+                                   <input type="text" placeholder="Search SA" className="input input-bordered input-info w-[333px] bg-[#434243] " />
                               </div>
                               <li><ActiveLink to='/' > <div className=' flex items-center'><span className=' me-2 text-[33px]'><AiTwotoneHome /></span><span> Home</span></div></ActiveLink></li>
                               <li><ActiveLink to='ourMenu'>Our Menu</ActiveLink></li>
@@ -58,12 +58,12 @@ const Header = () => {
                          {
                               user ? <>
                                    <div className="flex gap-2">
-                                        <div className="dropdown dropdown-end">
+                                        <div className="dropdown dropdown-end relative">
                                              <label tabIndex={0} className="btn btn-ghost btn-circle w-[66px] lg:me-5">
                                                   <img title={user?.displayName} className=' imgStyle me-3' src={user?.photoURL} alt="" />
                                              </label>
                                              <ul tabIndex={0} className="menu menu-compact dropdown-content lg:mt-5 mt-5 shadow bg-opacity-90 bg-black rounded-box w-72 lg:w-80 lg:me-2 lg:pb-10 lg:pt-5">
-                                                  <li>
+                                                  <li className=' mt-2'>
                                                        <ActiveLink to='/profile'><div className=' flex items-center'> <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                                                             <div className="w-10 rounded-full ">
                                                                  <img src={user?.photoURL} />

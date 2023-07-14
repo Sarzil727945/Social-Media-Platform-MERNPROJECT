@@ -120,7 +120,7 @@ const Register = () => {
                          <div className=" text-center lg:text-left lg:relative">
                               <div className=' lg:absolute lg:top-1 lg:bottom-0 lg:start-36 start-2 text-[#0C87B9] text-center'>
                                    <p className=' text-[20px]'>Please Resister to continue</p>
-                                   <h3 className="text-[33px] font-bold">WELCOME TO INCAM !</h3>
+                                   <h3 className="text-[33px] font-bold">WELCOME TO INCAM!</h3>
                               </div>
                               <img src={img} className=' lg:h-[500px] lg:w-[625px] w-full' alt="" />
                          </div>
