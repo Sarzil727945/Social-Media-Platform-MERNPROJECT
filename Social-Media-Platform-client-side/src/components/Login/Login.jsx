@@ -74,7 +74,7 @@ const Login = () => {
 
                     // user information post data page start 
                     const saveUser = { name: user.displayName, email: user.email, img: user.photoURL }
-                    fetch('http://localhost:5000/users', {
+                    fetch('https://social-media-platform-server-side.vercel.app/users', {
                          method: 'POST',
                          headers: {
                               'content-type': 'application/json'

@@ -47,9 +47,9 @@ async function run() {
   try {
 
     // server link start
+    const usersCollection = client.db('SocialMediaPlatform').collection('users');
     const serverCollection = client.db('dbAssignment12').collection('cltAssignment12');
     const selectedCollection = client.db('dbAssignment12').collection('selected');
-    const usersCollection = client.db('SocialMediaPlatform').collection('users');
     // server link end 
 
     // jwt localhost start
@@ -267,7 +267,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-  res.send('Assignment12 server running')
+  res.send('Social Media Platform')
 })
 
 app.listen(port, () => {

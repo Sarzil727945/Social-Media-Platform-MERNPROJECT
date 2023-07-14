@@ -11,7 +11,6 @@ import { AiFillHome, AiFillSetting, AiTwotoneHome } from 'react-icons/ai';
 
 const Header = () => {
      const { user, logOut } = useContext(AuthContext)
-     const [card] = useCard()
 
      // logOut part start
      const handelLogOut = () => {
@@ -35,22 +34,24 @@ const Header = () => {
                               </label>
                               <ul tabIndex={0} className="menu menu-compact dropdown-content mt-8 p-2 shadow bg-opacity-90 bg-black rounded-box w-72">
                                    <div className="form-control text-black">
-                                        <input type="text" placeholder="Type here" className="input input-bordered input-accent w-full" />
+                                        <input type="text" placeholder="Search SA" className="input input-bordered input-info w-full" />
                                    </div>
-                                   <li><ActiveLink to='/'>Home</ActiveLink></li>
+                                   <li className=' mt-1'><ActiveLink to='/'><div className=' flex items-center'>
+                                        <span className=' text-[22px]'><AiTwotoneHome /></span> <span className=' ms-2'> Home</span>
+                                   </div></ActiveLink></li>
                                    <li><ActiveLink to='ourMenu'>Our Menu</ActiveLink></li>
                                    <li><ActiveLink to='order'>Our Order</ActiveLink></li>
                               </ul>
                          </div>
-                         <a className="btn btn-ghost normal-case text-2xl font-bold lg:text-[35px] text-[#4eb0d6] ">PlatFrom</a>
+                         <a className="btn btn-ghost normal-case text-2xl font-bold lg:text-[35px] text-[#9d2b95] ">PlatFrom</a>
                     </div>
                     <div className="navbar-center hidden lg:flex">
                          <ul className="menu menu-horizontal px-1">
                               <></>
                               <div className="form-control text-black mt-3 lg:me-36">
-                                   <input type="text" placeholder="Search SA" className="input input-bordered input-accent w-[333px]" />
+                                   <input type="text" placeholder="Search SA" className="input input-bordered input-info w-[333px]" />
                               </div>
-                              <li><ActiveLink to='/' > <div className=' flex items-center'><span className=' me-2 text-[33px]'><AiTwotoneHome/></span><span> Home</span></div></ActiveLink></li>
+                              <li><ActiveLink to='/' > <div className=' flex items-center'><span className=' me-2 text-[33px]'><AiTwotoneHome /></span><span> Home</span></div></ActiveLink></li>
                               <li><ActiveLink to='ourMenu'>Our Menu</ActiveLink></li>
                               <li><ActiveLink to='order'>Our Order</ActiveLink></li>
                          </ul>
@@ -65,7 +66,7 @@ const Header = () => {
                                              </label>
                                              <ul tabIndex={0} className="menu menu-compact dropdown-content lg:mt-5 mt-5 shadow bg-opacity-90 bg-black rounded-box w-72 lg:w-80 lg:me-2 lg:pb-10 lg:pt-5">
                                                   <li>
-                                                       <ActiveLink to='/'><div className=' flex items-center'> <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                                                       <ActiveLink to='/profile'><div className=' flex items-center'> <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                                                             <div className="w-10 rounded-full ">
                                                                  <img src={user.photoURL} />
                                                             </div>
@@ -77,7 +78,7 @@ const Header = () => {
                                                        </div></ActiveLink>
                                                   </li>
                                                   <li>
-                                                       <ActiveLink to='ourMenu'><div className=' flex items-center'>
+                                                       <ActiveLink to='order'><div className=' flex items-center'>
                                                             <span className='btn btn-circle text-[22px]'><AiFillSetting /></span> <span className=' ms-2'> Settings</span>
                                                        </div></ActiveLink>
                                                   </li>
