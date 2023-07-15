@@ -1,24 +1,43 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 import ActiveLink from '../../ActiveLink/ActiveLink';
 import { FiLogOut } from 'react-icons/fi';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
 import './Header.css'
 import { AiFillHome, AiFillSetting, AiTwotoneHome } from 'react-icons/ai';
+import Swal from 'sweetalert2';
 
 
 const Header = () => {
      const { user, logOut } = useContext(AuthContext)
 
      // logOut part start
-     const handelLogOut = () => {
-          logOut()
-               .then(() => {
-                    // Sign-out successful.
-               })
-               .catch((error) => {
-                    // An error happened.
-               });
+     const handelLogOut = (id) => {
+          Swal.fire({
+               title: 'Are you sure?',
+               text: "Do you want to logout of your account?",
+               icon: 'warning',
+               showCancelButton: true,
+               confirmButtonColor: '#3085d6',
+               cancelButtonColor: '#d33',
+               confirmButtonText: 'Yes, Logout it!'
+          }).then((result) => {
+               if (result.isConfirmed) {
+                    logOut()
+                         .then(() => {
+                              Swal.fire(
+                                   'Logout!',
+                                   'Your Account has been logout.',
+                                   'success'
+                              )
+                              // Sign-out successful.
+                         })
+                         .catch((error) => {
+                              // An error happened.
+                         });
+               }
+
+          })
+
      }
      // logOut part end
 
@@ -80,7 +99,7 @@ const Header = () => {
                                                             <span className='btn btn-circle text-[22px]'><AiFillSetting /></span> <span className=' ms-2'> Settings</span>
                                                        </div></ActiveLink>
                                                   </li>
-                                                  <li><button onClick={handelLogOut} className=' text-[18px] ps-[36px]'> <span className='btn btn-circle text-[22px]'><FiLogOut /></span> Log Out</button></li>
+                                                  <li><button onClick={() => handelLogOut("id")} className=' text-[18px] ps-[36px]'> <span className='btn btn-circle text-[22px]'><FiLogOut /></span> Log Out</button></li>
                                              </ul>
                                         </div>
                                    </div>

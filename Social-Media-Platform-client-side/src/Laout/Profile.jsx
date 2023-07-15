@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import Header from '../shared/Header/Header';
 import { AuthContext } from '../AuthProvider/AuthProvider';
-import ActiveLink from '../ActiveLink/ActiveLink';
 import { Link } from 'react-router-dom';
 
 const Profile = () => {
