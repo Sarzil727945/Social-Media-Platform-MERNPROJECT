@@ -60,7 +60,11 @@ const Header = () => {
                                    <li><ActiveLink to='order'>Our Order</ActiveLink></li>
                               </ul>
                          </div>
-                         <a className="btn btn-ghost normal-case text-2xl font-bold lg:text-[35px] text-[#9d2b95] ">PlatFrom</a>
+                         <div className=' ms-0 lg:ms-5'>
+                              <h1 className='normal-case text-2xl font-bold lg:text-[40px] gradient-text'>
+                                   PlatFrom
+                              </h1>
+                         </div>
                     </div>
                     <div className="navbar-center hidden lg:flex">
                          <ul className="menu menu-horizontal px-1">
