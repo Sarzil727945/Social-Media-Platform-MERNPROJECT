@@ -5,6 +5,7 @@ import ActiveLink from '../../ActiveLink/ActiveLink';
 import { AiTwotoneLike, AiOutlineLike } from 'react-icons/ai';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { key } from 'localforage';
 
 const MyPost = () => {
      const { user } = useContext(AuthContext);
@@ -20,7 +21,7 @@ const MyPost = () => {
      };
 
      // server data get start 
-     const url = `http://localhost:5000/allPost?email=${user?.email}`;
+     const url = `https://social-media-platform-server-side-sarzil727945.vercel.app/allPost?email=${user?.email}`;
      useEffect(() => {
           fetch(url)
                .then(res => res.json())
@@ -30,12 +31,11 @@ const MyPost = () => {
                })
      }, [isLoading, url]);
      // server data get exit 
-     console.log(postData);
      return (
           <div className=' pb-10 '>
                {
                     postData?.map(data =>
-                         <div className="card card-compact w- h-full bg-base-100 shadow-2xl lg:mt-10 mt-5 lg:mx-32 pb-5">
+                         <div className="card card-compact w- h-full bg-base-100 shadow-2xl lg:mt-10 mt-5 lg:mx-32 pb-5" key={data._id}>
                               <div className=' border-b-2'>
                                    <div className='flex justify-between relative  text-start px-4 pt-4 pb-1'>
                                         <div className='flex items-center '>
@@ -50,26 +50,26 @@ const MyPost = () => {
                                         <div className="flex gap-2">
                                              <div className="dropdown dropdown-end relative">
                                                   <label tabIndex={0} className="btn btn-ghost btn-circle">
-                                                      <span className=' text-[30px] mb-4'> ...</span>
+                                                       <span className=' text-[30px] mb-4'> ...</span>
                                                   </label>
                                                   <ul tabIndex={0} className="menu menu-compact dropdown-content lg:mt-5 mt-5 shadow bg-opacity-90 bg-black rounded-box w-72 lg:w-80 lg:me-2 pb-10 lg:pt-5">
                                                        <li className=' mt-2'>
                                                             <ActiveLink to='order'>
                                                                  <div className=' flex items-center'>
-                                                                      <div className=' flex'><span className=' me-2 text-2xl'><FiEdit/></span> <span>Edit post</span></div>
-                                                                 
-                                                            </div>
+                                                                      <div className=' flex'><span className=' me-2 text-2xl'><FiEdit /></span> <span>Edit post</span></div>
+
+                                                                 </div>
                                                             </ActiveLink>
                                                        </li>
                                                        <li>
                                                             <ActiveLink to='order'>
                                                                  <div className=' flex items-center'>
                                                                       <div className=' flex'>
-                                                                           <span className=' me-2 text-2xl'><RiDeleteBin6Line/></span>
+                                                                           <span className=' me-2 text-2xl'><RiDeleteBin6Line /></span>
                                                                            <span> Delete post</span>
                                                                       </div>
-                                                                 
-                                                            </div>
+
+                                                                 </div>
                                                             </ActiveLink>
                                                        </li>
                                                   </ul>
@@ -95,7 +95,7 @@ const MyPost = () => {
 
                                         <div className=' flex justify-between lg:px-5 lg:py-2'>
                                              <div>
-                                             <div className=''>
+                                                  <div className=''>
                                                        <p className=' text-lg' onClick={togglePassword} >{
                                                             passwordIcon ? <AiTwotoneLike /> : <AiOutlineLike />
                                                        }</p>
