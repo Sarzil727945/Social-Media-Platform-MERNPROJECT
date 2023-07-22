@@ -11,7 +11,7 @@ const img_hosting_token = import.meta.env.VITE_Image_Upload_token;
 
 
 const Post = () => {
-  useTitle('Profile')
+     useTitle('Profile')
      const navigate = useNavigate();
      const { user } = useContext(AuthContext)
      const [axiosSecure] = useAxiosSecure();
@@ -77,7 +77,7 @@ const Post = () => {
                               <div className="lg:ms-5 lg:mt-0 mt-5">
                                    <input type="file"
                                         {...register("image", { required: false, })}
-                                        className="file-input file-input-bordered w-full lg:w-[333px] rounded-full" placeholder="Picture URL" aria-label="Picture URL" onChange={handleInput2Change}/>
+                                        className="file-input file-input-bordered w-full lg:w-[333px] rounded-full" placeholder="Picture URL" aria-label="Picture URL" onChange={handleInput2Change} />
                               </div>
                          </div>
                          <div className=' lg:my-10 my-5'>
@@ -86,7 +86,7 @@ const Post = () => {
                     </div>
                </form>
 
-               <div className=' mt-5'>
+               <div className=' mt-5 '>
                     <MyPost></MyPost>
                </div>
           </div>

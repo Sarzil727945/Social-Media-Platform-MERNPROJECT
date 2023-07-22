@@ -14,7 +14,7 @@ const Profile = () => {
      };
 
      return (
-          <div>
+          <div className='bg-base-200'>
                <div>
                     <Header></Header>
                </div>
