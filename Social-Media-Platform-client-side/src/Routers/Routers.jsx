@@ -11,6 +11,7 @@ import ErrorPage from "../shared/ErrorPage";
 import Profile from "../Laout/Profile";
 import AuthProvider from "../AuthProvider/AuthProvider";
 import PrivateRoute from "./PrivateRoute";
+import Post from "../profilePages/Post/Post";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -43,19 +44,10 @@ export const router = createBrowserRouter([
     path: "profile",
     element: <PrivateRoute><Profile></Profile></PrivateRoute>,
     children: [
-      // {
-      //   path: 'myCard',
-      //   element: <MyCard></MyCard>
-      // },
-      // {
-      //   path: 'users',
-      //   element: <AllUsers></AllUsers>
-      // },
-      // {
-      //   path: 'addItem',
-      //   element: <AdminRoute><AddItem></AddItem></AdminRoute>
-      // },
-
+      {
+        path: 'post',
+        element: <Post></Post>
+      },
     ]
-  },
+  }
 ]);

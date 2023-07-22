@@ -48,7 +48,7 @@ async function run() {
 
     // server link start
     const usersCollection = client.db('SocialMediaPlatform').collection('users');
-    const serverCollection = client.db('dbAssignment12').collection('cltAssignment12');
+    const allPostCollection = client.db('SocialMediaPlatform').collection('allPost');
     const selectedCollection = client.db('dbAssignment12').collection('selected');
     // server link end 
 
@@ -84,27 +84,27 @@ async function run() {
       next();
     }
 
-    // class added post mongoDB start
-    app.post('/class', verifyJwt, verifyInstructors, async (req, res) => {
+    // allPost added post mongoDB start
+    app.post('/allPost', async (req, res) => {
       const newAdd = req.body;
-      const result = await serverCollection.insertOne(newAdd)
+      const result = await allPostCollection.insertOne(newAdd)
       res.send(result);
     });
-    // class added post mongoDB end
+    // allPost added post mongoDB end
 
-    // get class data server start
-    app.get('/class', async (req, res) => {
+    // get allPost data server start
+    app.get('/allPost', async (req, res) => {
       let query = {};
       if (req.query?.email) {
         query = { email: req.query.email }
       }
-      const result = await serverCollection.find(query).toArray();
+      const result = await allPostCollection.find(query).toArray();
       res.send(result);
     })
-    //  get class data server end 
+    //  get allPost data server end 
 
-    //  class data patch start 
-    app.patch('/class/:id', async (req, res) => {
+    //  allPost data patch start 
+    app.patch('/allPost/:id', async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) }
       const updatedClasses = req.body;
@@ -117,7 +117,7 @@ async function run() {
       const result = await serverCollection.updateOne(filter, updateDoc)
       res.send(result)
     })
-    //  class data patch end
+    //  allPost data patch end
 
 
     // selected data added post mongoDB start
