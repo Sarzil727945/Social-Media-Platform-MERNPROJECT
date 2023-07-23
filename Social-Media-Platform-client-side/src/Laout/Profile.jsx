@@ -18,7 +18,7 @@ const Profile = () => {
                <div>
                     <Header></Header>
                </div>
-               <div className=' lg:pt-32 pt-28 mx-5 lg:mx-80'>
+               <div className=' lg:pt-32 pt-28  lg:mx-80'>
                     <div className=' border-b-2'>
                          <div className='pb-5 lg:flex lg:justify-between lg:relative text-center lg:text-start'>
                               <div className=' lg:flex items-center '>
@@ -38,7 +38,7 @@ const Profile = () => {
                     </div>
                     <div className=' mt-5'>
                          <div className="tabs">
-                              <div className="tabs">
+                              <div className="tabs mx-5 lg:mx-0">
                                    <Link to='/profile/post'>
                                         <button className={toggleState === 1 ? "tab btn btn-outline  btn-ghost border-0 border-b-4 hover:bg-opacity-0 hover:text-[#2461bd] text-[#2461bd] hover:border-[#2461bd] font-bold" : "tab btn btn-outline  border-0 hover:bg-opacity-70 font-semibold"}
                                         onClick={() => toggleTab(1)}

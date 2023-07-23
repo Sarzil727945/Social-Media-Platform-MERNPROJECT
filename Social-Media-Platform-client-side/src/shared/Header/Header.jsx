@@ -3,7 +3,9 @@ import ActiveLink from '../../ActiveLink/ActiveLink';
 import { FiLogOut } from 'react-icons/fi';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
 import './Header.css'
-import { AiFillHome, AiFillSetting, AiTwotoneHome } from 'react-icons/ai';
+import { AiFillSetting, AiTwotoneHome } from 'react-icons/ai';
+import { FaMapMarkedAlt } from 'react-icons/fa';
+import { HiUserGroup } from 'react-icons/hi';
 import Swal from 'sweetalert2';
 
 
@@ -56,8 +58,12 @@ const Header = () => {
                                    <li className=' mt-1'><ActiveLink to='/'><div className=' flex items-center'>
                                         <span className=' text-[22px]'><AiTwotoneHome /></span> <span className=' ms-2'> Home</span>
                                    </div></ActiveLink></li>
-                                   <li><ActiveLink to='ourMenu'>Our Menu</ActiveLink></li>
-                                   <li><ActiveLink to='order'>Our Order</ActiveLink></li>
+                                   <li><ActiveLink to='ourMenu'><div className=' flex items-center'>
+                                        <span className=' me-2 text-[22px]'><FaMapMarkedAlt /></span> Marketplace
+                                   </div></ActiveLink></li>
+                                   <li><ActiveLink to='order'><div className=' flex items-center'>
+                                        <span className=' me-2 text-[22px]'><HiUserGroup /></span> Groups
+                                   </div></ActiveLink></li>
                               </ul>
                          </div>
                          <div className=' ms-0 lg:ms-5'>
@@ -72,9 +78,13 @@ const Header = () => {
                               <div className="form-control mt-3 lg:me-36">
                                    <input type="text" placeholder="Search SA" className="input input-bordered input-info w-[333px] bg-[#434243] rounded-full" />
                               </div>
-                              <li><ActiveLink to='/' > <div className=' flex items-center'><span className=' me-2 text-[33px]'><AiTwotoneHome /></span><span> Home</span></div></ActiveLink></li>
-                              <li><ActiveLink to='ourMenu'>Our Menu</ActiveLink></li>
-                              <li><ActiveLink to='order'>Our Order</ActiveLink></li>
+                              <li><ActiveLink to='/' > <div className=' flex items-center'><span className=' me-2 text-[30px]'><AiTwotoneHome /></span><span> Home</span></div></ActiveLink></li>
+                              <li><ActiveLink to='ourMenu'><div className=' flex items-center'>
+                                   <span className=' me-2 text-[30px]'><FaMapMarkedAlt /></span> Marketplace
+                              </div></ActiveLink></li>
+                              <li><ActiveLink to='order'><div className=' flex items-center'>
+                                   <span className=' me-2 text-[30px]'><HiUserGroup /></span> Groups
+                              </div></ActiveLink></li>
                          </ul>
                     </div>
                     <div className="navbar-end">
