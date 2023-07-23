@@ -8,6 +8,9 @@ import { AuthContext } from '../../AuthProvider/AuthProvider';
 import Swal from 'sweetalert2';
 import { updateProfile } from 'firebase/auth';
 import { AiFillBackward, AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import useAxiosSecure from '../../hooks/useAxiouSeoure';
+const img_hosting_token = import.meta.env.VITE_Image_Upload_token;
+
 
 
 const Register = () => {
@@ -18,14 +21,14 @@ const Register = () => {
      const [success, setSuccess] = useState('')
      const [email, setEmail] = useState("")
      const [passwordShown, setPasswordShown] = useState(false);
-
      const { createUser } = useContext(AuthContext)
+     const [axiosSecure] = useAxiosSecure();
      const navigate = useNavigate()
+     const img_hosting_url=`https://api.imgbb.com/1/upload?key=${img_hosting_token}`;
 
      // passwordShown function start 
      const [passwordIcon, setPasswordIcon] = useState(false)
      const [conformPasswordIcon, setConformPasswordIcon] = useState(false)
-
      const [conformPasswordShown, setConformPasswordShown] = useState(false);
 
      const togglePassword = () => {
@@ -42,6 +45,7 @@ const Register = () => {
      const onSubmit = (data) => {
           setError(' ')
           setSuccess(' ')
+
 
           if (data.password !== data.conformPassword) {
                setError("Don't mach this password")
@@ -62,34 +66,40 @@ const Register = () => {
                .then((userCredential) => {
                     const currentUser = userCredential.user;
                     setSuccess('Create user account successFull')
-                    upDataUser(currentUser, data.name, data.photoUrl)
 
                     // user information post data page start
-                    const saveUser = { name: data.name, email: data.email, img: data.photoUrl }
-                    fetch('https://social-media-platform-server-side.vercel.app/users', {
+                    const formData = new FormData();
+                    formData.append('image', data.image[0])
+
+                    fetch(img_hosting_url, {
                          method: 'POST',
-                         headers: {
-                              'content-type': 'application/json'
-                         },
-                         body: JSON.stringify(saveUser)
+                         body: formData
                     })
                          .then(res => res.json())
-                         .then(data => {
-                              if (data.insertedId) {
-                    if (currentUser) {
-                         Swal.fire({
-                              title: 'Success!',
-                              text: 'Register Success !!',
-                              icon: 'success',
-                              confirmButtonText: 'Ok'
+                         .then(imgResponse => {
+                              if (imgResponse.success) {
+                                   const imgURL = imgResponse?.data?.url;
+                                   console.log(imgURL);
+                                   upDataUser(currentUser, data.name, imgURL)
+                                   const saveUser = { name: data.name, email: data.email, img: imgURL }
+                                   console.log(saveUser);
+                                   axiosSecure.post('/users', saveUser)
+                                        .then(data => {
+                                             if (data) {
+                                                  Swal.fire({
+                                                       title: 'Success!',
+                                                       text: 'Your Post Successful !!',
+                                                       icon: 'success',
+                                                       confirmButtonText: 'Ok'
+                                                  })
+                                             }
+                                             // navigate('/dashboard/myClasses')
+                                             reset();
+                                             navigate('/')
+                                             setEmail('')
+                                        })
+                              }
                          })
-                    }
-                    reset();
-                    // Verification(currentUser)
-                    navigate('/')
-                    setEmail('')
-                         }
-                    })
                     // user information post data page end
                })
                .catch((error) => {
@@ -139,10 +149,10 @@ const Register = () => {
 
                                    <div className="form-control">
                                         <label className="label">
-                                             <span className="label-text">Photo URL</span>
+                                             <span className="label-text">Your Photo</span>
                                         </label>
-                                        <input type="text"
-                                             placeholder="Photo URL" {...register("photoUrl")} name='photoUrl' className="input input-bordered" />
+                                        <input type="file"
+                                             placeholder="Photo" {...register("image")} name='image' className="file-input file-input-bordered w-full" />
                                    </div>
 
                                    <div className="form-control">

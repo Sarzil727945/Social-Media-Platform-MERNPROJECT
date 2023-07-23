@@ -93,7 +93,7 @@ const Header = () => {
                                    <div className="flex gap-2">
                                         <div className="dropdown dropdown-end relative">
                                              <label tabIndex={0} className="btn btn-ghost btn-circle w-[66px] lg:me-5">
-                                                  <img title={user?.displayName} className=' imgStyle me-3' src={user?.photoURL} alt="" />
+                                                  <img title={user?.displayName} className=' w-[66px] h-[66px] rounded-full me-3' src={user?.photoURL} alt="" />
                                              </label>
                                              <ul tabIndex={0} className="menu menu-compact dropdown-content lg:mt-5 mt-5 shadow bg-opacity-90 bg-black rounded-box w-72 lg:w-80 lg:me-2 lg:pb-10 lg:pt-5">
                                                   <li className=' mt-2'>
