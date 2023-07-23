@@ -12,6 +12,7 @@ import Profile from "../Laout/Profile";
 import AuthProvider from "../AuthProvider/AuthProvider";
 import PrivateRoute from "./PrivateRoute";
 import Post from "../profilePages/Post/Post";
+import MyPost from "../profilePages/MyPost/MyPost";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
       {
         path: 'post',
         element: <Post></Post>
+      },
+      {
+        path: 'myPost',
+        element: <MyPost></MyPost>
       },
     ]
   }

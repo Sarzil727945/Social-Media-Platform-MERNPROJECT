@@ -8,6 +8,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { FaEllipsis } from 'react-icons/fa6';
 import { GoComment } from 'react-icons/go';
 import { PiShareFatDuotone } from 'react-icons/pi';
+import Swal from 'sweetalert2';
 
 const MyPost = () => {
      const { user } = useContext(AuthContext);
@@ -33,6 +34,42 @@ const MyPost = () => {
                })
      }, [isLoading, url]);
      // server data get exit 
+
+      // server data delete start
+      const handelDelete = (id) => {
+          Swal.fire({
+               title: 'Are you sure?',
+               text: "You won't be able to revert this!",
+               icon: 'warning',
+               showCancelButton: true,
+               confirmButtonColor: '#3085d6',
+               cancelButtonColor: '#d33',
+               confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+               if (result.isConfirmed) {
+
+                    fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/allPost/${id}`, {
+                         method: 'DELETE'
+                    })
+                         .then(res => res.json())
+                         .then(data => {
+                              if (data.deletedCount > 0) {
+                                   Swal.fire(
+                                        'Deleted!',
+                                        'Your Post has been deleted.',
+                                        'success'
+                                   )
+
+                                   const remaining = postData.filter(item => item._id !== id)
+                                   setPostData(remaining);
+                              }
+                         })
+               }
+
+          })
+
+     }
+     // server data delete end
      return (
           <div className=' pb-10 '>
                {
@@ -64,15 +101,14 @@ const MyPost = () => {
                                                             </ActiveLink>
                                                        </li>
                                                        <li>
-                                                            <ActiveLink to='order'>
-                                                                 <div className=' flex items-center'>
-                                                                      <div className=' flex'>
-                                                                           <span className=' me-2 text-2xl'><RiDeleteBin6Line /></span>
-                                                                           <span> Delete post</span>
+                                                            <button onClick={() => handelDelete(data._id)}>
+                                                                 <div className='text-white ms-5'>
+                                                                      <div className=' flex items-center'>
+                                                                           <div className=' me-2 text-2xl'><RiDeleteBin6Line /></div>
+                                                                          <div className='text-xl mb-1'> Delete post</div>
                                                                       </div>
-
                                                                  </div>
-                                                            </ActiveLink>
+                                                            </button>
                                                        </li>
                                                   </ul>
                                              </div>

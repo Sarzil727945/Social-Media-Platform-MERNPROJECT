@@ -14,6 +14,7 @@ const Post = () => {
      useTitle('Profile')
      const navigate = useNavigate();
      const { user } = useContext(AuthContext)
+     const [isLoading, setIsLoading] = useState(true);
      const [axiosSecure] = useAxiosSecure();
      const { register, handleSubmit, reset } = useForm();
      const displayName = user?.displayName;
@@ -58,7 +59,7 @@ const Post = () => {
                                              confirmButtonText: 'Ok'
                                         })
                                    }
-                                   // navigate('/dashboard/myClasses')
+                                   navigate('/profile/myPost')
                                    reset();
                               })
                     }

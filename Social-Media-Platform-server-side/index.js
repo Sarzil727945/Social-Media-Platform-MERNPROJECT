@@ -103,6 +103,15 @@ async function run() {
     })
     //  get allPost data server end 
 
+    // selected data delete mongoDB start
+    app.delete('/allPost/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await allPostCollection.deleteOne(query);
+      res.send(result);
+    })
+    // selected data delete mongoDB  exit
+
     //  allPost data patch start 
     app.patch('/allPost/:id', async (req, res) => {
       const id = req.params.id;
@@ -114,39 +123,30 @@ async function run() {
           status: updatedClasses.status
         }
       }
-      const result = await serverCollection.updateOne(filter, updateDoc)
+      const result = await allPostCollection.updateOne(filter, updateDoc)
       res.send(result)
     })
     //  allPost data patch end
 
 
     // selected data added post mongoDB start
-    app.post('/selected', async (req, res) => {
+    app.post('/allPost', async (req, res) => {
       const newAdd = req.body;
-      const result = await selectedCollection.insertOne(newAdd)
+      const result = await allPostCollection.insertOne(newAdd)
       res.send(result);
     });
     // selected data added post mongoDB end
 
     // selected data added get mongoDB start
-    app.get('/selected', async (req, res) => {
+    app.get('/allPost', async (req, res) => {
       let query = {};
       if (req.query?.email) {
         query = { email: req.query.email }
       }
-      const result = await selectedCollection.find(query).toArray();
+      const result = await allPostCollection.find(query).toArray();
       res.send(result);
     })
     // selected data added get mongoDB end
-
-    // selected data delete mongoDB start
-    app.delete('/selected/:id', async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) }
-      const result = await selectedCollection.deleteOne(query);
-      res.send(result);
-    })
-    // selected data delete mongoDB  exit
 
 
     // user data post dataBD start 
