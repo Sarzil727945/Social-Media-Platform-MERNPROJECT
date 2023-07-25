@@ -9,11 +9,15 @@ import { FaEllipsis } from 'react-icons/fa6';
 import { GoComment } from 'react-icons/go';
 import { PiShareFatDuotone } from 'react-icons/pi';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../../hooks/useAxiouSeoure';
+import { useForm } from 'react-hook-form';
 
 const MyPost = () => {
      const { user } = useContext(AuthContext);
      const [isLoading, setIsLoading] = useState(true);
      const [postData, setPostData] = useState([]);
+     const [axiosSecure] = useAxiosSecure();
+     const { register, handleSubmit, reset } = useForm();
      const navigate = useNavigate()
 
      const [passwordShown, setPasswordShown] = useState(false);
@@ -38,6 +42,19 @@ const MyPost = () => {
      // server data handelEdit start
      const handelEdit = (id) => {
           console.log(id);
+     }
+     const [input1Value, setInput1Value] = useState('');
+     const [input2Value, setInput2Value] = useState('');
+
+     const handleInput1Change = (e) => {
+          setInput1Value(e.target.value);
+     };
+
+     const handleInput2Change = (e) => {
+          setInput2Value(e.target.value);
+     };
+     const isButtonDisabled = !(input1Value && input2Value);
+     const onSubmit = (data) => {
      }
      // server data handelEdit start
      // server data delete start
@@ -179,15 +196,35 @@ const MyPost = () => {
                }
                {/* The button to open modal */}
                <div className="modal" id="my_modal_8">
-                    <div className="modal-box">
-                         <h3 className="font-bold text-lg">Hello!</h3>
-                         <p className="py-4">This modal works with anchor links</p>
-                         <div className="modal-action">
-                              <a href="#" className="btn">Yay!</a>
+                    <div className="modal-box  w-11/12 max-w-3xl">
+                         <div className=' flex justify-end '>
+                              <a href='#' >
+                                   <button className="btn btn-circle bg-[#999998] text-black hover:bg-[#848482]">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                   </button>
+                              </a>
                          </div>
+                         <form className='flex justify-center pt-16' onSubmit={handleSubmit(onSubmit)}>
+                              <div>
+                                   <div className="lg:flex">
+                                        <div>
+                                             <input type="text" className="input input-bordered w-full lg:w-[333px] rounded-full"
+                                                  {...register("Bio", { required: false, maxLength: 120 })}
+                                                  placeholder="What's on your mind?" aria-label="Bio" onChange={handleInput1Change} />
+                                        </div>
+                                        <div className="lg:ms-5 lg:mt-0 mt-5">
+                                             <input type="file"
+                                                  {...register("image", { required: false, })}
+                                                  className="file-input file-input-bordered w-full lg:w-[333px] rounded-full" placeholder="Picture URL" aria-label="Picture URL" onChange={handleInput2Change} />
+                                        </div>
+                                   </div>
+                                   <div className=' lg:my-10 my-5 pt-5'>
+                                        <button type="submit" className="btn btn-active btn-accent w-full rounded-full" disabled={isButtonDisabled}>Save</button>
+                                   </div>
+                              </div>
+                         </form>
                     </div>
                </div>
-
           </div>
 
      );
