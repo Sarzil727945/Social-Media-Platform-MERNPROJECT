@@ -48,6 +48,7 @@ const Post = () => {
                     if (imgResponse.success) {
                          const imgURL = imgResponse?.data?.url;
                          const { Bio } = data;
+                         console.log(data);
                          const like = 0;
                          const add = { displayName, email, userPic, Bio, like, fileImg: imgURL }
                          axiosSecure.post('/allPost', add)
@@ -72,9 +73,9 @@ const Post = () => {
                     <div>
                          <div className="lg:flex">
                               <div>
-                                   <input type="text" className="input input-bordered w-full lg:w-[333px] rounded-full"
+                                   <input type="text" className="input input-bordered w-full lg:w-[333px] rounded-full" name='Bio'
                                         {...register("Bio", { required: false, maxLength: 120 })}
-                                        placeholder="What's on your mind?" aria-label="Bio" onChange={handleInput1Change} />
+                                        placeholder="What's on your mind?" aria-label="Bio Data" onChange={handleInput1Change} />
                               </div>
                               <div className="lg:ms-5 lg:mt-0 mt-5">
                                    <input type="file"

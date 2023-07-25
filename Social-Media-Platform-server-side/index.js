@@ -102,7 +102,22 @@ async function run() {
       res.send(result);
     })
     //  get allPost data server end 
-
+          // server data update start
+          app.put('/allPost/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const options = { upsert: true };
+            const updatePost = req.body;
+            const addPost = {
+                 $set: {
+                      Bio: updatePost.Bio,
+                      fileImg: updatePost.fileImg,
+                 }
+            }
+            const result = await allPostCollection.updateOne(filter, addPost, options);
+            res.send(result)
+       })
+       // server data update end 
     // selected data delete mongoDB start
     app.delete('/allPost/:id', async (req, res) => {
       const id = req.params.id;
