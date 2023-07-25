@@ -35,8 +35,13 @@ const MyPost = () => {
      }, [isLoading, url]);
      // server data get exit 
 
-      // server data delete start
-      const handelDelete = (id) => {
+     // server data handelEdit start
+     const handelEdit = (id) => {
+          console.log(id);
+     }
+     // server data handelEdit start
+     // server data delete start
+     const handelDelete = (id) => {
           Swal.fire({
                title: 'Are you sure?',
                text: "You won't be able to revert this!",
@@ -93,24 +98,32 @@ const MyPost = () => {
                                                   </label>
                                                   <ul tabIndex={0} className="menu menu-compact dropdown-content lg:mt-5 mt-5 shadow bg-opacity-90 bg-black rounded-box w-72 lg:w-80 lg:me-2 pb-10 lg:pt-5">
                                                        <li className=' mt-2'>
-                                                            <ActiveLink to='order'>
-                                                                 <div className=' flex items-center'>
-                                                                      <div className=' flex'><span className=' me-2 text-2xl'><FiEdit /></span> <span>Edit post</span></div>
+                                                            <button onClick={() => handelEdit(data._id)}>
+                                                                 <div className='text-white ms-5'>
+                                                                      <div className=' flex items-center'>
+                                                                           <a href="#my_modal_8" className=' flex items-center' >
+                                                                                <span className=' me-2 text-2xl'><FiEdit /></span>
+                                                                                <span className='text-xl mb-1'>Edit post</span>
+                                                                           </a>
+
+                                                                      </div>
 
                                                                  </div>
-                                                            </ActiveLink>
+                                                            </button>
+
                                                        </li>
                                                        <li>
                                                             <button onClick={() => handelDelete(data._id)}>
                                                                  <div className='text-white ms-5'>
                                                                       <div className=' flex items-center'>
                                                                            <div className=' me-2 text-2xl'><RiDeleteBin6Line /></div>
-                                                                          <div className='text-xl mb-1'> Delete post</div>
+                                                                           <div className='text-xl mb-1'> Delete post</div>
                                                                       </div>
                                                                  </div>
                                                             </button>
                                                        </li>
                                                   </ul>
+
                                              </div>
                                         </div>
                                    </div>
@@ -122,7 +135,7 @@ const MyPost = () => {
                               <div className="card-body">
                                    <div className=' flex justify-between lg:px-5'>
                                         <div>
-                                             <p>Like</p>
+                                             <p>Like {data.like}</p>
                                         </div>
                                         <div>
                                              <p>comments</p>
@@ -156,7 +169,7 @@ const MyPost = () => {
                                                             <p><PiShareFatDuotone /></p>
                                                             <p className=' text-[62%] ms-2'> Share</p>
                                                        </button>
-                                                  </div>                                      
+                                                  </div>
                                              </div>
                                         </div>
                                    </div>
@@ -164,7 +177,19 @@ const MyPost = () => {
                          </div>
                     )
                }
+               {/* The button to open modal */}
+               <div className="modal" id="my_modal_8">
+                    <div className="modal-box">
+                         <h3 className="font-bold text-lg">Hello!</h3>
+                         <p className="py-4">This modal works with anchor links</p>
+                         <div className="modal-action">
+                              <a href="#" className="btn">Yay!</a>
+                         </div>
+                    </div>
+               </div>
+
           </div>
+
      );
 };
 

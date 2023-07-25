@@ -27,6 +27,15 @@ const Home = () => {
           setPasswordIcon(!passwordIcon)
      };
 
+     // like part start 
+     const [like, setLike] = useState("")
+     const [isLike, setIsLike] = useState(false)
+     const onLike = () => {
+          setLike(like + (isLike ? -1 : 1))
+          setIsLike(!isLike);
+     }
+     // like part end
+
      // server data get start 
      const url = `https://social-media-platform-server-side-sarzil727945.vercel.app/allPost`;
      useEffect(() => {
@@ -35,9 +44,11 @@ const Home = () => {
                .then(data => {
                     setPostData(data);
                     setIsLoading(false);
+                    const [items] = postData;
+                    setLike(items?.like);
                })
      }, [isLoading, url]);
-     console.log(postData);
+    
      // server data get exit 
      return (
           <div className='bg-base-200 pb-10'>
@@ -99,7 +110,7 @@ const Home = () => {
                                         <div className="card-body">
                                              <div className=' flex justify-between lg:px-5'>
                                                   <div>
-                                                       <p>Like</p>
+                                                       <p>Like {like}</p>
                                                   </div>
                                                   <div>
                                                        <p>comments</p>
@@ -111,28 +122,29 @@ const Home = () => {
                                                   <div className=' flex justify-between lg:px-5 lg:py-1'>
                                                        <div>
                                                             <div className=' flex'>
-                                                                 <button className=' me-1 flex items-center text-2xl btn btn-ghost' onClick={togglePassword} >{
-                                                                      passwordIcon ? <AiTwotoneLike /> : <AiOutlineLike />
-                                                                 }
+                                                                 <button className={isLike? "me-1 flex items-center text-2xl btn btn-ghost text-blue-600": " me-1 flex items-center text-2xl btn btn-ghost"} onClick={onLike} >
+                                                                      {
+                                                                           isLike ? <AiTwotoneLike /> : <AiOutlineLike />
+                                                                      }
                                                                       <p className=' text-[15px] ms-1'> Like</p>
                                                                  </button>
                                                             </div>
                                                        </div>
                                                        <div>
-                                                       <div className=' flex'>
-                                                       <button className=' me-1 flex items-center text-2xl btn btn-ghost'>
-                                                            <p><GoComment /></p>
-                                                            <p className=' text-[62%] ms-2'> Comment</p>
-                                                       </button>
-                                                  </div>
+                                                            <div className=' flex'>
+                                                                 <button className=' me-1 flex items-center text-2xl btn btn-ghost'>
+                                                                      <p><GoComment /></p>
+                                                                      <p className=' text-[62%] ms-2'> Comment</p>
+                                                                 </button>
+                                                            </div>
                                                        </div>
                                                        <div>
-                                                       <div className=' flex'>
-                                                       <button className=' me-1 flex items-center text-2xl btn btn-ghost'>
-                                                            <p><PiShareFatDuotone /></p>
-                                                            <p className=' text-[62%] ms-2'> Share</p>
-                                                       </button>
-                                                  </div>
+                                                            <div className=' flex'>
+                                                                 <button className=' me-1 flex items-center text-2xl btn btn-ghost'>
+                                                                      <p><PiShareFatDuotone /></p>
+                                                                      <p className=' text-[62%] ms-2'> Share</p>
+                                                                 </button>
+                                                            </div>
                                                        </div>
                                                   </div>
                                              </div>

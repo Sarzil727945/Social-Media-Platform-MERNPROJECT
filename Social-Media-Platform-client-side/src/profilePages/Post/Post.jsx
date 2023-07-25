@@ -48,7 +48,8 @@ const Post = () => {
                     if (imgResponse.success) {
                          const imgURL = imgResponse?.data?.url;
                          const { Bio } = data;
-                         const add = { displayName, email, userPic, Bio, fileImg: imgURL }
+                         const like = 0;
+                         const add = { displayName, email, userPic, Bio, like, fileImg: imgURL }
                          axiosSecure.post('/allPost', add)
                               .then(data => {
                                    if (data) {
