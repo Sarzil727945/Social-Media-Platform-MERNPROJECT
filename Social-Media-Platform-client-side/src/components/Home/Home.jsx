@@ -12,7 +12,6 @@ import { IoMdClose } from 'react-icons/io';
 import { VscReport } from 'react-icons/vsc';
 import { GoComment } from 'react-icons/go';
 import { PiShareFatDuotone } from 'react-icons/pi';
-import Swal from 'sweetalert2';
 import Comments from '../Comments/Comments';
 
 const Home = () => {

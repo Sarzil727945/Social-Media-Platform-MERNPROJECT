@@ -49,7 +49,7 @@ async function run() {
     // server link start
     const usersCollection = client.db('SocialMediaPlatform').collection('users');
     const allPostCollection = client.db('SocialMediaPlatform').collection('allPost');
-    const selectedCollection = client.db('dbAssignment12').collection('selected');
+    const messageCollection = client.db('SocialMediaPlatform').collection('message');
     // server link end 
 
     // jwt localhost start
@@ -133,8 +133,25 @@ async function run() {
       res.send(result)
     })
     //  allPost data patch end
+    
+  // allMessage added post mongoDB start
+  app.post('/message', async (req, res) => {
+    const newAdd = req.body;
+    const result = await messageCollection.insertOne(newAdd)
+    res.send(result);
+  });
+  // allMessage added post mongoDB end
 
-
+    // get allMessage data server start
+    app.get('/message', async (req, res) => {
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email }
+      }
+      const result = await messageCollection.find(query).toArray();
+      res.send(result);
+    })
+    //  get allMessage data server end 
 
     // user data post dataBD start 
     app.post('/users', async (req, res) => {
