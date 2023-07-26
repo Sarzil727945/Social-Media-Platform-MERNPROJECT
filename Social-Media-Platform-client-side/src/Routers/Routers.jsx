@@ -13,6 +13,7 @@ import AuthProvider from "../AuthProvider/AuthProvider";
 import PrivateRoute from "./PrivateRoute";
 import Post from "../profilePages/Post/Post";
 import MyPost from "../profilePages/MyPost/MyPost";
+import Comments from "../components/Comments/Comments";
 export const router = createBrowserRouter([
   {
     path: "/",

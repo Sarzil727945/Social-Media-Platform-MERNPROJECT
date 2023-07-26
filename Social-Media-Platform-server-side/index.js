@@ -73,17 +73,6 @@ async function run() {
       next();
     }
 
-    // Warning: use verifyJWT before using verifyInstructors
-    const verifyInstructors = async (req, res, next) => {
-      const email = req.decoded.email;
-      const query = { email: email }
-      const user = await usersCollection.findOne(query);
-      if (user?.role !== 'Instructors') {
-        return res.status(403).send({ error: true, message: 'forbidden message' });
-      }
-      next();
-    }
-
     // allPost added post mongoDB start
     app.post('/allPost', async (req, res) => {
       const newAdd = req.body;
@@ -102,22 +91,24 @@ async function run() {
       res.send(result);
     })
     //  get allPost data server end 
-          // server data update start
-          app.put('/allPost/:id', async (req, res) => {
-            const id = req.params.id;
-            const filter = { _id: new ObjectId(id) }
-            const options = { upsert: true };
-            const updatePost = req.body;
-            const addPost = {
-                 $set: {
-                      Bio: updatePost.Bio,
-                      fileImg: updatePost.fileImg,
-                 }
-            }
-            const result = await allPostCollection.updateOne(filter, addPost, options);
-            res.send(result)
-       })
-       // server data update end 
+
+    // server data update start
+    app.put('/allPost/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) }
+      const options = { upsert: true };
+      const updatePost = req.body;
+      const addPost = {
+        $set: {
+          Bio: updatePost.Bio,
+          fileImg: updatePost.fileImg,
+        }
+      }
+      const result = await allPostCollection.updateOne(filter, addPost, options);
+      res.send(result)
+    })
+    // server data update end 
+
     // selected data delete mongoDB start
     app.delete('/allPost/:id', async (req, res) => {
       const id = req.params.id;
@@ -144,30 +135,10 @@ async function run() {
     //  allPost data patch end
 
 
-    // selected data added post mongoDB start
-    app.post('/allPost', async (req, res) => {
-      const newAdd = req.body;
-      const result = await allPostCollection.insertOne(newAdd)
-      res.send(result);
-    });
-    // selected data added post mongoDB end
-
-    // selected data added get mongoDB start
-    app.get('/allPost', async (req, res) => {
-      let query = {};
-      if (req.query?.email) {
-        query = { email: req.query.email }
-      }
-      const result = await allPostCollection.find(query).toArray();
-      res.send(result);
-    })
-    // selected data added get mongoDB end
-
 
     // user data post dataBD start 
     app.post('/users', async (req, res) => {
       const user = req.body;
-
       // google sign up part start
       const query = { email: user.email }
       const existingUser = await usersCollection.findOne(query);
@@ -181,6 +152,14 @@ async function run() {
     });
     // user data post dataBD exit
 
+     // admin user information get  start
+     app.get('/users', async (req, res) => {
+      const cursor = usersCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+    // admin user information get end
+
     // user data delete mongoDB start
     app.delete('/users/:id', async (req, res) => {
       const id = req.params.id;
@@ -189,14 +168,6 @@ async function run() {
       res.send(result);
     })
     // user data delete mongoDB  exit
-
-    // admin user information get  start
-    app.get('/users', async (req, res) => {
-      const cursor = usersCollection.find();
-      const result = await cursor.toArray();
-      res.send(result);
-    })
-    // admin user information get end
 
     // user admin check start
     app.get('/users/admin/:email', verifyJwt, async (req, res) => {
@@ -220,28 +191,6 @@ async function run() {
     })
     // user admin check end
 
-    // user Instructors check start
-    app.get('/users/Instructors/:email', verifyJwt, async (req, res) => {
-      const email = req.params.email;
-
-      if (req.decoded.email !== email) {
-        res.send({ Instructors: false })
-      }
-
-      // jwt verifyJwt start
-      const decodedEmail = req.decoded.email;
-      if (email !== decodedEmail) {
-        return res.status(403).send({ error: true, message: 'forbidden access' })
-      }
-      // jwt verifyJwt end
-
-      const query = { email: email }
-      const user = await usersCollection.findOne(query);
-      const result = { Instructors: user?.role === 'Instructors' }
-      res.send(result);
-    })
-    // user Instructors check end
-
     // user admin role added start
     app.patch('/users/admin/:id', async (req, res) => {
       const id = req.params.id;
@@ -255,20 +204,6 @@ async function run() {
       res.send(result);
     })
     // user admin role added exit
-
-    // user Instructors role added start
-    app.patch('/users/Instructors/:id', async (req, res) => {
-      const id = req.params.id;
-      const filter = { _id: new ObjectId(id) };
-      const updateDoc = {
-        $set: {
-          role: 'Instructors'
-        },
-      };
-      const result = await usersCollection.updateOne(filter, updateDoc);
-      res.send(result);
-    })
-    // user Instructors role added exit
 
 
     // Send a ping to confirm a successful connection

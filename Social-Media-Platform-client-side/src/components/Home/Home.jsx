@@ -12,6 +12,8 @@ import { IoMdClose } from 'react-icons/io';
 import { VscReport } from 'react-icons/vsc';
 import { GoComment } from 'react-icons/go';
 import { PiShareFatDuotone } from 'react-icons/pi';
+import Swal from 'sweetalert2';
+import Comments from '../Comments/Comments';
 
 const Home = () => {
      useTitle('Home')
@@ -19,22 +21,6 @@ const Home = () => {
      const [isLoading, setIsLoading] = useState(true);
      const [postData, setPostData] = useState([]);
      const navigate = useNavigate()
-
-     const [passwordShown, setPasswordShown] = useState(false);
-     const [passwordIcon, setPasswordIcon] = useState(false);
-     const togglePassword = () => {
-          setPasswordShown(!passwordShown);
-          setPasswordIcon(!passwordIcon)
-     };
-
-     // like part start 
-     const [like, setLike] = useState("")
-     const [isLike, setIsLike] = useState(false)
-     const onLike = () => {
-          setLike(like + (isLike ? -1 : 1))
-          setIsLike(!isLike);
-     }
-     // like part end
 
      // server data get start 
      const url = `https://social-media-platform-server-side-sarzil727945.vercel.app/allPost`;
@@ -48,7 +34,36 @@ const Home = () => {
                     setLike(items?.like);
                })
      }, [isLoading, url]);
-    
+
+     // like part start 
+     const [like, setLike] = useState("")
+     const [isLike, setIsLike] = useState(false)
+     const [selectItem, setSelectItem] = useState('')
+     const onLike = (id) => {
+          console.log(id);
+          const url = `https://social-media-platform-server-side-sarzil727945.vercel.app/allPost`;
+          fetch(url)
+               .then(res => res.json())
+               .then(data => {
+                    const selectData = data.filter(d => d._id === id)
+                    const [dataO] = selectData
+                    setSelectItem(dataO);
+               })
+          setLike(like + (isLike ? -1 : 1))
+          setIsLike(!isLike);
+     }
+     console.log(selectItem);
+     console.log(like);
+
+     // like part end
+
+     // comments part start
+     const [comment, setComment] = useState([])
+     const selectComment = (id) => {
+          setComment([id])
+     }
+     // comments part end
+
      // server data get exit 
      return (
           <div className='bg-base-200 pb-10'>
@@ -122,7 +137,7 @@ const Home = () => {
                                                   <div className=' flex justify-between lg:px-5 lg:py-1'>
                                                        <div>
                                                             <div className=' flex'>
-                                                                 <button className={isLike? "me-1 flex items-center text-2xl btn btn-ghost text-blue-600": " me-1 flex items-center text-2xl btn btn-ghost"} onClick={onLike} >
+                                                                 <button className={isLike ? "me-1 flex items-center text-2xl btn btn-ghost text-blue-600" : " me-1 flex items-center text-2xl btn btn-ghost"} onClick={() => onLike(data._id)}  >
                                                                       {
                                                                            isLike ? <AiTwotoneLike /> : <AiOutlineLike />
                                                                       }
@@ -131,7 +146,7 @@ const Home = () => {
                                                             </div>
                                                        </div>
                                                        <div>
-                                                            <div className=' flex'>
+                                                            <div onClick={() => selectComment(data._id)} className=' flex'>
                                                                  <button className=' me-1 flex items-center text-2xl btn btn-ghost'>
                                                                       <p><GoComment /></p>
                                                                       <p className=' text-[62%] ms-2'> Comment</p>
@@ -147,6 +162,16 @@ const Home = () => {
                                                             </div>
                                                        </div>
                                                   </div>
+                                             </div>
+                                             <div>
+                                                  {
+                                                      
+                                                       comment.map(d => (d === data._id) &&<Comments
+                                                            id={d}
+                                                            key={d}
+                                                       ></Comments>)
+                                                  }
+
                                              </div>
                                         </div>
                                    </div>

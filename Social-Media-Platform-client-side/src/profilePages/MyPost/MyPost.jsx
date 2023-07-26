@@ -38,7 +38,7 @@ const MyPost = () => {
                })
      }, [isLoading, url]);
      // server data get exit 
-
+ 
      // server data handelEdit start
      const handelEdit = (id) => {
           console.log(id);
