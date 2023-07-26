@@ -5,6 +5,9 @@ import { AuthContext } from '../../AuthProvider/AuthProvider';
 import { useContext } from 'react';
 import useAxiosSecure from '../../hooks/useAxiouSeoure';
 import { useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 
 const Comments = ({ id }) => {
@@ -14,6 +17,7 @@ const Comments = ({ id }) => {
      const email = user?.email;
      const userPic = user?.photoURL;
      const messageId = id;
+     const navigate = useNavigate()
      const [input1Value, setInput1Value] = useState('');
      const [messageData, setMessageData] = useState([]);
      const handleInput1Change = (e) => {
@@ -47,24 +51,15 @@ const Comments = ({ id }) => {
      }, [url]);
      // server allMessage data get exit
 
-     console.log(messageData);
+     // // Reloads the page
+     // const handleReloadPage = () => {
+     //      window.location.reload();
+     // };
+
      return (
-          <div>
-               <form className='flex' onSubmit={handelFrom}>
-                    <div className=' relative w-[333%]'>
-                         <div className=" mx-5 mt-1">
-                              <div>
-                                   <textarea name='message' placeholder="Write a public comment..." className="textarea textarea-bordered w-full pe-[10%] rounded-[18px]" onChange={handleInput1Change}></textarea>
-                              </div>
-                              <div className=' absolute bottom-0 right-[0] me-11 mb-2'>
-                                   {
-                                        isButtonDisabled ? <button type="submit" className="  w-full text-[25px]" disabled={isButtonDisabled}><BiSolidSend /></button> : <button type="submit" className=" w-full text-[25px] text-blue-700" disabled={isButtonDisabled}><BiSolidSend /></button>
-                                   }
-                              </div>
-                         </div>
-                    </div>
-               </form>
-               <div className=' mx-5 mt-2'>
+          <div className=' relative'>
+               <p>{messageData.length}</p>
+               <div className=' mx-5 mt-2 h-[333px] overflow-scroll pb-20'>
                     {
                          messageData.map(data => <div key={data._id}>
                               <div className=' flex items-center mb-5'>
@@ -80,6 +75,22 @@ const Comments = ({ id }) => {
                               </div>
                          </div>)
                     }
+               </div>
+               <div className=' absolute w-full bottom-[-10px]'>
+                    <form className='flex' onSubmit={handelFrom}>
+                         <div className=' relative w-[333%]'>
+                              <div className=" lg:mx-5 mx-2 mt-1">
+                                   <div>
+                                        <textarea name='message' placeholder="Write a public comment..." className="textarea textarea-bordered  w-full pe-[10%] rounded-[18px]" onChange={handleInput1Change}></textarea>
+                                   </div>
+                                   <div className=' absolute bottom-0 right-[0] me-11 pb-2'>
+                                        {
+                                             isButtonDisabled ? <button type="submit" className="  w-full text-[25px]" disabled={isButtonDisabled}><BiSolidSend /></button> : <button type="submit" className=" w-full text-[25px] text-[#3e9dc2]"  disabled={isButtonDisabled}><BiSolidSend /></button>
+                                        }
+                                   </div>
+                              </div>
+                         </div>
+                    </form>
                </div>
           </div>
      );

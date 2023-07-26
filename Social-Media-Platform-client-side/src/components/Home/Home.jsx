@@ -70,7 +70,7 @@ const Home = () => {
                     <div className=' lg:mx-72'>
                          {
                               postData?.map(data =>
-                                   <div className="card card-compact w- h-full bg-base-100 shadow-2xl lg:mt-10 mt-5 lg:mx-32 pb-5" key={data._id}>
+                                   <div className="card card-compact w- h-full bg-base-100 shadow-2xl lg:mt-10 mt-5 lg:mx-32" key={data._id}>
                                         <div className=' border-b-2'>
                                              <div className='flex justify-between relative  text-start px-4 pt-4 pb-1'>
                                                   <div className='flex items-center '>
@@ -127,7 +127,11 @@ const Home = () => {
                                                        <p>Like {like}</p>
                                                   </div>
                                                   <div>
-                                                       <p>comments</p>
+                                                       <div onClick={() => selectComment(data._id)} className=' flex'>
+                                                            <button>
+                                                                 <a>Comment</a>
+                                                            </button>
+                                                       </div>
                                                   </div>
                                              </div>
 
@@ -164,8 +168,8 @@ const Home = () => {
                                              </div>
                                              <div>
                                                   {
-                                                      
-                                                       comment.map(d => (d === data._id) &&<Comments
+
+                                                       comment.map(d => (d === data._id) && <Comments
                                                             id={d}
                                                             key={d}
                                                        ></Comments>)

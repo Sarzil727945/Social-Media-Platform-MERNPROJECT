@@ -10,6 +10,7 @@ import { GoComment } from 'react-icons/go';
 import { PiShareFatDuotone } from 'react-icons/pi';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../hooks/useAxiouSeoure';
+import Comments from '../../components/Comments/Comments';
 
 
 const MyPost = () => {
@@ -38,7 +39,7 @@ const MyPost = () => {
                })
      }, [isLoading, url]);
      // server data get exit 
- 
+
      // server data handelEdit start
      const handelEdit = (id) => {
           console.log(id);
@@ -80,7 +81,7 @@ const MyPost = () => {
                     }
                     form.reset();
                     navigate('/profile/myPost')
-                    
+
                })
      }
      // server data handelEdit start
@@ -124,16 +125,22 @@ const MyPost = () => {
      const handleClickButton1 = () => {
           // Do some action here...
           console.log('Button 1 clicked!');
-      
+
           // Trigger the click event on Button 2
           button2Ref.current.click();
-        };
-      
-        // Function to handle Button 2 click
-        const handleClickButton2 = () => {
+     };
+
+     // Function to handle Button 2 click
+     const handleClickButton2 = () => {
           // Do some action here...
           console.log('Button 2 clicked!');
-        };
+     };
+     // comments part start
+     const [comment, setComment] = useState([])
+     const selectComment = (id) => {
+          setComment([id])
+     }
+     // comments part end
      return (
           <div className=' pb-10 '>
                {
@@ -195,7 +202,11 @@ const MyPost = () => {
                                              <p>Like {data.like}</p>
                                         </div>
                                         <div>
-                                             <p>comments</p>
+                                             <div onClick={() => selectComment(data._id)} className=' flex'>
+                                                  <button>
+                                                       <a>Comment</a>
+                                                  </button>
+                                             </div>
                                         </div>
                                    </div>
 
@@ -214,7 +225,7 @@ const MyPost = () => {
                                              </div>
                                              <div>
                                                   <div className=' flex'>
-                                                       <button className=' me-1 flex items-center text-2xl btn btn-ghost'>
+                                                       <button onClick={() => selectComment(data._id)} className=' me-1 flex items-center text-2xl btn btn-ghost'>
                                                             <p><GoComment /></p>
                                                             <p className=' text-[62%] ms-2'> Comment</p>
                                                        </button>
@@ -230,6 +241,16 @@ const MyPost = () => {
                                              </div>
                                         </div>
                                    </div>
+                                   <div>
+                                        {
+
+                                             comment.map(d => (d === data._id) && <Comments
+                                                  id={d}
+                                                  key={d}
+                                             ></Comments>)
+                                        }
+
+                                   </div>
                               </div>
                          </div>
                     )
@@ -240,7 +261,7 @@ const MyPost = () => {
                          <div className=' flex justify-end '>
                               <a href='#' >
                                    <button ref={button2Ref} onClick={handleClickButton2} className="btn btn-circle bg-[#e0e0dd] text-black hover:bg-[#9b9b9a] border-0">
-                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                    </button>
                               </a>
                          </div>
