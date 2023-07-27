@@ -24,6 +24,24 @@ const Comments = ({ id }) => {
           setInput1Value(e.target.value);
      };
      const isButtonDisabled = !(input1Value);
+
+     // server allMessage data get start
+     useEffect(() => {
+          fetchData();
+     }, []);
+
+     const fetchData = async () => {
+          try {
+               const response = await fetch('https://social-media-platform-server-side-sarzil727945.vercel.app/message');
+               const jsonData = await response.json();
+               const sameMassageID = jsonData.filter(d => d.messageId === id)
+               setMessageData(sameMassageID);
+          } catch (error) {
+               console.error('Error fetching data:', error);
+          }
+     };
+     // // server allMessage data get exit
+
      //  allMessage post server start 
      const handelFrom = (event) => {
           event.preventDefault();
@@ -33,64 +51,52 @@ const Comments = ({ id }) => {
           const add = { messageId, displayName, email, userPic, message }
           axiosSecure.post('/message', add)
                .then(data => {
+                    fetchData();
                     console.log(data);
                })
           form.reset();
+
      }
      //  allMessage post server end
 
-     // server allMessage data get start 
-     const url = `https://social-media-platform-server-side-sarzil727945.vercel.app/message`;
-     useEffect(() => {
-          fetch(url)
-               .then(res => res.json())
-               .then(data => {
-                    const sameMassageID = data.filter(d => d.messageId === id)
-                    setMessageData(sameMassageID);
-               })
-     }, [url]);
-     // server allMessage data get exit
-
-     // // Reloads the page
-     // const handleReloadPage = () => {
-     //      window.location.reload();
-     // };
 
      return (
-          <div className=' relative'>
-               <p>{messageData.length}</p>
-               <div className=' mx-5 mt-2 h-[333px] overflow-scroll pb-20'>
-                    {
-                         messageData.map(data => <div key={data._id}>
-                              <div className=' flex items-center mb-5'>
-                                   <div>
-                                        <img className=' w-8 h-8 rounded-full me-2' src={data.userPic} alt="" />
+          <div >
+               <p className=' text-center'>{messageData.length}</p>
+               <div className=' relative'>
+                    <div className=' mx-5 mt-2 h-[333px] overflow-scroll pb-32'>
+                         {
+                              messageData.map(data => <div key={data._id}>
+                                   <div className=' flex items-center mb-5'>
+                                        <div>
+                                             <img className=' w-8 h-8 rounded-full me-2' src={data.userPic} alt="" />
+                                        </div>
+                                        <div className=' bg-[#e8e3e3] rounded-[18px]'>
+                                             <div className=' px-4 pb-2 '>
+                                                  <p className=' pt-2'>{data.displayName}</p>
+                                                  <h2 className=' text-[17px]'>{data.message}</h2>
+                                             </div>
+                                        </div>
                                    </div>
-                                   <div className=' bg-[#e8e3e3] rounded-[18px]'>
-                                        <div className=' px-4 pb-2 '>
-                                             <p className=' pt-2'>{data.displayName}</p>
-                                             <h2 className=' text-[17px]'>{data.message}</h2>
+                              </div>)
+                         }
+                    </div>
+                    <div className=' absolute w-full bottom-[-10px]'>
+                         <form className='flex' onSubmit={handelFrom}>
+                              <div className=' relative w-[333%]'>
+                                   <div className=" lg:mx-5 mx-2 mt-1">
+                                        <div>
+                                             <textarea name='message' placeholder="Write a public comment..." className="textarea textarea-bordered  w-full pe-[10%] rounded-[18px]" onChange={handleInput1Change}></textarea>
+                                        </div>
+                                        <div className=' absolute bottom-0 right-[0] me-11 pb-2'>
+                                             {
+                                                  isButtonDisabled ? <button type="submit" className="  w-full text-[25px]" disabled={isButtonDisabled}><BiSolidSend /></button> : <button type="submit" className=" w-full text-[25px] text-[#3e9dc2]" disabled={isButtonDisabled}><BiSolidSend /></button>
+                                             }
                                         </div>
                                    </div>
                               </div>
-                         </div>)
-                    }
-               </div>
-               <div className=' absolute w-full bottom-[-10px]'>
-                    <form className='flex' onSubmit={handelFrom}>
-                         <div className=' relative w-[333%]'>
-                              <div className=" lg:mx-5 mx-2 mt-1">
-                                   <div>
-                                        <textarea name='message' placeholder="Write a public comment..." className="textarea textarea-bordered  w-full pe-[10%] rounded-[18px]" onChange={handleInput1Change}></textarea>
-                                   </div>
-                                   <div className=' absolute bottom-0 right-[0] me-11 pb-2'>
-                                        {
-                                             isButtonDisabled ? <button type="submit" className="  w-full text-[25px]" disabled={isButtonDisabled}><BiSolidSend /></button> : <button type="submit" className=" w-full text-[25px] text-[#3e9dc2]"  disabled={isButtonDisabled}><BiSolidSend /></button>
-                                        }
-                                   </div>
-                              </div>
-                         </div>
-                    </form>
+                         </form>
+                    </div>
                </div>
           </div>
      );

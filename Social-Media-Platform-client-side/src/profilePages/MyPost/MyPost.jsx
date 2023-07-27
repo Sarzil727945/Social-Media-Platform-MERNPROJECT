@@ -28,17 +28,22 @@ const MyPost = () => {
           setPasswordIcon(!passwordIcon)
      };
 
-     // server data get start 
-     const url = `https://social-media-platform-server-side-sarzil727945.vercel.app/allPost?email=${user?.email}`;
+     // server myData get start
      useEffect(() => {
-          fetch(url)
-               .then(res => res.json())
-               .then(data => {
-                    setPostData(data);
-                    setIsLoading(false);
-               })
-     }, [isLoading, url]);
-     // server data get exit 
+          fetchData();
+     }, []);
+
+     const fetchData = async () => {
+          try {
+               const response = await fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/allPost?email=${user?.email}`);
+               const jsonData = await response.json();
+               setPostData(jsonData);
+               setIsLoading(false);
+          } catch (error) {
+               console.error('Error fetching data:', error);
+          }
+     };
+     // // server myData get exit
 
      // server data handelEdit start
      const handelEdit = (id) => {
@@ -71,6 +76,7 @@ const MyPost = () => {
                body: JSON.stringify(add)
           })
                .then(data => {
+                    fetchData();
                     if (data) {
                          Swal.fire({
                               title: 'Success!',
@@ -80,7 +86,6 @@ const MyPost = () => {
                          })
                     }
                     form.reset();
-                    navigate('/profile/myPost')
 
                })
      }
@@ -135,16 +140,43 @@ const MyPost = () => {
           // Do some action here...
           console.log('Button 2 clicked!');
      };
+
+     // server allMessage data get start
+     const [messageData, setMessageData] = useState([]);
+     useEffect(() => {
+          fetchMessageData();
+     }, []);
+
+     const fetchMessageData = async () => {
+          try {
+               const response = await fetch('https://social-media-platform-server-side-sarzil727945.vercel.app/message');
+               const jsonData = await response.json();
+               setMessageData(jsonData);
+          } catch (error) {
+               console.error('Error fetching data:', error);
+          }
+     };
+     // // server allMessage data get exit
+
      // comments part start
+     const [dataM, setDataM] = useState([]);
+     useEffect(() => {
+          const filteredData = postData.map((p) => {
+               return messageData.filter((f) => p._id === f.messageId);
+          });
+          setDataM(filteredData);
+     }, [postData, messageData]);
+
      const [comment, setComment] = useState([])
      const selectComment = (id) => {
           setComment([id])
+          fetchMessageData();
      }
      // comments part end
      return (
           <div className=' pb-10 '>
                {
-                    postData?.map(data =>
+                    postData?.map((data, index) =>
                          <div className="card card-compact h-full bg-base-100 shadow-2xl lg:mt-10 mt-5 lg:mx-32 pb-5" key={data._id}>
                               <div className=' border-b-2'>
                                    <div className='flex justify-between relative  text-start px-4 pt-4 pb-1'>
@@ -203,9 +235,12 @@ const MyPost = () => {
                                         </div>
                                         <div>
                                              <div onClick={() => selectComment(data._id)} className=' flex'>
-                                                  <button>
-                                                       <a>Comment</a>
-                                                  </button>
+                                                  <div>
+                                                       {dataM[index]?.length}
+                                                       <button className='mx-1'>
+                                                            <a> comment</a>
+                                                       </button>
+                                                  </div>
                                              </div>
                                         </div>
                                    </div>

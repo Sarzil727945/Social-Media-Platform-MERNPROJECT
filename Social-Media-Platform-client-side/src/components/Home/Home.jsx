@@ -51,25 +51,48 @@ const Home = () => {
           setLike(like + (isLike ? -1 : 1))
           setIsLike(!isLike);
      }
-     console.log(selectItem);
-     console.log(like);
-
      // like part end
 
+     // server allMessage data get start
+     const [messageData, setMessageData] = useState([]);
+     useEffect(() => {
+          fetchData();
+     }, []);
+
+     const fetchData = async () => {
+          try {
+               const response = await fetch('https://social-media-platform-server-side-sarzil727945.vercel.app/message');
+               const jsonData = await response.json();
+               setMessageData(jsonData);
+          } catch (error) {
+               console.error('Error fetching data:', error);
+          }
+     };
+     // // server allMessage data get exit
+
      // comments part start
+     const [dataM, setDataM] = useState([]);
+     useEffect(() => {
+          const filteredData = postData.map((p) => {
+               return messageData.filter((f) => p._id === f.messageId);
+          });
+          setDataM(filteredData);
+     }, [postData, messageData]);
+
      const [comment, setComment] = useState([])
      const selectComment = (id) => {
           setComment([id])
+          fetchData();
      }
      // comments part end
 
-     // server data get exit 
      return (
           <div className='bg-base-200 pb-10'>
                <div className=' lg:pt-28 pt-20'>
                     <div className=' lg:mx-72'>
                          {
-                              postData?.map(data =>
+                              postData?.map((data, index) =>
+
                                    <div className="card card-compact w- h-full bg-base-100 shadow-2xl lg:mt-10 mt-5 lg:mx-32" key={data._id}>
                                         <div className=' border-b-2'>
                                              <div className='flex justify-between relative  text-start px-4 pt-4 pb-1'>
@@ -124,13 +147,16 @@ const Home = () => {
                                         <div className="card-body">
                                              <div className=' flex justify-between lg:px-5'>
                                                   <div>
-                                                       <p>Like {like}</p>
+                                                       <p>Like</p>
                                                   </div>
                                                   <div>
                                                        <div onClick={() => selectComment(data._id)} className=' flex'>
-                                                            <button>
-                                                                 <a>Comment</a>
-                                                            </button>
+                                                            <div>
+                                                                 {dataM[index]?.length}
+                                                                 <button className='mx-1'>
+                                                                      <a> comment</a>
+                                                                 </button>
+                                                            </div>
                                                        </div>
                                                   </div>
                                              </div>
