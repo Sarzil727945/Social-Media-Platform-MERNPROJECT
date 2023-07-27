@@ -15,18 +15,13 @@ import Comments from '../../components/Comments/Comments';
 
 const MyPost = () => {
      const { user } = useContext(AuthContext);
+     const displayName = user?.displayName;
+     const email = user?.email;
+     const userPic = user?.photoURL;
      const [isLoading, setIsLoading] = useState(true);
      const [postData, setPostData] = useState([]);
      const [axiosSecure] = useAxiosSecure();
-
      const navigate = useNavigate()
-
-     const [passwordShown, setPasswordShown] = useState(false);
-     const [passwordIcon, setPasswordIcon] = useState(false);
-     const togglePassword = () => {
-          setPasswordShown(!passwordShown);
-          setPasswordIcon(!passwordIcon)
-     };
 
      // server myData get start
      useEffect(() => {
@@ -141,6 +136,22 @@ const MyPost = () => {
           console.log('Button 2 clicked!');
      };
 
+     // like part start 
+     const [likeShown, setLikeShown] = useState(false);
+     const [likeIcon, setLikeIcon] = useState(false);
+     const like = (likeId) => {
+
+          const add = { likeId, displayName, email, userPic}
+          axiosSecure.post('/like', add)
+          .then(data => {
+               console.log(data);
+          })
+
+          setLikeShown(!likeShown);
+          setLikeIcon(!likeIcon)
+     };
+     // like part end
+     
      // server allMessage data get start
      const [messageData, setMessageData] = useState([]);
      useEffect(() => {
@@ -231,7 +242,7 @@ const MyPost = () => {
                               <div className="card-body">
                                    <div className=' flex justify-between lg:px-5'>
                                         <div>
-                                             <p>Like {data.like}</p>
+                                             <p>Like </p>
                                         </div>
                                         <div>
                                              <div onClick={() => selectComment(data._id)} className=' flex'>
@@ -250,8 +261,8 @@ const MyPost = () => {
                                         <div className=' flex justify-between lg:px-5 lg:py-1'>
                                              <div>
                                                   <div className=' flex'>
-                                                       <button className=' me-1 flex items-center text-2xl btn btn-ghost' onClick={togglePassword} >{
-                                                            passwordIcon ? <AiTwotoneLike /> : <AiOutlineLike />
+                                                       <button className=' me-1 flex items-center text-2xl btn btn-ghost' onClick={()=>like(data._id)} >{
+                                                            likeIcon ? <AiTwotoneLike /> : <AiOutlineLike />
                                                        }
                                                             <p className=' text-[15px] ms-1'> Like</p>
                                                        </button>

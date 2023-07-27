@@ -50,6 +50,7 @@ async function run() {
     const usersCollection = client.db('SocialMediaPlatform').collection('users');
     const allPostCollection = client.db('SocialMediaPlatform').collection('allPost');
     const messageCollection = client.db('SocialMediaPlatform').collection('message');
+    const likeCollection = client.db('SocialMediaPlatform').collection('like');
     // server link end 
 
     // jwt localhost start
@@ -133,14 +134,14 @@ async function run() {
       res.send(result)
     })
     //  allPost data patch end
-    
-  // allMessage added post mongoDB start
-  app.post('/message', async (req, res) => {
-    const newAdd = req.body;
-    const result = await messageCollection.insertOne(newAdd)
-    res.send(result);
-  });
-  // allMessage added post mongoDB end
+
+    // allMessage added post mongoDB start
+    app.post('/message', async (req, res) => {
+      const newAdd = req.body;
+      const result = await messageCollection.insertOne(newAdd)
+      res.send(result);
+    });
+    // allMessage added post mongoDB end
 
     // get allMessage data server start
     app.get('/message', async (req, res) => {
@@ -153,6 +154,23 @@ async function run() {
     })
     //  get allMessage data server end 
 
+    // allLike added post mongoDB start
+    app.post('/like', async (req, res) => {
+      const newAdd = req.body;
+      // one like check  part start
+      const query = { email: newAdd.email, likeId: newAdd.likeId}
+      const existingUser =  (await likeCollection.findOne(query));
+      if (existingUser) {
+        return res.send({ message: 'like already exists' })
+      }
+      // one like check  part end
+      else {
+        const result = await likeCollection.insertOne(newAdd)
+        res.send(result);
+      }
+    });
+    // allLike added post mongoDB end
+
     // user data post dataBD start 
     app.post('/users', async (req, res) => {
       const user = req.body;
@@ -162,15 +180,16 @@ async function run() {
       if (existingUser) {
         return res.send({ message: 'user already exists' })
       }
-      // google sign up part start
-
-      const result = await usersCollection.insertOne(user)
-      res.send(result);
+      // google sign up part end
+      else {
+        const result = await usersCollection.insertOne(user)
+        res.send(result);
+      }
     });
     // user data post dataBD exit
 
-     // admin user information get  start
-     app.get('/users', async (req, res) => {
+    // admin user information get  start
+    app.get('/users', async (req, res) => {
       const cursor = usersCollection.find();
       const result = await cursor.toArray();
       res.send(result);

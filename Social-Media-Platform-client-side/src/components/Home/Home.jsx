@@ -13,10 +13,15 @@ import { VscReport } from 'react-icons/vsc';
 import { GoComment } from 'react-icons/go';
 import { PiShareFatDuotone } from 'react-icons/pi';
 import Comments from '../Comments/Comments';
+import useAxiosSecure from '../../hooks/useAxiouSeoure';
 
 const Home = () => {
      useTitle('Home')
+     const [axiosSecure] = useAxiosSecure();
      const { user } = useContext(AuthContext);
+     const displayName = user?.displayName;
+     const email = user?.email;
+     const userPic = user?.photoURL;
      const [isLoading, setIsLoading] = useState(true);
      const [postData, setPostData] = useState([]);
      const navigate = useNavigate()
@@ -29,28 +34,23 @@ const Home = () => {
                .then(data => {
                     setPostData(data);
                     setIsLoading(false);
-                    const [items] = postData;
-                    setLike(items?.like);
                })
      }, [isLoading, url]);
 
      // like part start 
-     const [like, setLike] = useState("")
-     const [isLike, setIsLike] = useState(false)
-     const [selectItem, setSelectItem] = useState('')
-     const onLike = (id) => {
-          console.log(id);
-          const url = `https://social-media-platform-server-side-sarzil727945.vercel.app/allPost`;
-          fetch(url)
-               .then(res => res.json())
+     const [likeShown, setLikeShown] = useState(false);
+     const [likeIcon, setLikeIcon] = useState(false);
+     const like = (likeId) => {
+
+          const add = { likeId, displayName, email, userPic }
+          axiosSecure.post('/like', add)
                .then(data => {
-                    const selectData = data.filter(d => d._id === id)
-                    const [dataO] = selectData
-                    setSelectItem(dataO);
+                    console.log(data);
                })
-          setLike(like + (isLike ? -1 : 1))
-          setIsLike(!isLike);
-     }
+
+          setLikeShown(!likeShown);
+          setLikeIcon(!likeIcon)
+     };
      // like part end
 
      // server allMessage data get start
@@ -69,6 +69,8 @@ const Home = () => {
           }
      };
      // // server allMessage data get exit
+
+
 
      // comments part start
      const [dataM, setDataM] = useState([]);
@@ -166,10 +168,9 @@ const Home = () => {
                                                   <div className=' flex justify-between lg:px-5 lg:py-1'>
                                                        <div>
                                                             <div className=' flex'>
-                                                                 <button className={isLike ? "me-1 flex items-center text-2xl btn btn-ghost text-blue-600" : " me-1 flex items-center text-2xl btn btn-ghost"} onClick={() => onLike(data._id)}  >
-                                                                      {
-                                                                           isLike ? <AiTwotoneLike /> : <AiOutlineLike />
-                                                                      }
+                                                                 <button className=' me-1 flex items-center text-2xl btn btn-ghost' onClick={() => like(data._id)} >{
+                                                                      likeIcon ? <AiTwotoneLike /> : <AiOutlineLike />
+                                                                 }
                                                                       <p className=' text-[15px] ms-1'> Like</p>
                                                                  </button>
                                                             </div>
