@@ -21,6 +21,7 @@ const Login = () => {
      const emailRef = useRef();
 
      const [error, setError] = useState('')
+     const [success, setSuccess] = useState('')
      const [passwordShown, setPasswordShown] = useState(false);
      const [passwordIcon, setPasswordIcon] = useState(false);
      const [captchaToken, setCaptchaToken] = useState("");
@@ -36,7 +37,8 @@ const Login = () => {
 
      const handelForm = (event) => {
           event.preventDefault();
-          setError('')
+          setError(' ')
+          setSuccess(' ')
           const form = event.target
           const email = form.email.value;
           const password = form.password.value;
@@ -45,7 +47,7 @@ const Login = () => {
           signIn(email, password)
                .then((userCredential) => {
                     const currentUser = userCredential.user;
-
+                    setSuccess(' Your account login successFull')
                     if (currentUser) {
                          Swal.fire({
                               title: 'Success!',
@@ -70,6 +72,7 @@ const Login = () => {
 
           googlSignIn()
                .then((result) => {
+                    setSuccess(' Your google account login successFull')
                     const user = result.user;
 
                     // user information post data page start 
@@ -166,10 +169,19 @@ const Login = () => {
                                         sitekey="6LehVRsnAAAAAMM4EXD3v1mqKve9NARW_qzmnoQe"
                                         onChange={(token) => setCaptchaToken(token)}
                                    />
+                                    <p className=' text-green-500'>{success}</p>
+                                   {
+
+                                        success && <div className="text-center my-5">
+                                             <span> loading....</span>
+                                        </div>
+
+                                   }
                                    <div className="form-control mt-2">
                                         <input disabled={!captchaToken} type='submit' className="btn bg-[#9d2b95] hover:bg-[#9d2b95] text-white text-xl" value='Log in' />
                                    </div>
                               </form>
+                             
                               <div className="form-control flex">
                                    <button onClick={handelGoogleRegister} className="btn bg-[#682e9e] hover:bg-[#682e9e] mx-auto w-36"> <span className='text-[40px]'><FcGoogle /></span> <span className=' ms-1 text-[18px] text-white'>Sing in</span></button>
                               </div>

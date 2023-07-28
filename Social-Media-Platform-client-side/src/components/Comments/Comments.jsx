@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-const Comments = ({ id }) => {
+const Comments = ({ id, fetchMData, fetchMessageData }) => {
      const [axiosSecure] = useAxiosSecure();
      const { user } = useContext(AuthContext)
      const displayName = user?.displayName;
@@ -18,6 +18,7 @@ const Comments = ({ id }) => {
      const userPic = user?.photoURL;
      const messageId = id;
      const navigate = useNavigate()
+     const [isLoading, setIsLoading] = useState(true);
      const [input1Value, setInput1Value] = useState('');
      const [messageData, setMessageData] = useState([]);
      const handleInput1Change = (e) => {
@@ -36,6 +37,9 @@ const Comments = ({ id }) => {
                const jsonData = await response.json();
                const sameMassageID = jsonData.filter(d => d.messageId === id)
                setMessageData(sameMassageID);
+               
+               setIsLoading(false);
+               fetchMessageData();
           } catch (error) {
                console.error('Error fetching data:', error);
           }
@@ -52,6 +56,8 @@ const Comments = ({ id }) => {
           axiosSecure.post('/message', add)
                .then(data => {
                     fetchData();
+                    fetchMData();
+                    fetchMessageData();
                     console.log(data);
                })
           form.reset();
@@ -62,7 +68,12 @@ const Comments = ({ id }) => {
 
      return (
           <div >
-               <p className=' text-center'>{messageData.length}</p>
+               {
+                    isLoading && <div className="text-center my-5">
+                         <span> loading....</span>
+                    </div>
+               }
+
                <div className=' relative'>
                     <div className=' mx-5 mt-2 h-[333px] overflow-scroll pb-32'>
                          {
@@ -81,6 +92,7 @@ const Comments = ({ id }) => {
                               </div>)
                          }
                     </div>
+
                     <div className=' absolute w-full bottom-[-10px]'>
                          <form className='flex' onSubmit={handelFrom}>
                               <div className=' relative w-[333%]'>

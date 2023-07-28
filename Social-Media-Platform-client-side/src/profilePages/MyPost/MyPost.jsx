@@ -22,7 +22,7 @@ const MyPost = () => {
      const [postData, setPostData] = useState([]);
      const [axiosSecure] = useAxiosSecure();
      const navigate = useNavigate()
-    
+
      // server myData get start
      useEffect(() => {
           fetchData();
@@ -53,6 +53,7 @@ const MyPost = () => {
                     const selectData = data.filter(d => d._id === id)
                     const [dataO] = selectData
                     setSelectItem(dataO);
+                    setIsLoading(false);
                })
      }
      const { Bio, fileImg, _id } = selectItem;
@@ -148,6 +149,7 @@ const MyPost = () => {
                const response = await fetch('https://social-media-platform-server-side-sarzil727945.vercel.app/like');
                const jsonData = await response.json();
                setLikeData(jsonData);
+               setIsLoading(false);
           } catch (error) {
                console.error('Error fetching data:', error);
           }
@@ -193,6 +195,7 @@ const MyPost = () => {
                const response = await fetch('https://social-media-platform-server-side-sarzil727945.vercel.app/message');
                const jsonData = await response.json();
                setMessageData(jsonData);
+               setIsLoading(false);
           } catch (error) {
                console.error('Error fetching data:', error);
           }
@@ -328,6 +331,7 @@ const MyPost = () => {
                                              comment.map(d => (d === data._id) && <Comments
                                                   id={d}
                                                   key={d}
+                                                  fetchMessageData={fetchMessageData}
                                              ></Comments>)
                                         }
 
@@ -335,6 +339,11 @@ const MyPost = () => {
                               </div>
                          </div>
                     )
+               }
+               {
+                    isLoading && <div className="text-center my-2">
+                         <span> loading....</span>
+                    </div>
                }
                {/* The button to open modal */}
                <div className="modal" id="my_modal_8">

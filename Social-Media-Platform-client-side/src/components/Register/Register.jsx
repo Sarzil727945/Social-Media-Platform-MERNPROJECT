@@ -19,13 +19,12 @@ const Register = () => {
 
      const [error, setError] = useState('')
      const [success, setSuccess] = useState('')
-     const [isLoading, setIsLoading] = useState(true);
      const [email, setEmail] = useState("")
      const [passwordShown, setPasswordShown] = useState(false);
      const { createUser } = useContext(AuthContext)
      const [axiosSecure] = useAxiosSecure();
      const navigate = useNavigate()
-     const img_hosting_url=`https://api.imgbb.com/1/upload?key=${img_hosting_token}`;
+     const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`;
 
      // passwordShown function start 
      const [passwordIcon, setPasswordIcon] = useState(false)
@@ -144,7 +143,7 @@ const Register = () => {
                                              <span className="label-text">Name</span>
                                         </label>
                                         <input type="text"
-                                             placeholder="Name" {...register("name", { required: true })} name='name' className="input input-bordered"  required/>
+                                             placeholder="Name" {...register("name", { required: true })} name='name' className="input input-bordered" required />
                                         {errors.name && <span className=' text-red-500 mt-1'>Name is required</span>}
                                    </div>
 
@@ -153,7 +152,7 @@ const Register = () => {
                                              <span className="label-text">Your Photo</span>
                                         </label>
                                         <input type="file"
-                                             placeholder="Photo" {...register("image")} name='image' className="file-input file-input-bordered w-full" required/>
+                                             placeholder="Photo" {...register("image")} name='image' className="file-input file-input-bordered w-full" required />
                                    </div>
 
                                    <div className="form-control">
@@ -211,6 +210,13 @@ const Register = () => {
 
                                    <p className='text-red-500'>{error}</p>
                                    <p className=' text-green-500'>{success}</p>
+                                   {
+
+                                        success && <div className="text-center my-5">
+                                             <span> loading....</span>
+                                        </div>
+
+                                   }
                                    <div className="form-control mt-2">
                                         <button type='submit' className="btn bg-[#0C87B9] hover:bg-[#0C87B9] text-xl">Sign Up</button>
 

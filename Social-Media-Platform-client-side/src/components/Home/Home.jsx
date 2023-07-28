@@ -50,6 +50,7 @@ const Home = () => {
                const response = await fetch('https://social-media-platform-server-side-sarzil727945.vercel.app/like');
                const jsonData = await response.json();
                setLikeData(jsonData);
+               setIsLoading(false);
           } catch (error) {
                console.error('Error fetching data:', error);
           }
@@ -66,8 +67,8 @@ const Home = () => {
                })
           {
                const skData = likeData.filter((f) => f.likeId === likeId);
-               const likeEmail = skData.filter((e)=> e.email === email);
-               likeEmail[0] ? alert('Your already like this picture!!'): ''
+               const likeEmail = skData.filter((e) => e.email === email);
+               likeEmail[0] ? alert('Your already like this picture!!') : ''
           }
      };
      // like data post server end 
@@ -86,14 +87,15 @@ const Home = () => {
      // server allMessage data get start
      const [messageData, setMessageData] = useState([]);
      useEffect(() => {
-          fetchData();
+          fetchMData();
      }, []);
 
-     const fetchData = async () => {
+     const fetchMData = async () => {
           try {
                const response = await fetch('https://social-media-platform-server-side-sarzil727945.vercel.app/message');
                const jsonData = await response.json();
                setMessageData(jsonData);
+               setIsLoading(false);
           } catch (error) {
                console.error('Error fetching data:', error);
           }
@@ -114,7 +116,7 @@ const Home = () => {
      const [comment, setComment] = useState([])
      const selectComment = (id) => {
           setComment([id])
-          fetchData();
+          fetchMData();
      }
      // comments part end
 
@@ -234,6 +236,7 @@ const Home = () => {
                                                        comment.map(d => (d === data._id) && <Comments
                                                             id={d}
                                                             key={d}
+                                                            fetchMData={fetchMData}
                                                        ></Comments>)
                                                   }
 
@@ -242,7 +245,13 @@ const Home = () => {
                                    </div>
                               )
                          }
+
                     </div>
+                    {
+                         isLoading && <div className="text-center my-60">
+                              <span> loading....</span>
+                         </div>
+                    }
                </div>
           </div>
      );
