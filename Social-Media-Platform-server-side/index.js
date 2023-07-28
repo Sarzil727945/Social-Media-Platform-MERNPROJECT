@@ -158,8 +158,8 @@ async function run() {
     app.post('/like', async (req, res) => {
       const newAdd = req.body;
       // one like check  part start
-      const query = { email: newAdd.email, likeId: newAdd.likeId}
-      const existingUser =  (await likeCollection.findOne(query));
+      const query = { email: newAdd.email, likeId: newAdd.likeId }
+      const existingUser = (await likeCollection.findOne(query));
       if (existingUser) {
         return res.send({ message: 'like already exists' })
       }
@@ -170,6 +170,17 @@ async function run() {
       }
     });
     // allLike added post mongoDB end
+
+    // get allLike data server start
+    app.get('/like', async (req, res) => {
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email }
+      }
+      const result = await likeCollection.find(query).toArray();
+      res.send(result);
+    })
+    //  get allLike data server end 
 
     // user data post dataBD start 
     app.post('/users', async (req, res) => {

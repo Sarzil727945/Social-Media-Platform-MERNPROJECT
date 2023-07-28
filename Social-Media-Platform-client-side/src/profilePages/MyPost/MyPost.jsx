@@ -22,7 +22,7 @@ const MyPost = () => {
      const [postData, setPostData] = useState([]);
      const [axiosSecure] = useAxiosSecure();
      const navigate = useNavigate()
-
+    
      // server myData get start
      useEffect(() => {
           fetchData();
@@ -137,21 +137,51 @@ const MyPost = () => {
      };
 
      // like part start 
-     const [likeShown, setLikeShown] = useState(false);
-     const [likeIcon, setLikeIcon] = useState(false);
-     const like = (likeId) => {
+     // allLike data get server start
+     const [likeData, setLikeData] = useState([]);
+     useEffect(() => {
+          fetchLikeData();
+     }, []);
 
-          const add = { likeId, displayName, email, userPic}
-          axiosSecure.post('/like', add)
-          .then(data => {
-               console.log(data);
-          })
-
-          setLikeShown(!likeShown);
-          setLikeIcon(!likeIcon)
+     const fetchLikeData = async () => {
+          try {
+               const response = await fetch('https://social-media-platform-server-side-sarzil727945.vercel.app/like');
+               const jsonData = await response.json();
+               setLikeData(jsonData);
+          } catch (error) {
+               console.error('Error fetching data:', error);
+          }
      };
+     // allLike data get server end
+
+     // like data post server start
+     const like = (likeId) => {
+          const add = { likeId, displayName, email, userPic }
+          axiosSecure.post('/like', add)
+               .then(data => {
+                    console.log(data);
+                    fetchLikeData();
+               })
+          {
+               const skData = likeData.filter((f) => f.likeId === likeId);
+               const likeEmail = skData.filter((e) => e.email === email);
+               likeEmail[0] ? alert('Your already like this picture!!') : ''
+          }
+     };
+     // like data post server end 
+
+     // like sameId data start 
+     const [dataL, setDataL] = useState([]);
+     useEffect(() => {
+          const filteredData = postData.map((p) => {
+               return likeData.filter((f) => p._id === f.likeId);
+          });
+          setDataL(filteredData);
+     }, [postData, likeData]);
+     console.log(dataL);
+     // like sameId data end 
      // like part end
-     
+
      // server allMessage data get start
      const [messageData, setMessageData] = useState([]);
      useEffect(() => {
@@ -242,7 +272,12 @@ const MyPost = () => {
                               <div className="card-body">
                                    <div className=' flex justify-between lg:px-5'>
                                         <div>
-                                             <p>Like </p>
+                                             <div>
+                                                  {dataL[index]?.length}
+                                                  <button className='mx-1'>
+                                                       <a> Like</a>
+                                                  </button>
+                                             </div>
                                         </div>
                                         <div>
                                              <div onClick={() => selectComment(data._id)} className=' flex'>
@@ -261,8 +296,8 @@ const MyPost = () => {
                                         <div className=' flex justify-between lg:px-5 lg:py-1'>
                                              <div>
                                                   <div className=' flex'>
-                                                       <button className=' me-1 flex items-center text-2xl btn btn-ghost' onClick={()=>like(data._id)} >{
-                                                            likeIcon ? <AiTwotoneLike /> : <AiOutlineLike />
+                                                       <button className=' me-1 flex items-center text-2xl btn btn-ghost' onClick={() => like(data._id)} >{
+                                                            <AiOutlineLike />
                                                        }
                                                             <p className=' text-[15px] ms-1'> Like</p>
                                                        </button>
