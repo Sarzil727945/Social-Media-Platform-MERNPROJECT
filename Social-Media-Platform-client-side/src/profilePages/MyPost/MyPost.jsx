@@ -180,8 +180,13 @@ const MyPost = () => {
           });
           setDataL(filteredData);
      }, [postData, likeData]);
-     console.log(dataL);
      // like sameId data end 
+
+     const [onePostAllLike, setOnePostAllLike] = useState([])
+     const allLikeUser = (id) => {
+          const AllLike = likeData.filter(f => f.likeId === id)
+          setOnePostAllLike(AllLike);
+     }
      // like part end
 
      // server allMessage data get start
@@ -275,10 +280,11 @@ const MyPost = () => {
                               <div className="card-body">
                                    <div className=' flex justify-between lg:px-5'>
                                         <div>
-                                             <div>
+                                             <div onClick={() => allLikeUser(data._id)}
+                                             >
                                                   {dataL[index]?.length}
                                                   <button className='mx-1'>
-                                                       <a> Like</a>
+                                                       <a href="#my_modal_8"> Like</a>
                                                   </button>
                                              </div>
                                         </div>
@@ -345,8 +351,27 @@ const MyPost = () => {
                          <span> loading....</span>
                     </div>
                }
+               
                {/* The button to open modal */}
-               <div className="modal" id="my_modal_8">
+               {
+                    onePostAllLike ? <div className="modal" id="my_modal_8">
+                    <div className="modal-box  lg:w-4/12 w-full">
+                         <div className=' flex justify-end '>
+                              <a href='#' >
+                                   <button className="btn btn-circle bg-[#e0e0dd] text-black hover:bg-[#9b9b9a] border-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                   </button>
+                              </a>
+                         </div>
+                         <div className=' h-40 overflow-scroll'>
+                              {
+                                   onePostAllLike?.map(d => <div key={d._id}>
+                                        <p>{d.displayName}</p>
+                                   </div>)
+                              }
+                         </div>
+                    </div>
+               </div> : <div className="modal" id="my_modal_8">
                     <div className="modal-box  w-11/12 max-w-3xl">
                          <div className=' flex justify-end '>
                               <a href='#' >
@@ -379,8 +404,8 @@ const MyPost = () => {
                          </form>
                     </div>
                </div>
+               }
           </div>
-
      );
 };
 

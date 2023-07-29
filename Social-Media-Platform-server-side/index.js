@@ -93,6 +93,22 @@ async function run() {
     })
     //  get allPost data server end 
 
+    // search part start
+    app.get("/postSearchText/:text", async (req, res) => {
+      const text = req.params.text;
+      const result = await allPostCollection
+        .find({
+          $or: [
+            { Bio: { $regex: text, $options: "i" } },
+            { displayName: { $regex: text, $options: "i" } },
+            { email: { $regex: text, $options: "i" } },
+          ],
+        })
+        .toArray();
+      res.send(result);
+    });
+    // search part exit 
+
     // server data update start
     app.put('/allPost/:id', async (req, res) => {
       const id = req.params.id;

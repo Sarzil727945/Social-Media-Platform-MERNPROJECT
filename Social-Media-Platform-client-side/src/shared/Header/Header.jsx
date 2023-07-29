@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import ActiveLink from '../../ActiveLink/ActiveLink';
 import { FiLogOut } from 'react-icons/fi';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
@@ -7,11 +7,28 @@ import { AiFillSetting, AiTwotoneHome } from 'react-icons/ai';
 import { FaMapMarkedAlt } from 'react-icons/fa';
 import { HiUserGroup } from 'react-icons/hi';
 import Swal from 'sweetalert2';
+import Home from '../../components/Home/Home';
 
 
 const Header = () => {
      const { user, logOut } = useContext(AuthContext)
+     const [searchText, setSearchText] = useState('')
+     const [searchData, setSearchData] = useState([])
 
+     const handleSubmit = (e) => {
+          e.preventDefault();
+          fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/postSearchText/${searchText}`)
+               .then((res) => res.json())
+               .then((data) => {
+                    setSearchData(data);
+               });
+     }
+     const handleKeyPress = (e) => {
+          if (e.key === 'Enter') {
+               handleSubmit(e);
+          }
+     };
+     console.log(searchData);
      // logOut part start
      const handelLogOut = (id) => {
           Swal.fire({
@@ -53,7 +70,9 @@ const Header = () => {
                               </label>
                               <ul tabIndex={0} className="menu menu-compact dropdown-content mt-8 p-2 shadow bg-opacity-90 bg-black rounded-box w-72">
                                    <div className="form-control">
-                                        <input type="text" placeholder="Search SA" className="input input-bordered input-info w-full bg-[#434243] rounded-full" />
+                                        <form onSubmit={handleSubmit}>
+                                             <input onChange={(e) => setSearchText(e.target.value)} onKeyPress={handleKeyPress} type="text" placeholder="Search SA" className="input input-bordered input-info w-full bg-[#434243] rounded-full" />
+                                        </form>
                                    </div>
                                    <li className=' mt-1'><ActiveLink to='/'><div className=' flex items-center'>
                                         <span className=' text-[22px]'><AiTwotoneHome /></span> <span className=' ms-2'> Home</span>
@@ -76,7 +95,8 @@ const Header = () => {
                          <ul className="menu menu-horizontal px-1">
                               <></>
                               <div className="form-control mt-3 lg:me-36">
-                                   <input type="text" placeholder="Search SA" className="input input-bordered input-info w-[333px] bg-[#434243] rounded-full" />
+                                   <input onChange={(e) => setSearchText(e.target.value)}
+                                        onKeyPress={handleKeyPress} type="text" placeholder="Search SA" className="input input-bordered input-info w-[333px] bg-[#434243] rounded-full" />
                               </div>
                               <li><ActiveLink to='/' > <div className=' flex items-center'><span className=' me-2 text-[30px]'><AiTwotoneHome /></span><span> Home</span></div></ActiveLink></li>
                               <li><ActiveLink to='ourMenu'><div className=' flex items-center'>
@@ -122,6 +142,13 @@ const Header = () => {
                               </>
                          }
                     </div>
+                    <div>
+                    </div>
+               </div>
+               <div className=' hidden'>
+                    <Home searchData={searchData}>
+
+                    </Home>
                </div>
           </div>
      );
