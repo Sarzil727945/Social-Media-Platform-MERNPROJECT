@@ -387,9 +387,11 @@ const MyPost = () => {
                                              </div>
                                         </div>
                                         <div className=' lg:my-10 my-5 pt-5 modal-action'>
-                                             <button onClick={handleClickButton1} type="submit" className="btn btn-active btn-accent w-full rounded-full">                                <label htmlFor="my_modal_6">
-                                                  Save
-                                             </label>
+                                             <button onClick={handleClickButton1} type="submit" className="btn btn-active btn-accent w-full rounded-full">
+                                                  <label htmlFor="my_modal_6" className=' lg:px-80 py-4 px-28'>
+
+                                                       Save
+                                                  </label>
                                              </button>
                                         </div>
                                    </div>

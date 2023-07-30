@@ -100,7 +100,7 @@ const Comments = ({ id, fetchMData, fetchMessageData }) => {
                                         <div>
                                              <textarea name='message' placeholder="Write a public comment..." className="textarea textarea-bordered  w-full pe-[10%] rounded-[18px]" onChange={handleInput1Change}></textarea>
                                         </div>
-                                        <div className=' absolute bottom-0 right-[0] me-11 pb-2'>
+                                        <div className=' absolute bottom-0 right-[0] lg:me-11 pb-2 me-5'>
                                              {
                                                   isButtonDisabled ? <button type="submit" className="  w-full text-[25px]" disabled={isButtonDisabled}><BiSolidSend /></button> : <button type="submit" className=" w-full text-[25px] text-[#3e9dc2]" disabled={isButtonDisabled}><BiSolidSend /></button>
                                              }
