@@ -41,9 +41,11 @@ const MyPost = () => {
      // // server myData get exit
 
      // server data handelEdit start
+     const [modalOpen, setModalOpen] = useState('')
      const handelEdit = (id) => {
-          console.log(id);
+          setModalOpen(id);
      }
+
      const [selectItem, setSelectItem] = useState('')
      const thisData = (id) => {
           const url = `https://social-media-platform-server-side-sarzil727945.vercel.app/allPost`;
@@ -128,7 +130,7 @@ const MyPost = () => {
           console.log('Button 1 clicked!');
 
           // Trigger the click event on Button 2
-          button2Ref.current.click();
+          button2Ref?.current?.click();
      };
 
      // Function to handle Button 2 click
@@ -186,6 +188,7 @@ const MyPost = () => {
      const allLikeUser = (id) => {
           const AllLike = likeData.filter(f => f.likeId === id)
           setOnePostAllLike(AllLike);
+          setModalOpen('like')
      }
      // like part end
 
@@ -248,10 +251,12 @@ const MyPost = () => {
                                                             <button onClick={() => handelEdit(data._id)}>
                                                                  <div className='text-white ms-5'>
                                                                       <div className=' flex items-center'>
-                                                                           <a onClick={() => thisData(data._id)} href="#my_modal_8" className=' flex items-center' >
+                                                                           <label onClick={() => thisData(data._id)} htmlFor="my_modal_6" className=' flex items-center' >
                                                                                 <span className=' me-2 text-2xl'><FiEdit /></span>
-                                                                                <span className='text-xl mb-1'>Edit post</span>
-                                                                           </a>
+                                                                                <span className='text-xl mb-1'>
+                                                                                     Edit post
+                                                                                </span>
+                                                                           </label>
                                                                       </div>
                                                                  </div>
                                                             </button>
@@ -284,7 +289,9 @@ const MyPost = () => {
                                              >
                                                   {dataL[index]?.length}
                                                   <button className='mx-1'>
-                                                       <a href="#my_modal_8"> Like</a>
+                                                       <label htmlFor="my_modal_7">
+                                                            Like
+                                                       </label>
                                                   </button>
                                              </div>
                                         </div>
@@ -351,60 +358,68 @@ const MyPost = () => {
                          <span> loading....</span>
                     </div>
                }
-               
-               {/* The button to open modal */}
-               {
-                    onePostAllLike ? <div className="modal" id="my_modal_8">
-                    <div className="modal-box  lg:w-4/12 w-full">
-                         <div className=' flex justify-end '>
-                              <a href='#' >
-                                   <button className="btn btn-circle bg-[#e0e0dd] text-black hover:bg-[#9b9b9a] border-0">
+
+               {/* modal edit start  */}
+               <div>
+                    <input type="checkbox" id="my_modal_6" className="modal-toggle" />
+                    <div className="modal">
+                         <div className="modal-box w-11/12 max-w-3xl">
+                              <div className=' flex justify-end modal-action mt-0'>
+                                   <label htmlFor="my_modal_6" className="btn btn-circle bg-[#e0e0dd] text-black hover:bg-[#9b9b9a] border-0">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                                   </button>
-                              </a>
-                         </div>
-                         <div className=' h-40 overflow-scroll'>
-                              {
-                                   onePostAllLike?.map(d => <div key={d._id}>
-                                        <p>{d.displayName}</p>
-                                   </div>)
-                              }
-                         </div>
-                    </div>
-               </div> : <div className="modal" id="my_modal_8">
-                    <div className="modal-box  w-11/12 max-w-3xl">
-                         <div className=' flex justify-end '>
-                              <a href='#' >
-                                   <button ref={button2Ref} onClick={handleClickButton2} className="btn btn-circle bg-[#e0e0dd] text-black hover:bg-[#9b9b9a] border-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                                   </button>
-                              </a>
-                         </div>
-                         <form className='flex justify-center pt-16' onSubmit={formUpdate}>
-                              <div>
-                                   <div className="lg:flex">
-                                        <div>
-                                             <input type="text" className="input input-bordered w-full lg:w-[333px] rounded-full"
-                                                  name='Bio'
-                                                  defaultValue={Bio}
-                                                  placeholder="What's on your mind?" aria-label="Bio" />
-                                        </div>
-                                        <div className="lg:ms-5 lg:mt-0 mt-5">
-                                             <input type="text"
-                                                  name='image'
-                                                  className="input input-bordered w-full lg:w-[333px] rounded-full"
-                                                  defaultValue={fileImg}
-                                                  placeholder="Picture URL" aria-label="Picture URL" />
-                                        </div>
-                                   </div>
-                                   <div className=' lg:my-10 my-5 pt-5'>
-                                        <button onClick={handleClickButton1} type="submit" className="btn btn-active btn-accent w-full rounded-full">Save</button>
-                                   </div>
+                                   </label>
                               </div>
-                         </form>
+                              <form className='flex justify-center pt-16' onSubmit={formUpdate}>
+                                   <div>
+                                        <div className="lg:flex">
+                                             <div>
+                                                  <input type="text" className="input input-bordered w-full lg:w-[333px] rounded-full"
+                                                       name='Bio'
+                                                       defaultValue={Bio}
+                                                       placeholder="What's on your mind?" aria-label="Bio" />
+                                             </div>
+                                             <div className="lg:ms-5 lg:mt-0 mt-5">
+                                                  <input type="text"
+                                                       name='image'
+                                                       className="input input-bordered w-full lg:w-[333px] rounded-full"
+                                                       defaultValue={fileImg}
+                                                       placeholder="Picture URL" aria-label="Picture URL" />
+                                             </div>
+                                        </div>
+                                        <div className=' lg:my-10 my-5 pt-5 modal-action'>
+                                             <button onClick={handleClickButton1} type="submit" className="btn btn-active btn-accent w-full rounded-full">                                <label htmlFor="my_modal_6">
+                                                  Save
+                                             </label>
+                                             </button>
+                                        </div>
+                                   </div>
+                              </form>
+                         </div>
                     </div>
                </div>
-               }
+               {/* modal edit end  */}
+
+               {/* modal like start  */}
+               <div>
+                    <input type="checkbox" id="my_modal_7" className="modal-toggle" />
+                    <div className="modal">
+                         <div className="modal-box">
+                              <div className=' flex justify-end modal-action mt-0'>
+                                   <label htmlFor="my_modal_7" className="btn btn-circle bg-[#e0e0dd] text-black hover:bg-[#9b9b9a] border-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                   </label>
+                              </div>
+                              <div className=' h-44'>
+                                   {
+                                        onePostAllLike?.map(d => <div key={d._id}>
+                                             <p>{d.displayName}</p>
+                                        </div>)
+                                   }
+                              </div>
+                         </div>
+                    </div>
+               </div>
+               {/* modal like end  */}
           </div>
      );
 };

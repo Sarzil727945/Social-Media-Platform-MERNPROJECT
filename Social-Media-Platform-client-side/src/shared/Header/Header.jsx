@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ActiveLink from '../../ActiveLink/ActiveLink';
 import { FiLogOut } from 'react-icons/fi';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
@@ -13,14 +13,16 @@ import Home from '../../components/Home/Home';
 const Header = () => {
      const { user, logOut } = useContext(AuthContext)
      const [searchText, setSearchText] = useState('')
-     const [searchData, setSearchData] = useState([])
+     const [isLoading, setIsLoading] = useState(true);
+
 
      const handleSubmit = (e) => {
           e.preventDefault();
           fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/postSearchText/${searchText}`)
                .then((res) => res.json())
                .then((data) => {
-                    setSearchData(data);
+                    setSearchText(data);
+                    setIsLoading(false);
                });
      }
      const handleKeyPress = (e) => {
@@ -28,7 +30,7 @@ const Header = () => {
                handleSubmit(e);
           }
      };
-     console.log(searchData);
+
      // logOut part start
      const handelLogOut = (id) => {
           Swal.fire({
@@ -60,6 +62,7 @@ const Header = () => {
      }
      // logOut part end
 
+     console.log(searchText);
      return (
           <div>
                <div className="navbar fixed bg-opacity-90 bg-black z-50 text-white ">
@@ -146,9 +149,9 @@ const Header = () => {
                     </div>
                </div>
                <div className=' hidden'>
-                    <Home searchData={searchData}>
+                    {/* <Home searchText = {searchText} >
 
-                    </Home>
+                    </Home> */}
                </div>
           </div>
      );

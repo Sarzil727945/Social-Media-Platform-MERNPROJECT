@@ -15,8 +15,7 @@ import { PiShareFatDuotone } from 'react-icons/pi';
 import Comments from '../Comments/Comments';
 import useAxiosSecure from '../../hooks/useAxiouSeoure';
 
-const Home = ({searchData}) => {
-     
+const Home = () => {
      useTitle('Home')
      const [axiosSecure] = useAxiosSecure();
      const { user } = useContext(AuthContext);
@@ -26,8 +25,6 @@ const Home = ({searchData}) => {
      const [isLoading, setIsLoading] = useState(true);
      const [postData, setPostData] = useState([]);
      const navigate = useNavigate()
-     
-     console.log(searchData);
 
      // server allData get start 
      const url = `https://social-media-platform-server-side-sarzil727945.vercel.app/allPost`;
@@ -38,7 +35,7 @@ const Home = ({searchData}) => {
                     setPostData(data);
                     setIsLoading(false);
                })
-     }, [isLoading, url]);
+     }, [url]);
      // server allData get end
 
      // like part start 
@@ -111,8 +108,6 @@ const Home = ({searchData}) => {
      };
      // // server allMessage data get exit
 
-
-
      // comments part start
      const [dataM, setDataM] = useState([]);
      useEffect(() => {
@@ -135,7 +130,6 @@ const Home = ({searchData}) => {
                     <div className=' lg:mx-72'>
                          {
                               postData?.map((data, index) =>
-
                                    <div className="card card-compact w- h-full bg-base-100 shadow-2xl lg:mt-10 mt-5 lg:mx-32" key={data._id}>
                                         <div className=' border-b-2'>
                                              <div className='flex justify-between relative  text-start px-4 pt-4 pb-1'>
@@ -183,23 +177,25 @@ const Home = ({searchData}) => {
                                                   </div>
                                              </div>
                                              <div className=' mb-3 px-5'>
-                                                  <p>{data.Bio}</p>
+                                                  <p>{data?.Bio}</p>
                                              </div>
                                         </div>
-                                        <figure><img src={data.fileImg} alt="Shoes" /></figure>
+                                        <figure><img src={data?.fileImg} alt="Shoes" /></figure>
                                         <div className="card-body">
                                              <div className=' flex justify-between lg:px-5'>
                                                   <div>
-                                                       <div onClick={() => allLikeUser(data._id)}
+                                                       <div onClick={() => allLikeUser(data?._id)}
                                                        >
                                                             {dataL[index]?.length}
                                                             <button className='mx-1'>
-                                                                 <a href="#my_modal_8"> Like</a>
+                                                                 <label htmlFor="my_modal_7">
+                                                                      Like
+                                                                 </label>
                                                             </button>
                                                        </div>
                                                   </div>
                                                   <div>
-                                                       <div onClick={() => selectComment(data._id)} className=' flex'>
+                                                       <div onClick={() => selectComment(data?._id)} className=' flex'>
                                                             <div>
                                                                  {dataM[index]?.length}
                                                                  <button className='mx-1'>
@@ -215,7 +211,7 @@ const Home = ({searchData}) => {
                                                   <div className=' flex justify-between lg:px-5 lg:py-1'>
                                                        <div>
                                                             <div className=' flex'>
-                                                                 <button className=' me-1 flex items-center text-2xl btn btn-ghost' onClick={() => like(data._id)} >{
+                                                                 <button className=' me-1 flex items-center text-2xl btn btn-ghost' onClick={() => like(data?._id)} >{
                                                                       <AiOutlineLike />
                                                                  }
                                                                       <p className=' text-[15px] ms-1'> Like</p>
@@ -223,7 +219,7 @@ const Home = ({searchData}) => {
                                                             </div>
                                                        </div>
                                                        <div>
-                                                            <div onClick={() => selectComment(data._id)} className=' flex'>
+                                                            <div onClick={() => selectComment(data?._id)} className=' flex'>
                                                                  <button className=' me-1 flex items-center text-2xl btn btn-ghost'>
                                                                       <p><GoComment /></p>
                                                                       <p className=' text-[62%] ms-2'> Comment</p>
@@ -243,7 +239,7 @@ const Home = ({searchData}) => {
                                              <div>
                                                   {
 
-                                                       comment.map(d => (d === data._id) && <Comments
+                                                       comment.map(d => (d === data?._id) && <Comments
                                                             id={d}
                                                             key={d}
                                                             fetchMData={fetchMData}
@@ -263,25 +259,28 @@ const Home = ({searchData}) => {
                          </div>
                     }
                </div>
-               {/* The button to open modal */}
-               <div className="modal" id="my_modal_8">
-                    <div className="modal-box  lg:w-4/12 w-full">
-                         <div className=' flex justify-end '>
-                              <a href='#' >
-                                   <button className="btn btn-circle bg-[#e0e0dd] text-black hover:bg-[#9b9b9a] border-0">
+
+               {/* modal like start  */}
+               <div>
+                    <input type="checkbox" id="my_modal_7" className="modal-toggle" />
+                    <div className="modal">
+                         <div className="modal-box">
+                              <div className=' flex justify-end modal-action mt-0'>
+                                   <label htmlFor="my_modal_7" className="btn btn-circle bg-[#e0e0dd] text-black hover:bg-[#9b9b9a] border-0">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                                   </button>
-                              </a>
-                         </div>
-                         <div className=' h-40 overflow-scroll'>
-                              {
-                                   onePostAllLike?.map(d => <div key={d._id}>
-                                        <p>{d.displayName}</p>
-                                   </div>)
-                              }
+                                   </label>
+                              </div>
+                              <div className=' h-44'>
+                                   {
+                                        onePostAllLike?.map(d => <div key={d._id}>
+                                             <p>{d.displayName}</p>
+                                        </div>)
+                                   }
+                              </div>
                          </div>
                     </div>
                </div>
+               {/* modal like end  */}
           </div>
      );
 };
