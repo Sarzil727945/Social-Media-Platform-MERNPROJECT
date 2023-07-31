@@ -198,6 +198,15 @@ async function run() {
     })
     //  get allLike data server end 
 
+    // delete Like data server start
+    app.delete('/like/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await likeCollection.deleteOne(query);
+      res.send(result);
+    })
+    //  delete Like data server end 
+
     // user data post dataBD start 
     app.post('/users', async (req, res) => {
       const user = req.body;

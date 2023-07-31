@@ -57,21 +57,36 @@ const Home = () => {
      };
      // allLike data get server end
 
-     // like data post server start
+     // like data post and delete server start
      const like = (likeId) => {
           const add = { likeId, displayName, email, userPic }
-          axiosSecure.post('/like', add)
-               .then(data => {
-                    console.log(data);
-                    fetchLikeData();
-               })
+
           {
                const skData = likeData.filter((f) => f.likeId === likeId);
                const likeEmail = skData.filter((e) => e.email === email);
-               likeEmail[0] ? alert('Your already like this picture!!') : ''
+               const [Obj] = likeEmail
+               const sameEmail = (Obj?.email === email)
+               const id = (Obj?._id);
+
+                    (sameEmail) ?
+                    fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/like/${id}`, {
+                         method: 'DELETE'
+                    })
+                         .then(res => res.json())
+                         .then(data => {
+                              console.log(data);
+                              const remaining = likeData.filter(item => item._id !== id)
+                              setLikeData(remaining);
+                         }) :
+                    axiosSecure.post('/like', add)
+                         .then(data => {
+                              console.log(data);
+                              fetchLikeData();
+                         })
+
           }
      };
-     // like data post server end 
+     // like data post and delete server end 
 
      // like sameId data start 
      const [dataL, setDataL] = useState([]);
@@ -83,6 +98,7 @@ const Home = () => {
      }, [postData, likeData]);
      // like sameId data end 
 
+     // likeIcon Change start 
      const [alreadyLike, setAlreadyLike] = useState([]);
      useEffect(() => {
           const likeEmail = dataL.map((d) => {
@@ -90,7 +106,8 @@ const Home = () => {
           });
           setAlreadyLike(likeEmail);
      }, [dataL]);
-     console.log(alreadyLike);
+     // likeIcon Change end 
+
      const [onePostAllLike, setOnePostAllLike] = useState([])
      const allLikeUser = (id) => {
           const AllLike = likeData.filter(f => f.likeId === id)
@@ -223,12 +240,12 @@ const Home = () => {
                                                                  <button className=' me-1 flex items-center text-2xl btn btn-ghost' onClick={() => like(data?._id)} >
                                                                       {
                                                                            (alreadyLike[index]?.length !== 0) ? (alreadyLike[index]?.map(d => < div key={d._id}>
-                                                                                {d.email && <span><AiTwotoneLike /></span>
+                                                                                {d.email && <span className=' text-blue-600'><AiTwotoneLike /></span>
                                                                                 }
                                                                            </div>)) : <span><AiOutlineLike /></span>
                                                                       }
 
-                                                                      <p className=' text-[15px] ms-1'> Like</p>
+                                                                      <p className=' text-[15px] '> Like</p>
 
                                                                  </button>
                                                             </div>

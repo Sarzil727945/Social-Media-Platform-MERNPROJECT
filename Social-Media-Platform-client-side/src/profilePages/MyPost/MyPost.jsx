@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
 import { useNavigate } from 'react-router-dom';
-import ActiveLink from '../../ActiveLink/ActiveLink';
 import { AiTwotoneLike, AiOutlineLike } from 'react-icons/ai';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -88,6 +87,7 @@ const MyPost = () => {
                })
      }
      // server data handelEdit start
+
      // server data delete start
      const handelDelete = (id) => {
           Swal.fire({
@@ -158,21 +158,36 @@ const MyPost = () => {
      };
      // allLike data get server end
 
-     // like data post server start
+     // like data post and delete server start
      const like = (likeId) => {
           const add = { likeId, displayName, email, userPic }
-          axiosSecure.post('/like', add)
-               .then(data => {
-                    console.log(data);
-                    fetchLikeData();
-               })
+
           {
                const skData = likeData.filter((f) => f.likeId === likeId);
                const likeEmail = skData.filter((e) => e.email === email);
-               likeEmail[0] ? alert('Your already like this picture!!') : ''
+               const [Obj] = likeEmail
+               const sameEmail = (Obj?.email === email)
+               const id = (Obj?._id);
+
+                    (sameEmail) ?
+                    fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/like/${id}`, {
+                         method: 'DELETE'
+                    })
+                         .then(res => res.json())
+                         .then(data => {
+                              console.log(data);
+                              const remaining = likeData.filter(item => item._id !== id)
+                              setLikeData(remaining);
+                         }) :
+                    axiosSecure.post('/like', add)
+                         .then(data => {
+                              console.log(data);
+                              fetchLikeData();
+                         })
+
           }
      };
-     // like data post server end 
+     // like data post and delete server end 
 
      // like sameId data start 
      const [dataL, setDataL] = useState([]);
@@ -183,6 +198,16 @@ const MyPost = () => {
           setDataL(filteredData);
      }, [postData, likeData]);
      // like sameId data end 
+
+     // likeIcon Change start 
+     const [alreadyLike, setAlreadyLike] = useState([]);
+     useEffect(() => {
+          const likeEmail = dataL.map((d) => {
+               return d.filter((f) => f.email === email);
+          });
+          setAlreadyLike(likeEmail);
+     }, [dataL]);
+     // likeIcon Change end
 
      const [onePostAllLike, setOnePostAllLike] = useState([])
      const allLikeUser = (id) => {
@@ -225,6 +250,7 @@ const MyPost = () => {
           fetchMessageData();
      }
      // comments part end
+
      return (
           <div className=' pb-10 '>
                {
@@ -312,10 +338,14 @@ const MyPost = () => {
                                         <div className=' flex justify-between lg:px-5 lg:py-1'>
                                              <div>
                                                   <div className=' flex'>
-                                                       <button className=' me-1 flex items-center text-2xl btn btn-ghost' onClick={() => like(data._id)} >{
-                                                            <AiOutlineLike />
-                                                       }
-                                                            <p className=' text-[15px] ms-1'> Like</p>
+                                                       <button className=' me-1 flex items-center text-2xl btn btn-ghost' onClick={() => like(data._id)} >
+                                                            {
+                                                                 (alreadyLike[index]?.length !== 0) ? (alreadyLike[index]?.map(d => < div key={d._id}>
+                                                                      {d.email && <span className=' text-blue-600'><AiTwotoneLike /></span>
+                                                                      }
+                                                                 </div>)) : <span><AiOutlineLike /></span>
+                                                            }
+                                                            <p className=' text-[15px]'> Like</p>
                                                        </button>
 
                                                   </div>
