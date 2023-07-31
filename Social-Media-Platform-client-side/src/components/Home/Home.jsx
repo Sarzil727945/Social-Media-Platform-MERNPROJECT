@@ -68,7 +68,7 @@ const Home = () => {
                const sameEmail = (Obj?.email === email)
                const id = (Obj?._id);
 
-                    (sameEmail) ?
+               (sameEmail) ?
                     fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/like/${id}`, {
                          method: 'DELETE'
                     })
@@ -201,8 +201,8 @@ const Home = () => {
                                                        </div>
                                                   </div>
                                              </div>
-                                             <div className=' mb-3 px-5'>
-                                                  <p>{data?.Bio}</p>
+                                             <div className=' mb-3 px-5 overflow-hidden'>
+                                                  <p>{data.Bio}</p>
                                              </div>
                                         </div>
                                         <figure><img src={data?.fileImg} alt="Shoes" /></figure>

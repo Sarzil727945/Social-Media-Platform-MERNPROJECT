@@ -303,7 +303,7 @@ const MyPost = () => {
                                              </div>
                                         </div>
                                    </div>
-                                   <div className=' mb-3 px-5'>
+                                   <div className=' mb-3 px-5 overflow-hidden'>
                                         <p>{data.Bio}</p>
                                    </div>
                               </div>

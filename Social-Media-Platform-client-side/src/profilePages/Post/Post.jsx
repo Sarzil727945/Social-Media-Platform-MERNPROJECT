@@ -14,7 +14,7 @@ const Post = () => {
      useTitle('Profile')
      const navigate = useNavigate();
      const { user } = useContext(AuthContext)
-     const [isLoading, setIsLoading] = useState(true);
+     const [isLoading, setIsLoading] = useState(false);
      const [axiosSecure] = useAxiosSecure();
      const { register, handleSubmit, reset } = useForm();
      const displayName = user?.displayName;
@@ -45,6 +45,7 @@ const Post = () => {
           })
                .then(res => res.json())
                .then(imgResponse => {
+                    setIsLoading(true)
                     if (imgResponse.success) {
                          const imgURL = imgResponse?.data?.url;
                          const { Bio } = data;
@@ -63,6 +64,7 @@ const Post = () => {
                                    }
                                    navigate('/profile/myPost')
                                    reset();
+                                   setIsLoading(false)
                               })
                     }
                })
@@ -83,6 +85,11 @@ const Post = () => {
                                         className="file-input file-input-bordered w-full lg:w-[333px] rounded-full" placeholder="Picture URL" aria-label="Picture URL" onChange={handleInput2Change} />
                               </div>
                          </div>
+                         {
+                              isLoading && <div className="text-center my-5">
+                                   <span> loading....</span>
+                              </div>
+                         }
                          <div className=' lg:my-10 my-5'>
                               <button type="submit" className="btn btn-active btn-accent w-full rounded-full" disabled={isButtonDisabled}>Post</button>
                          </div>
