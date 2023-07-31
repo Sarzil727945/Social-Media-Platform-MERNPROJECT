@@ -183,7 +183,7 @@ const Login = () => {
                               </form>
                              
                               <div className="form-control flex">
-                                   <button onClick={handelGoogleRegister} className="btn bg-[#682e9e] hover:bg-[#682e9e] mx-auto w-36"> <span className='text-[40px]'><FcGoogle /></span> <span className=' ms-1 text-[18px] text-white'>Sing in</span></button>
+                                   <button onClick={handelGoogleRegister} className="btn bg-[#682e9e] hover:bg-[#682e9e] mx-auto w-40"> <span className='text-[40px]'><FcGoogle /></span> <span className=' text-[18px] text-white'> Sing in</span></button>
                               </div>
                               <div className=' text-center mt-4'>
                                    or

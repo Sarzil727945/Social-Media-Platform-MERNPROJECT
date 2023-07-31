@@ -83,6 +83,14 @@ const Home = () => {
      }, [postData, likeData]);
      // like sameId data end 
 
+     const [alreadyLike, setAlreadyLike] = useState([]);
+     useEffect(() => {
+          const likeEmail = dataL.map((d) => {
+               return d.filter((f) => f.email === email);
+          });
+          setAlreadyLike(likeEmail);
+     }, [dataL]);
+     console.log(alreadyLike);
      const [onePostAllLike, setOnePostAllLike] = useState([])
      const allLikeUser = (id) => {
           const AllLike = likeData.filter(f => f.likeId === id)
@@ -211,10 +219,17 @@ const Home = () => {
                                                   <div className=' flex justify-between lg:px-5 lg:py-1'>
                                                        <div>
                                                             <div className=' flex'>
-                                                                 <button className=' me-1 flex items-center text-2xl btn btn-ghost' onClick={() => like(data?._id)} >{
-                                                                      <AiOutlineLike />
-                                                                 }
+
+                                                                 <button className=' me-1 flex items-center text-2xl btn btn-ghost' onClick={() => like(data?._id)} >
+                                                                      {
+                                                                           (alreadyLike[index]?.length !== 0) ? (alreadyLike[index]?.map(d => < div key={d._id}>
+                                                                                {d.email && <span><AiTwotoneLike /></span>
+                                                                                }
+                                                                           </div>)) : <span><AiOutlineLike /></span>
+                                                                      }
+
                                                                       <p className=' text-[15px] ms-1'> Like</p>
+
                                                                  </button>
                                                             </div>
                                                        </div>

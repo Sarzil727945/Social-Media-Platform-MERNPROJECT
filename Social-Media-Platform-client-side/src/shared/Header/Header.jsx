@@ -136,7 +136,7 @@ const Header = () => {
                                                             <span className='btn btn-circle text-[22px]'><AiFillSetting /></span> <span className=' ms-2'> Settings</span>
                                                        </div></ActiveLink>
                                                   </li>
-                                                  <li><button onClick={() => handelLogOut("id")} className=' text-[18px] ps-[36px]'> <span className='btn btn-circle text-[22px]'><FiLogOut /></span> Log Out</button></li>
+                                                  <li><button onClick={() => handelLogOut("id")} className=' text-[18px] ps-[36px] hover:text-white'> <span className='btn btn-circle text-[22px] '><FiLogOut /></span> Log Out</button></li>
                                              </ul>
                                         </div>
                                    </div>
