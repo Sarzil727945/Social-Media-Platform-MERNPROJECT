@@ -99,7 +99,7 @@ async function run() {
       const result = await allPostCollection
         .find({
           $or: [
-            { Bio: { $regex: text, $options: "i" } },
+            // { Bio: { $regex: text, $options: "i" } },
             { displayName: { $regex: text, $options: "i" } },
             { email: { $regex: text, $options: "i" } },
           ],

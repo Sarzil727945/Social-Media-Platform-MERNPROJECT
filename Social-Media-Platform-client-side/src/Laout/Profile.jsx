@@ -31,8 +31,8 @@ const Profile = () => {
                                    </div>
                               </div>
                               <div className=' lg:absolute lg:right-0 lg:bottom-5 mt-5'>
-                                   <button className="btn btn-active btn-secondary me-2">Secondary</button>
-                                   <button className="btn btn-primary">Button</button>
+                                   <button className="btn btn-active btn-secondary me-2">Ascending Sort</button>
+                                   <button className="btn btn-primary">Descending Sort</button>
                               </div>
                          </div>
                     </div>

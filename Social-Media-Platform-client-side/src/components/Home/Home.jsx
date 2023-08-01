@@ -24,6 +24,7 @@ const Home = () => {
      const userPic = user?.photoURL;
      const [isLoading, setIsLoading] = useState(true);
      const [postData, setPostData] = useState([]);
+     const [searchText, setSearchText] = useState('')
      const navigate = useNavigate()
 
      // server allData get start 
@@ -37,6 +38,25 @@ const Home = () => {
                })
      }, [url]);
      // server allData get end
+
+     // search part start 
+     const handleSubmit = (e) => {
+          e.preventDefault();
+          fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/postSearchText/${searchText}`)
+               .then((res) => res.json())
+               .then((data) => {
+                    setPostData(data);
+                    setIsLoading(false);
+               });
+
+     }
+
+     const handleKeyPress = (e) => {
+          if (e.key === 'Enter') {
+               handleSubmit(e);
+          }
+     };
+     // search part end 
 
      // like part start 
      // allLike data get server start
@@ -151,10 +171,17 @@ const Home = () => {
 
      return (
           <div className='bg-base-200 pb-10'>
+               <div className=' z-50 fixed lg:block hidden'>
+                    <div className="form-control lg:w-[366px] text-white  mt-[22px] lg:ms-[277px]">
+                         <form onSubmit={handleSubmit}>
+                              <input onChange={(e) => setSearchText(e.target.value)} onKeyPress={handleKeyPress} type="text" placeholder="Search SA" className="input input-bordered input-info w-full bg-[#434243] rounded-full" />
+                         </form>
+                    </div>
+               </div>
                <div className=' lg:pt-28 pt-20'>
                     <div className=' lg:mx-72'>
                          {
-                              postData?.map((data, index) =>
+                              (postData)?.map((data, index) =>
                                    <div className="card card-compact w- h-full bg-base-100 shadow-2xl lg:mt-10 mt-5 lg:mx-32" key={data._id}>
                                         <div className=' border-b-2'>
                                              <div className='flex justify-between relative  text-start px-4 pt-4 pb-1'>
@@ -285,11 +312,18 @@ const Home = () => {
                          }
 
                     </div>
-                    {
-                         isLoading && <div className="text-center my-60">
-                              <span> loading....</span>
-                         </div>
-                    }
+                    <div>
+                         {
+                              isLoading ? <div className="text-center my-60">
+                                   <span> loading....</span>
+                              </div> : <div>
+                                   {
+                                        (postData[0]) ? '' : <div className=' my-60 text-center h-full text-5xl text-red-600 font-bold'><span>Not Found !!</span></div>
+                                   }
+                              </div>
+                         }
+                    </div>
+
                </div>
 
                {/* modal like start  */}

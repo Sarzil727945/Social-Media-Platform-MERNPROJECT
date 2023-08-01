@@ -169,7 +169,7 @@ const MyPost = () => {
                const sameEmail = (Obj?.email === email)
                const id = (Obj?._id);
 
-                    (sameEmail) ?
+               (sameEmail) ?
                     fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/like/${id}`, {
                          method: 'DELETE'
                     })

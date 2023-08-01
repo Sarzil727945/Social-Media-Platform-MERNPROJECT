@@ -7,13 +7,13 @@ import { AiFillSetting, AiTwotoneHome } from 'react-icons/ai';
 import { FaMapMarkedAlt } from 'react-icons/fa';
 import { HiUserGroup } from 'react-icons/hi';
 import Swal from 'sweetalert2';
-import Home from '../../components/Home/Home';
 
 
 const Header = () => {
      const { user, logOut } = useContext(AuthContext)
      const [searchText, setSearchText] = useState('')
-     const [isLoading, setIsLoading] = useState(true);
+     const [searchText1, setSearchText1] = useState([])
+     // const [isLoading, setIsLoading] = useState(true);
 
 
      const handleSubmit = (e) => {
@@ -21,10 +21,12 @@ const Header = () => {
           fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/postSearchText/${searchText}`)
                .then((res) => res.json())
                .then((data) => {
-                    setSearchText(data);
-                    setIsLoading(false);
+                    setSearchText1(data);
+                    // setIsLoading(false);
                });
+
      }
+
      const handleKeyPress = (e) => {
           if (e.key === 'Enter') {
                handleSubmit(e);
@@ -62,7 +64,6 @@ const Header = () => {
      }
      // logOut part end
 
-     console.log(searchText);
      return (
           <div>
                <div className="navbar fixed bg-opacity-90 bg-black z-50 text-white ">
@@ -97,7 +98,7 @@ const Header = () => {
                     <div className="navbar-center hidden lg:flex">
                          <ul className="menu menu-horizontal px-1">
                               <></>
-                              <div className="form-control mt-3 lg:me-36">
+                              <div className="form-control mt-[5px] lg:me-[66px]">
                                    <input onChange={(e) => setSearchText(e.target.value)}
                                         onKeyPress={handleKeyPress} type="text" placeholder="Search SA" className="input input-bordered input-info w-[333px] bg-[#434243] rounded-full" />
                               </div>
@@ -148,12 +149,8 @@ const Header = () => {
                     <div>
                     </div>
                </div>
-               <div className=' hidden'>
-                    {/* <Home searchText = {searchText} >
-
-                    </Home> */}
-               </div>
           </div>
+          
      );
 };
 
