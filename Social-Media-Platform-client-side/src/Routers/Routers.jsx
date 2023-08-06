@@ -3,7 +3,6 @@ import {
 } from "react-router-dom";
 import Main from "../Laout/Main";
 import Home from "../components/Home/Home";
-import OurMenu from "../components/OurMenu/OurMenu";
 import Orders from "../components/Orders/Orders";
 import Login from "../components/Login/Login";
 import Register from "../components/Register/Register";
@@ -14,6 +13,7 @@ import PrivateRoute from "./PrivateRoute";
 import Post from "../profilePages/Post/Post";
 import MyPost from "../profilePages/MyPost/MyPost";
 import Comments from "../components/Comments/Comments";
+import Friends from "../components/Friends/Friends";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -25,8 +25,8 @@ export const router = createBrowserRouter([
         element:<PrivateRoute><Home></Home></PrivateRoute> 
       },
       {
-        path: "ourMenu",
-        element: <OurMenu></OurMenu>
+        path: "friends",
+        element: <Friends></Friends>
       },
       {
         path: 'order',
