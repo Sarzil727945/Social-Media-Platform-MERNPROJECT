@@ -9,6 +9,7 @@ const Friends = () => {
      const navigate = useNavigate()
      const { user } = useContext(AuthContext)
      const [allUser, setAllUser] = useState([])
+     const [myRequest, setMyRequest] = useState([]);
      const [searchText, setSearchText] = useState('')
      const [isLoading, setIsLoading] = useState(true);
      const [axiosSecure] = useAxiosSecure();
@@ -18,22 +19,35 @@ const Friends = () => {
 
      // server AllUser Data get start
      useEffect(() => {
-          fetchData();
-     }, []);
+          if (email) {
+               fetchData();
+          }
+     }, [email, isLoading]);
 
      const fetchData = async () => {
           try {
                const response = await fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/users`);
                const jsonData = await response.json();
-               const userBad = jsonData.find(f => f.email !== email)
-               const filter = jsonData.filter(f => f.email !== userBad.email)
+               const filter = jsonData.filter(f => f?.email !== email)
                setAllUser(filter);
                setIsLoading(false);
           } catch (error) {
                console.error('Error fetching data:', error);
           }
      };
+
      // // server AllUser Data get exit
+
+     // request user bad start 
+     // const [requestB, setRequestB] = useState([])
+
+     useEffect(() => {
+          const filteredData = allUser.filter((item) => {
+               return !myRequest.some((request) => request.email === item.email);
+          });
+          setAllUser(filteredData);
+     }, [myRequest]);
+     // request user bad end
 
      // search part start 
      const handleSubmit = (e) => {
@@ -56,7 +70,7 @@ const Friends = () => {
      const [friendRequest, setFriendRequest] = useState([]);
      useEffect(() => {
           fetchFriendRequest();
-     }, []);
+     }, [isLoading, email]);
 
      const fetchFriendRequest = async () => {
           try {
@@ -73,8 +87,9 @@ const Friends = () => {
      // friendRequest data post and Delete server start
      const friendRequests = (data) => {
           const rEmail = data?.email;
-          const rId = data?._id
-          const add = { displayName, email, userPic, rEmail, rId }
+          const rId = data?._id;
+          const request = 'request';
+          const add = { displayName, email, userPic, rEmail, rId, request }
 
           {
                const skData = friendRequest.filter((f) => f.rId === rId);
@@ -123,6 +138,12 @@ const Friends = () => {
      }, [dataR]);
      // friendRequestIcon Change end 
 
+
+     useEffect(() => {
+          const myEmail = friendRequest.filter(f => f.rEmail === email)
+          setMyRequest(myEmail);
+     }, [friendRequest]);
+
      return (
           <div>
                <div className=' z-50 fixed lg:block hidden'>
@@ -135,31 +156,62 @@ const Friends = () => {
                <div>
                     <h1 className=' text-5xl text-center py-20 font-bold pt-28'>All Friends</h1>
                </div>
-               <div className=' grid lg:grid-cols-4 gap-5 mb-5 lg:mx-28 mx-5'>
-                    {
-                         allUser?.map((item, index) =>
-                              <div className="card card-compact w-100 bg-base-100 shadow-xl" key={item._id}>
-                                   <figure><img className=' w-full h-[255px]' src={item.img} alt="Shoes" /></figure>
-                                   <div className="card-body">
-                                        <h2 className="card-title">{item.name}</h2>
-                                        <div className="card-actions flex justify-center my-2">
-                                             <button onClick={() => friendRequests(item)} className={(alreadyRequest[index]?.length !== 0)?"py-2 px-20 bg-slate-600 text-white text-lg rounded-[12px]" : "py-2 px-20 bg-blue-600 text-white text-lg rounded-[12px]"}>
-                                                  {
-                                                       (alreadyRequest[index]?.length !== 0) ? (alreadyRequest[index]?.map(d => < div key={d._id}>
-                                                            {d.email && <span>Cancel</span>
-                                                            }
-                                                       </div>)) : <span>Add Friend</span>
-                                                  }
-                                             </button>
+               <div className='border-b-2 lg:mx-28 mx-5'>
+                    <div>
+                         <p className=' text-2xl font-bold'>Friend Requests</p>
+                    </div>
+                    <div className=' grid lg:grid-cols-4 gap-5 mb-16 mt-5'>
+                         {
+                              myRequest?.map((item, index) =>
+                                   <div className="card card-compact w-100 bg-base-100 shadow-xl" key={item._id}>
+                                        <figure><img className=' w-full h-[255px]' src={item.userPic} alt="Shoes" /></figure>
+                                        <div className="card-body">
+                                             <h2 className="card-title">{item.displayName}</h2>
+                                             <div className="card-actions flex justify-center my-2">
+                                                  <button className="py-2 px-20 bg-blue-600 text-white text-lg rounded-[12px]">
+                                                       <span>Confirm</span>
+                                                  </button>
+                                                  <button className="py-2 px-20 bg-slate-600 text-white text-lg rounded-[12px]">
+                                                       <span>Delete</span>
+                                                  </button>
+                                             </div>
                                         </div>
                                    </div>
-                              </div>
-                         )
-                    }
+                              )
+                         }
+                    </div>
+               </div>
+
+               <div className='lg:mx-28 mx-5 mt-8'>
+                    <div>
+                         <p className='text-2xl font-bold'>People You May Know</p>
+                    </div>
+                    <div className=' grid lg:grid-cols-4 gap-5 mb-5  my-5'>
+                         {
+                              allUser?.map((item, index) =>
+                                   <div className="card card-compact w-100 bg-base-100 shadow-xl" key={item._id}>
+                                        <figure><img className=' w-full h-[255px]' src={item.img} alt="Shoes" /></figure>
+                                        <div className="card-body">
+                                             <h2 className="card-title">{item.name}</h2>
+                                             <div className="card-actions flex justify-center my-2">
+                                                  <button onClick={() => friendRequests(item)} className={(alreadyRequest[index]?.length !== 0) ? "py-2 px-20 bg-slate-600 text-white text-lg rounded-[12px]" : "py-2 px-20 bg-blue-600 text-white text-lg rounded-[12px]"}>
+                                                       {
+                                                            (alreadyRequest[index]?.length !== 0) ? (alreadyRequest[index]?.map(d => < div key={d?._id}>
+                                                                 {d?.email && <span>Cancel</span>
+                                                                 }
+                                                            </div>)) : <span>Add Friend</span>
+                                                       }
+                                                  </button>
+                                             </div>
+                                        </div>
+                                   </div>
+                              )
+                         }
+                    </div>
                </div>
                <div>
                     {
-                         isLoading && <div className="text-center my-60">
+                         (isLoading) && <div className="text-center my-60">
                               <span> loading....</span>
                          </div>
                     }
