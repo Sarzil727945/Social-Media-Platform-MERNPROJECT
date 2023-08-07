@@ -51,6 +51,7 @@ async function run() {
     const allPostCollection = client.db('SocialMediaPlatform').collection('allPost');
     const messageCollection = client.db('SocialMediaPlatform').collection('message');
     const likeCollection = client.db('SocialMediaPlatform').collection('like');
+    const friendCollection = client.db('SocialMediaPlatform').collection('friendRequest');
     // server link end 
 
     // jwt localhost start
@@ -232,20 +233,57 @@ async function run() {
     })
     // admin user information get end
 
-       // search part start
-       app.get("/userSearchText/:text", async (req, res) => {
-        const text = req.params.text;
-        const result = await usersCollection
-          .find({
-            $or: [
-              { name: { $regex: text, $options: "i" } },
-              { email: { $regex: text, $options: "i" } },
-            ],
-          })
-          .toArray();
+    // search part start
+    app.get("/userSearchText/:text", async (req, res) => {
+      const text = req.params.text;
+      const result = await usersCollection
+        .find({
+          $or: [
+            { name: { $regex: text, $options: "i" } },
+            { email: { $regex: text, $options: "i" } },
+          ],
+        })
+        .toArray();
+      res.send(result);
+    });
+    // search part exit 
+
+     // friendRequest added post mongoDB start
+    app.post('/friendRequest', async (req, res) => {
+      const newAdd = req.body;
+      // one friendRequest check  part start
+      const query = { email: newAdd.email, rId: newAdd.rId }
+      const existingUser = (await friendCollection.findOne(query));
+      if (existingUser) {
+        return res.send({ message: 'friend Request already exists' })
+      }
+      // one friendRequest check  part end
+      else {
+        const result = await friendCollection.insertOne(newAdd)
         res.send(result);
-      });
-      // search part exit 
+      }
+    });
+    // friendRequest added post mongoDB end
+
+     // get friendRequest data server start
+     app.get('/friendRequest', async (req, res) => {
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email }
+      }
+      const result = await friendCollection.find(query).toArray();
+      res.send(result);
+    })
+    //  get friendRequest data server end 
+
+      // delete friendRequest data server start
+      app.delete('/friendRequest/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) }
+        const result = await friendCollection.deleteOne(query);
+        res.send(result);
+      })
+      //  delete friendRequest data server end 
 
     // user data delete mongoDB start
     app.delete('/users/:id', async (req, res) => {
