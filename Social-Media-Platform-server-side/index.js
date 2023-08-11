@@ -248,7 +248,7 @@ async function run() {
     });
     // search part exit 
 
-     // friendRequest added post mongoDB start
+    // friendRequest added post mongoDB start
     app.post('/friendRequest', async (req, res) => {
       const newAdd = req.body;
       // one friendRequest check  part start
@@ -265,8 +265,8 @@ async function run() {
     });
     // friendRequest added post mongoDB end
 
-     // get friendRequest data server start
-     app.get('/friendRequest', async (req, res) => {
+    // get friendRequest data server start
+    app.get('/friendRequest', async (req, res) => {
       let query = {};
       if (req.query?.email) {
         query = { email: req.query.email }
@@ -276,14 +276,29 @@ async function run() {
     })
     //  get friendRequest data server end 
 
-      // delete friendRequest data server start
-      app.delete('/friendRequest/:id', async (req, res) => {
-        const id = req.params.id;
-        const query = { _id: new ObjectId(id) }
-        const result = await friendCollection.deleteOne(query);
-        res.send(result);
-      })
-      //  delete friendRequest data server end 
+    //  patch friendRequest data server start 
+    app.patch('/friendRequest/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) }
+      const updatedBooking = req.body;
+      const updateDoc = {
+        $set: {
+          request: updatedBooking.request
+        },
+      };
+      const result = await friendCollection.updateOne(filter, updateDoc)
+      res.send(result);
+    })
+    //  patch friendRequest data server end 
+
+    // delete friendRequest data server start
+    app.delete('/friendRequest/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await friendCollection.deleteOne(query);
+      res.send(result);
+    })
+    //  delete friendRequest data server end 
 
     // user data delete mongoDB start
     app.delete('/users/:id', async (req, res) => {

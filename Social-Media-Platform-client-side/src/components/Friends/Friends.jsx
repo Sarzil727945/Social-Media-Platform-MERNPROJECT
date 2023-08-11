@@ -9,7 +9,7 @@ const Friends = () => {
      const navigate = useNavigate()
      const { user } = useContext(AuthContext)
      const [allUser, setAllUser] = useState([])
-     const [myRequest, setMyRequest] = useState([]);
+     const [myRequestConfirm, setMyRequestConfirm] = useState([]);
      const [searchText, setSearchText] = useState('')
      const [isLoading, setIsLoading] = useState(true);
      const [axiosSecure] = useAxiosSecure();
@@ -22,7 +22,7 @@ const Friends = () => {
           if (email) {
                fetchData();
           }
-     }, [email, isLoading]);
+     }, [email]);
 
      const fetchData = async () => {
           try {
@@ -39,14 +39,18 @@ const Friends = () => {
      // // server AllUser Data get exit
 
      // request user bad start 
-     // const [requestB, setRequestB] = useState([])
+     const [requestB, setRequestB] = useState([])
 
      useEffect(() => {
           const filteredData = allUser.filter((item) => {
-               return !myRequest.some((request) => request.email === item.email);
+               return !myRequestConfirm.some((request) => request?.email === item?.email);
           });
-          setAllUser(filteredData);
-     }, [myRequest]);
+          const filteredDataRequestB = filteredData.filter((item) => {
+               return !requestB.some((request) => request?.rId === item?._id);
+          });
+          setAllUser(filteredDataRequestB);
+          // console.log(requestB);
+     }, [myRequestConfirm, requestB]);
      // request user bad end
 
      // search part start 
@@ -138,12 +142,43 @@ const Friends = () => {
      }, [dataR]);
      // friendRequestIcon Change end 
 
-
+     const [myRequest, setMyRequest] = useState([])
      useEffect(() => {
           const myEmail = friendRequest.filter(f => f.rEmail === email)
-          setMyRequest(myEmail);
+          const myRequestOrConfirm = myEmail?.filter(f => f.request === "request" || "confirm")
+          const myRequest = myEmail?.filter(f => f.request === "request")
+          const myConfirm = myEmail?.filter(f => f.request === "confirm")
+          setMyRequestConfirm(myRequestOrConfirm);
+          setMyRequest(myRequest);
+          console.log(myConfirm);
+          
+          // my request all friend start 
+          const myAllRequest = friendRequest.filter(f => f.email === email)
+          const myAllRequestConfirm = myAllRequest?.filter(f => f.request === "confirm")
+          setRequestB(myAllRequestConfirm);
      }, [friendRequest]);
 
+     //  friendRequest Confirm part start 
+     const requestConfirm = (data) => {
+          fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/friendRequest/${data?._id}`, {
+               method: 'PATCH',
+               headers: {
+                    'content-type': 'application/json'
+               },
+               body: JSON.stringify({ request: 'confirm' })
+          })
+               .then(res => res.json())
+               .then(data => {
+                    if (data.modifiedCount > 0) {
+                         const remaining = myRequestConfirm?.filter(booking => booking?._id !== data?._id);
+                         const updated = myRequestConfirm?.find(booking => booking?._id === data?._id);
+                         (updated) && (updated.request = 'confirm')
+                         const newBookings = [updated, ...remaining];
+                         setMyRequestConfirm(newBookings);
+                    }
+               })
+     }
+     //  friendRequest Confirm part end
      return (
           <div>
                <div className=' z-50 fixed lg:block hidden'>
@@ -168,7 +203,7 @@ const Friends = () => {
                                         <div className="card-body">
                                              <h2 className="card-title">{item.displayName}</h2>
                                              <div className="card-actions flex justify-center my-2">
-                                                  <button className="py-2 px-20 bg-blue-600 text-white text-lg rounded-[12px]">
+                                                  <button onClick={() => requestConfirm(item)} className="py-2 px-20 bg-blue-600 text-white text-lg rounded-[12px]">
                                                        <span>Confirm</span>
                                                   </button>
                                                   <button className="py-2 px-20 bg-slate-600 text-white text-lg rounded-[12px]">

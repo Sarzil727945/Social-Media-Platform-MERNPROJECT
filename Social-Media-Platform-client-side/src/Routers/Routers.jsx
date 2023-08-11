@@ -29,6 +29,10 @@ export const router = createBrowserRouter([
         element: <PrivateRoute><Friends></Friends></PrivateRoute>
       },
       {
+        path: "/profile/friends",
+        element: <PrivateRoute><Friends></Friends></PrivateRoute>
+      },
+      {
         path: 'order',
         element: <Orders></Orders>
       },
