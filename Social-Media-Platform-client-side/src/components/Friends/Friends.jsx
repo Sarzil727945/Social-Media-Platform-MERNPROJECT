@@ -147,11 +147,9 @@ const Friends = () => {
           const myEmail = friendRequest.filter(f => f.rEmail === email)
           const myRequestOrConfirm = myEmail?.filter(f => f.request === "request" || "confirm")
           const myRequest = myEmail?.filter(f => f.request === "request")
-          const myConfirm = myEmail?.filter(f => f.request === "confirm")
           setMyRequestConfirm(myRequestOrConfirm);
           setMyRequest(myRequest);
-          console.log(myConfirm);
-          
+
           // my request all friend start 
           const myAllRequest = friendRequest.filter(f => f.email === email)
           const myAllRequestConfirm = myAllRequest?.filter(f => f.request === "confirm")
@@ -176,6 +174,7 @@ const Friends = () => {
                          const newBookings = [updated, ...remaining];
                          setMyRequestConfirm(newBookings);
                     }
+                    navigate('/profile/post')
                })
      }
      //  friendRequest Confirm part end

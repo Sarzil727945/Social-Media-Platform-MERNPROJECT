@@ -14,6 +14,7 @@ import Post from "../profilePages/Post/Post";
 import MyPost from "../profilePages/MyPost/MyPost";
 import Comments from "../components/Comments/Comments";
 import Friends from "../components/Friends/Friends";
+import RequestConfirm from "../components/RequestConfirm/RequestConfirm";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
     path: "profile",
     element: <PrivateRoute><Profile></Profile></PrivateRoute>,
     children: [
+      {
+        path: 'requestConfirm',
+        element: <RequestConfirm></RequestConfirm>
+      },
       {
         path: 'post',
         element: <Post></Post>

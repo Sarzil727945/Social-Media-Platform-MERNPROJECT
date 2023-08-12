@@ -7,6 +7,7 @@ import MyPost from '../MyPost/MyPost';
 import { useState } from 'react';
 import useTitle from '../../hooks/useTitle';
 import Swal from 'sweetalert2';
+import RequestConfirm from '../../components/RequestConfirm/RequestConfirm';
 const img_hosting_token = import.meta.env.VITE_Image_Upload_token;
 
 
@@ -71,7 +72,10 @@ const Post = () => {
      }
      return (
           <div className=' mt-10'>
-               <form className='flex justify-center border-b-2' onSubmit={handleSubmit(onSubmit)}>
+                <div>
+                    <RequestConfirm></RequestConfirm>
+               </div>
+               <form className='flex justify-center border-b-2 mt-20' onSubmit={handleSubmit(onSubmit)}>
                     <div>
                          <div className="lg:flex">
                               <div>
@@ -95,7 +99,6 @@ const Post = () => {
                          </div>
                     </div>
                </form>
-
                <div className=' mt-5 '>
                     <MyPost></MyPost>
                </div>
