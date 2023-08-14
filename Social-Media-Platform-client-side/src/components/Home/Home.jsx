@@ -14,17 +14,18 @@ import { GoComment } from 'react-icons/go';
 import { PiShareFatDuotone } from 'react-icons/pi';
 import Comments from '../Comments/Comments';
 import useAxiosSecure from '../../hooks/useAxiouSeoure';
+import { useDataContext } from '../../DataProvider/DataProvider';
 
 const Home = () => {
      useTitle('Home')
      const [axiosSecure] = useAxiosSecure();
      const { user } = useContext(AuthContext);
+     const { homeData } = useDataContext();
      const displayName = user?.displayName;
      const email = user?.email;
      const userPic = user?.photoURL;
      const [isLoading, setIsLoading] = useState(true);
      const [postData, setPostData] = useState([]);
-     const [searchText, setSearchText] = useState('')
      const navigate = useNavigate()
 
      // server allData get start 
@@ -40,23 +41,10 @@ const Home = () => {
      // server allData get end
 
      // search part start 
-     const handleSubmit = (e) => {
-          e.preventDefault();
-          fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/postSearchText/${searchText}`)
-               .then((res) => res.json())
-               .then((data) => {
-                    setPostData(data);
-                    setIsLoading(false);
-               });
-
-     }
-
-     const handleKeyPress = (e) => {
-          if (e.key === 'Enter') {
-               handleSubmit(e);
-          }
-     };
-     // search part end 
+     useEffect(() => {
+          setPostData(homeData)
+     }, [homeData])
+     // search part end
 
      // like part start 
      // allLike data get server start
@@ -80,7 +68,6 @@ const Home = () => {
      // like data post and delete server start
      const like = (likeId) => {
           const add = { likeId, displayName, email, userPic }
-
           {
                const skData = likeData.filter((f) => f.likeId === likeId);
                const likeEmail = skData.filter((e) => e.email === email);
@@ -171,13 +158,6 @@ const Home = () => {
 
      return (
           <div className='bg-base-200 pb-10'>
-               <div className=' z-50 fixed lg:block hidden'>
-                    <div className="form-control lg:w-[366px] text-white  mt-[22px] lg:ms-[277px]">
-                         <form onSubmit={handleSubmit}>
-                              <input onChange={(e) => setSearchText(e.target.value)} onKeyPress={handleKeyPress} type="text" placeholder="Search SA" className="input input-bordered input-info w-full bg-[#434243] rounded-full" />
-                         </form>
-                    </div>
-               </div>
                <div className=' lg:pt-28 pt-20'>
                     <div className=' lg:mx-72'>
                          {

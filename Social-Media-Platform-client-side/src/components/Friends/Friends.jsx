@@ -3,14 +3,16 @@ import useTitle from '../../hooks/useTitle';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
 import useAxiosSecure from '../../hooks/useAxiouSeoure';
+import { useDataContext } from '../../DataProvider/DataProvider';
 
 const Friends = () => {
      useTitle('Friends')
      const navigate = useNavigate()
      const { user } = useContext(AuthContext)
+     const { friendsData, reqFriendsData } = useDataContext();
      const [allUser, setAllUser] = useState([])
      const [myRequestConfirm, setMyRequestConfirm] = useState([]);
-     const [searchText, setSearchText] = useState('')
+     const [myRequest, setMyRequest] = useState([])
      const [isLoading, setIsLoading] = useState(true);
      const [axiosSecure] = useAxiosSecure();
      const displayName = user?.displayName;
@@ -38,6 +40,19 @@ const Friends = () => {
 
      // // server AllUser Data get exit
 
+     // allUser search part start 
+     useEffect(() => {
+          const filter = friendsData.filter(f => f?.email !== email)
+          const filteredData = filter?.filter((item) => {
+               return !myRequestConfirm.some((request) => request?.email === item?.email);
+          });
+          const filteredDataRequestB = filteredData.filter((item) => {
+               return !requestB.some((request) => request?.rId === item?._id);
+          });
+          setAllUser(filteredDataRequestB)
+     }, [friendsData, myRequestConfirm])
+     // allUser search part end
+
      // request user bad start 
      const [requestB, setRequestB] = useState([])
 
@@ -49,26 +64,8 @@ const Friends = () => {
                return !requestB.some((request) => request?.rId === item?._id);
           });
           setAllUser(filteredDataRequestB);
-          // console.log(requestB);
      }, [myRequestConfirm, requestB]);
      // request user bad end
-
-     // search part start 
-     const handleSubmit = (e) => {
-          e.preventDefault();
-          fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/userSearchText/${searchText}`)
-               .then((res) => res.json())
-               .then((data) => {
-                    setAllUser(data);
-                    setIsLoading(false);
-               });
-     }
-     const handleKeyPress = (e) => {
-          if (e.key === 'Enter') {
-               handleSubmit(e);
-          }
-     };
-     // search part end
 
      // friendRequest data get server start
      const [friendRequest, setFriendRequest] = useState([]);
@@ -87,6 +84,16 @@ const Friends = () => {
           }
      };
      // friendRequest data get server end
+
+     // friendRequest search part start 
+     useEffect(() => {
+          const myEmail = reqFriendsData.filter(f => f.rEmail === email)
+          const myRequestOrConfirm = myEmail?.filter(f => f.request === "request" || "confirm")
+          const myRequest = myEmail?.filter(f => f.request === "request")
+          setMyRequestConfirm(myRequestOrConfirm);
+          setMyRequest(myRequest);
+     }, [reqFriendsData])
+     // friendRequest search part end
 
      // friendRequest data post and Delete server start
      const friendRequests = (data) => {
@@ -142,7 +149,6 @@ const Friends = () => {
      }, [dataR]);
      // friendRequestIcon Change end 
 
-     const [myRequest, setMyRequest] = useState([])
      useEffect(() => {
           const myEmail = friendRequest.filter(f => f.rEmail === email)
           const myRequestOrConfirm = myEmail?.filter(f => f.request === "request" || "confirm")
@@ -155,6 +161,7 @@ const Friends = () => {
           const myAllRequestConfirm = myAllRequest?.filter(f => f.request === "confirm")
           setRequestB(myAllRequestConfirm);
      }, [friendRequest]);
+
 
      //  friendRequest Confirm part start 
      const requestConfirm = (data) => {
@@ -180,13 +187,6 @@ const Friends = () => {
      //  friendRequest Confirm part end
      return (
           <div>
-               <div className=' z-50 fixed lg:block hidden'>
-                    <div className="form-control lg:w-[366px] text-white  mt-[22px] lg:ms-[277px]">
-                         <form onSubmit={handleSubmit}>
-                              <input onChange={(e) => setSearchText(e.target.value)} onKeyPress={handleKeyPress} type="text" placeholder="Search SA" className="input input-bordered input-info w-full bg-[#434243] rounded-full" />
-                         </form>
-                    </div>
-               </div>
                <div>
                     <h1 className=' text-5xl text-center py-20 font-bold pt-28'>All Friends</h1>
                </div>
@@ -214,6 +214,15 @@ const Friends = () => {
                               )
                          }
                     </div>
+                    {
+                         isLoading ? <div className="text-center my-60">
+                              <span> loading....</span>
+                         </div> : <div>
+                              {
+                                   (myRequest[0]) ? '' : <div className=' mb-20 text-center h-full text-5xl text-red-600 font-bold'><span>Not Found !!</span></div>
+                              }
+                         </div>
+                    }
                </div>
 
                <div className='lg:mx-28 mx-5 mt-8'>
@@ -245,8 +254,12 @@ const Friends = () => {
                </div>
                <div>
                     {
-                         (isLoading) && <div className="text-center my-60">
+                         isLoading ? <div className="text-center my-60">
                               <span> loading....</span>
+                         </div> : <div>
+                              {
+                                   (allUser[0]) ? '' : <div className=' my-36 text-center h-full text-5xl text-red-600 font-bold'><span>Not Found !!</span></div>
+                              }
                          </div>
                     }
                </div>

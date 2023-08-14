@@ -7,12 +7,13 @@ import { AiFillSetting, AiTwotoneHome } from 'react-icons/ai';
 import { FaUserFriends } from 'react-icons/fa';
 import { HiUserGroup } from 'react-icons/hi';
 import Swal from 'sweetalert2';
+import { useDataContext } from '../../DataProvider/DataProvider';
 
 
 const Header = () => {
      const { user, logOut } = useContext(AuthContext)
      const [searchText, setSearchText] = useState('')
-     const [searchText1, setSearchText1] = useState([])
+     const { setHomeData, setFriendsData, setReqFriendsData } = useDataContext();
      // const [isLoading, setIsLoading] = useState(true);
 
 
@@ -21,12 +22,24 @@ const Header = () => {
           fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/postSearchText/${searchText}`)
                .then((res) => res.json())
                .then((data) => {
-                    setSearchText1(data);
+                    setHomeData(data);
                     // setIsLoading(false);
                });
 
-     }
+          fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/userSearchText/${searchText}`)
+               .then((res) => res.json())
+               .then((data) => {
+                    setFriendsData(data);
+                    // setIsLoading(false);
+               });
 
+          fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/requestUserSearch/${searchText}`)
+               .then((res) => res.json())
+               .then((data) => {
+                    setReqFriendsData(data);
+                    // setIsLoading(false);
+               });
+     }
      const handleKeyPress = (e) => {
           if (e.key === 'Enter') {
                handleSubmit(e);
@@ -99,8 +112,10 @@ const Header = () => {
                          <ul className="menu menu-horizontal px-1">
                               <></>
                               <div className="form-control mt-[5px] lg:me-[66px]">
-                                   <input onChange={(e) => setSearchText(e.target.value)}
-                                        onKeyPress={handleKeyPress} type="text" placeholder="Search SA" className="input input-bordered input-info w-[333px] bg-[#434243] rounded-full" />
+                                   <form onSubmit={handleSubmit}>
+                                        <input onChange={(e) => setSearchText(e.target.value)}
+                                             onKeyPress={handleKeyPress} type="text" placeholder="Search SA" className="input input-bordered input-info w-[333px] bg-[#434243] rounded-full" />
+                                   </form>
                               </div>
                               <li><ActiveLink to='/' > <div className=' flex items-center'><span className=' me-2 text-[30px]'><AiTwotoneHome /></span><span> Home</span></div></ActiveLink></li>
                               <li><ActiveLink to='friends'><div className=' flex items-center'>
@@ -150,7 +165,7 @@ const Header = () => {
                     </div>
                </div>
           </div>
-          
+
      );
 };
 

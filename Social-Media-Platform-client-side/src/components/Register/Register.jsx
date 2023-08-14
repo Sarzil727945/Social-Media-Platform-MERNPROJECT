@@ -12,7 +12,6 @@ import useAxiosSecure from '../../hooks/useAxiouSeoure';
 const img_hosting_token = import.meta.env.VITE_Image_Upload_token;
 
 
-
 const Register = () => {
      useTitle('Register')
      const { register, handleSubmit, watch, reset, formState: { errors } } = useForm();
