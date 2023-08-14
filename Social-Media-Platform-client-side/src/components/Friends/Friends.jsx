@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
 import useAxiosSecure from '../../hooks/useAxiouSeoure';
 import { useDataContext } from '../../DataProvider/DataProvider';
+import Swal from 'sweetalert2';
 
 const Friends = () => {
      useTitle('Friends')
@@ -71,7 +72,7 @@ const Friends = () => {
      const [friendRequest, setFriendRequest] = useState([]);
      useEffect(() => {
           fetchFriendRequest();
-     }, [isLoading, email]);
+     }, [isLoading, email, myRequest]);
 
      const fetchFriendRequest = async () => {
           try {
@@ -181,10 +182,46 @@ const Friends = () => {
                          const newBookings = [updated, ...remaining];
                          setMyRequestConfirm(newBookings);
                     }
-                    navigate('/profile/post')
                })
      }
      //  friendRequest Confirm part end
+
+     //  friendRequest delete part start
+     const requestDelete = (id) => {
+          Swal.fire({
+               title: 'Are you sure?',
+               text: "You won't be able to revert this!",
+               icon: 'warning',
+               showCancelButton: true,
+               confirmButtonColor: '#3085d6',
+               cancelButtonColor: '#d33',
+               confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+               if (result.isConfirmed) {
+
+                    fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/friendRequest/${id}`, {
+                         method: 'DELETE'
+                    })
+                         .then(res => res.json())
+                         .then(data => {
+                              if (data.deletedCount > 0) {
+                                   Swal.fire(
+                                        'Deleted!',
+                                        'Friend request deleted.',
+                                        'success'
+                                   )
+
+                                   const remaining = myRequest.filter(item => item._id !== id)
+                                   setMyRequestConfirm(remaining);
+                              }
+                         })
+               }
+
+          })
+
+     }
+     //  friendRequest delete part end
+
      return (
           <div>
                <div>
@@ -205,7 +242,7 @@ const Friends = () => {
                                                   <button onClick={() => requestConfirm(item)} className="py-2 px-20 bg-blue-600 text-white text-lg rounded-[12px]">
                                                        <span>Confirm</span>
                                                   </button>
-                                                  <button className="py-2 px-20 bg-slate-600 text-white text-lg rounded-[12px]">
+                                                  <button onClick={() => requestDelete(item?._id)} className="py-2 px-20 bg-slate-600 text-white text-lg rounded-[12px]">
                                                        <span>Delete</span>
                                                   </button>
                                              </div>
@@ -214,15 +251,17 @@ const Friends = () => {
                               )
                          }
                     </div>
-                    {
-                         isLoading ? <div className="text-center my-60">
-                              <span> loading....</span>
-                         </div> : <div>
-                              {
-                                   (myRequest[0]) ? '' : <div className=' mb-20 text-center h-full text-5xl text-red-600 font-bold'><span>Not Found !!</span></div>
-                              }
-                         </div>
-                    }
+                    <div>
+                         {
+                              isLoading ? <div className="text-center my-60">
+                                   <span> loading....</span>
+                              </div> : <div>
+                                   {
+                                        (myRequest[0]) ? '' : <div className=' mb-20 text-center h-full text-5xl text-red-600 font-bold'><span>Not Found !!</span></div>
+                                   }
+                              </div>
+                         }
+                    </div>
                </div>
 
                <div className='lg:mx-28 mx-5 mt-8'>

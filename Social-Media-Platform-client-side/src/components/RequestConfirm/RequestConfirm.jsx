@@ -3,9 +3,11 @@ import { useContext } from 'react';
 import { useState } from 'react';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
 import { useEffect } from 'react';
+import { useDataContext } from '../../DataProvider/DataProvider';
 
 const RequestConfirm = () => {
      const { user } = useContext(AuthContext)
+     const { reqFriendsData } = useDataContext();
      const [isLoading, setIsLoading] = useState(true);
      const [friendRequest, setFriendRequest] = useState([]);
      const [friendConfirm, setFriendConfirm] = useState([]);
@@ -35,6 +37,14 @@ const RequestConfirm = () => {
 
      }, [friendRequest]);
 
+     // friendRequest search part start 
+     useEffect(() => {
+          const myEmail = reqFriendsData.filter(f => f.rEmail === email)
+          const myConfirm = myEmail?.filter(f => f.request === "confirm")
+          setFriendConfirm(myConfirm);
+     }, [reqFriendsData])
+     // friendRequest search part end
+
      return (
           <div>
                <div className=' flex justify-between items-center mx-7'>
@@ -59,6 +69,17 @@ const RequestConfirm = () => {
                                         </div>
                                    </div>
                               )
+                         }
+                    </div>
+                    <div>
+                         {
+                              isLoading ? <div className="text-center my-60">
+                                   <span> loading....</span>
+                              </div> : <div>
+                                   {
+                                        (friendConfirm[0]) ? '' : <div className=' mb-20 text-center h-full text-5xl text-red-600 font-bold'><span>Not Found !!</span></div>
+                                   }
+                              </div>
                          }
                     </div>
                </div>
