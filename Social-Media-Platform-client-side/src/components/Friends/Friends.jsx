@@ -99,9 +99,11 @@ const Friends = () => {
      // friendRequest data post and Delete server start
      const friendRequests = (data) => {
           const rEmail = data?.email;
+          const rImg = data?.img;
+          const rName = data?.name;
           const rId = data?._id;
           const request = 'request';
-          const add = { displayName, email, userPic, rEmail, rId, request }
+          const add = { displayName, email, userPic, rName, rEmail, rImg, rId, request }
 
           {
                const skData = friendRequest.filter((f) => f.rId === rId);

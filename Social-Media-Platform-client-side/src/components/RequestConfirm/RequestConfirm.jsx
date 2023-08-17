@@ -29,10 +29,15 @@ const RequestConfirm = () => {
           }
      };
      // friendRequest data get server end
-
+     const [myConfirm, setMyConfirm] = useState([])
+     const [confirm] = myConfirm;
      useEffect(() => {
-          const myEmail = friendRequest.filter(f => f.rEmail === email)
-          const myConfirm = myEmail?.filter(f => f.request === "confirm")
+          const myEmail1 = friendRequest.filter(f => f.rEmail === email)
+          const myEmail2 = friendRequest.filter(f => f.email === email)
+          const myConfirm1 = myEmail1?.filter(f => f.request === "confirm")
+          const myConfirm2 = myEmail2?.filter(f => f.request === "confirm")
+          const myConfirm = [...myConfirm1, ...myConfirm2]
+          setMyConfirm(myConfirm2);
           setFriendConfirm(myConfirm);
 
      }, [friendRequest]);
@@ -63,10 +68,17 @@ const RequestConfirm = () => {
                          {
                               friendConfirm?.map((item, index) =>
                                    <div className="card card-compact w-100 bg-base-100 shadow-xl" key={item._id}>
-                                        <figure><img className=' w-full h-[200px]' src={item.userPic} alt="Shoes" /></figure>
-                                        <div className="card-body">
-                                             <h2 className="card-title">{item.displayName}</h2>
-                                        </div>
+
+                                        {
+                                             confirm?._id === item?._id ? <figure><img className=' w-full h-[200px]' src={item.rImg} alt="Shoes" /></figure> : <figure><img className=' w-full h-[200px]' src={item.userPic} alt="Shoes" /></figure>
+                                        }
+                                        {
+                                             confirm?._id === item?._id ? <div className="card-body">
+                                                  <h2 className="card-title">{item.rName}</h2>
+                                             </div> : <div className="card-body">
+                                                  <h2 className="card-title">{item.displayName}</h2>
+                                             </div>
+                                        }
                                    </div>
                               )
                          }

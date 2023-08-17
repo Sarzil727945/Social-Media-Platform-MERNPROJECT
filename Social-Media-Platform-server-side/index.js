@@ -94,7 +94,7 @@ async function run() {
     })
     //  get allPost data server end 
 
-    // search part start
+    // post data search part start
     app.get("/postSearchText/:text", async (req, res) => {
       const text = req.params.text;
       const result = await allPostCollection
@@ -108,7 +108,7 @@ async function run() {
         .toArray();
       res.send(result);
     });
-    // search part exit 
+    // post data search part exit 
 
     // server data update start
     app.put('/allPost/:id', async (req, res) => {
@@ -233,7 +233,7 @@ async function run() {
     })
     // admin user information get end
 
-    // search part start
+    // allUser data search part start
     app.get("/userSearchText/:text", async (req, res) => {
       const text = req.params.text;
       const result = await usersCollection
@@ -246,7 +246,7 @@ async function run() {
         .toArray();
       res.send(result);
     });
-    // search part exit 
+    // allUser data search part exit 
 
     // friendRequest added post mongoDB start
     app.post('/friendRequest', async (req, res) => {
@@ -275,6 +275,21 @@ async function run() {
       res.send(result);
     })
     //  get friendRequest data server end 
+
+    // request all user search part start
+    app.get("/requestUserSearch/:text", async (req, res) => {
+      const text = req.params.text;
+      const result = await friendCollection
+        .find({
+          $or: [
+            { displayName: { $regex: text, $options: "i" } },
+            { email: { $regex: text, $options: "i" } },
+          ],
+        })
+        .toArray();
+      res.send(result);
+    });
+    // request all user search part exit
 
     //  patch friendRequest data server start 
     app.patch('/friendRequest/:id', async (req, res) => {
@@ -353,8 +368,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
 
 app.get('/', (req, res) => {
   res.send('Social Media Platform')
