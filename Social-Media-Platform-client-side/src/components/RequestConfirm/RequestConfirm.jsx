@@ -36,9 +36,9 @@ const RequestConfirm = () => {
           const myEmail2 = friendRequest.filter(f => f.email === email)
           const myConfirm1 = myEmail1?.filter(f => f.request === "confirm")
           const myConfirm2 = myEmail2?.filter(f => f.request === "confirm")
-          const myConfirm = [...myConfirm1, ...myConfirm2]
           setMyConfirm(myConfirm2);
-          setFriendConfirm(myConfirm);
+          const myConfirmAll = [...myConfirm1, ...myConfirm2].reverse()
+          setFriendConfirm(myConfirmAll);
 
      }, [friendRequest]);
 

@@ -26,19 +26,56 @@ const Home = () => {
      const userPic = user?.photoURL;
      const [isLoading, setIsLoading] = useState(true);
      const [postData, setPostData] = useState([]);
+     const [allPostData, setAllPostData] = useState([]);
+     const [friendRequest, setFriendRequest] = useState([]);
+
      const navigate = useNavigate()
 
      // server allData get start 
-     const url = `https://social-media-platform-server-side-sarzil727945.vercel.app/allPost`;
      useEffect(() => {
-          fetch(url)
-               .then(res => res.json())
-               .then(data => {
-                    setPostData(data);
-                    setIsLoading(false);
-               })
-     }, [url]);
+          fetchAllPost();
+     }, [isLoading, email]);
+
+     const fetchAllPost = async () => {
+          try {
+               const response = await fetch('https://social-media-platform-server-side-sarzil727945.vercel.app/allPost');
+               const jsonData = await response.json();
+               setAllPostData(jsonData);;
+               setIsLoading(false);
+          } catch (error) {
+               console.error('Error fetching data:', error);
+          }
+     };
      // server allData get end
+
+     // friendRequest data get server start
+     useEffect(() => {
+          fetchFriendRequest();
+     }, [isLoading, email]);
+
+     const fetchFriendRequest = async () => {
+          try {
+               const response = await fetch('https://social-media-platform-server-side-sarzil727945.vercel.app/friendRequest');
+               const jsonData = await response.json();
+               const myConfirm = jsonData?.filter(f => f.request === "confirm")
+               setFriendRequest(myConfirm);
+               setIsLoading(false);
+          } catch (error) {
+               console.error('Error fetching data:', error);
+          }
+     };
+     // friendRequest data get server end
+
+     useEffect(() => {
+          const myEmail1 = friendRequest.filter(f => f.rEmail === email)
+          const myEmail2 = friendRequest.filter(f => f.email === email)
+          const myEmail = [...myEmail1, ...myEmail2]
+          const myFriendsPost = allPostData?.filter((p) => {
+               const ok = myEmail?.some((f) => (p.email === f.email) || (p.email === f.rEmail));
+               return ok
+          });
+          setPostData(myFriendsPost)
+     }, [allPostData, friendRequest]);
 
      // search part start 
      useEffect(() => {
@@ -155,6 +192,7 @@ const Home = () => {
           fetchMData();
      }
      // comments part end
+
 
      return (
           <div className='bg-base-200 pb-10'>
