@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
 import { useEffect } from 'react';
 import { useDataContext } from '../../DataProvider/DataProvider';
+import Swal from 'sweetalert2';
 
 const RequestConfirm = () => {
      const { user } = useContext(AuthContext)
@@ -49,6 +50,40 @@ const RequestConfirm = () => {
           setFriendConfirm(myConfirm);
      }, [reqFriendsData])
      // friendRequest search part end
+     
+      // confirm friend data delete start
+      const confirmHandelDelete = (id) => {
+          Swal.fire({
+               title: 'Are you sure?',
+               text: "Do you delete your friend !!",
+               icon: 'warning',
+               showCancelButton: true,
+               confirmButtonColor: '#3085d6',
+               cancelButtonColor: '#d33',
+               confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+               if (result.isConfirmed) {
+
+                    fetch(`https://social-media-platform-server-side-sarzil727945.vercel.app/friendRequest/${id}`, {
+                         method: 'DELETE'
+                    })
+                         .then(res => res.json())
+                         .then(data => {
+                              if (data.deletedCount > 0) {
+                                   Swal.fire(
+                                        'Deleted!',
+                                        'Confirm Friend has been deleted.',
+                                        'success'
+                                   )
+
+                                   const remaining = friendConfirm.filter(item => item._id !== id)
+                                   setFriendConfirm(remaining);
+                              }
+                         })
+               }
+          })
+     }
+     // confirm friend data delete end
 
      return (
           <div>
@@ -63,22 +98,24 @@ const RequestConfirm = () => {
                          </button>
                     </div>
                </div>
-               <div className=' mt-5 mx-20'>
-                    <div className=' grid lg:grid-cols-3 gap-5 mb-16 mt-5'>
+               <div className=' mt-5 lg:mx-20 mx-3'>
+                    <div className=' grid lg:grid-cols-3 grid-cols-2 lg:gap-5 gap-3 mb-16 mt-5'>
                          {
                               friendConfirm?.map((item, index) =>
                                    <div className="card card-compact w-100 bg-base-100 shadow-xl" key={item._id}>
 
-                                        {
-                                             confirm?._id === item?._id ? <figure><img className=' w-full h-[200px]' src={item.rImg} alt="Shoes" /></figure> : <figure><img className=' w-full h-[200px]' src={item.userPic} alt="Shoes" /></figure>
-                                        }
-                                        {
-                                             confirm?._id === item?._id ? <div className="card-body">
-                                                  <h2 className="card-title">{item.rName}</h2>
-                                             </div> : <div className="card-body">
-                                                  <h2 className="card-title">{item.displayName}</h2>
-                                             </div>
-                                        }
+                                        <button onClick={() => confirmHandelDelete(item?._id)}>
+                                             {
+                                                  confirm?._id === item?._id ? <figure><img className=' w-full lg:h-[200px] h-[100px] rounded-t-[15px]' src={item.rImg} alt="Shoes" /></figure> : <figure><img className=' w-full lg:h-[200px] h-[100px] rounded-t-[15px]' src={item.userPic} alt="Shoes" /></figure>
+                                             }
+                                             {
+                                                  confirm?._id === item?._id ? <div className="card-body">
+                                                       <h2 className="card-title lg:text-[20px] text-[18px]">{item.rName}</h2>
+                                                  </div> : <div className="card-body">
+                                                       <h2 className="card-title lg:text-[20px] text-[18px]">{item.displayName}</h2>
+                                                  </div>
+                                             }
+                                        </button>
                                    </div>
                               )
                          }

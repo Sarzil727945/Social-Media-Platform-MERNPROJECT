@@ -30,12 +30,16 @@ export const router = createBrowserRouter([
         element: <PrivateRoute><Friends></Friends></PrivateRoute>
       },
       {
+        path: 'order',
+        element: <PrivateRoute><Orders></Orders></PrivateRoute>
+      },
+      {
         path: "/profile/friends",
         element: <PrivateRoute><Friends></Friends></PrivateRoute>
       },
       {
-        path: 'order',
-        element: <Orders></Orders>
+        path: '/profile/order',
+        element: <PrivateRoute><Orders></Orders></PrivateRoute>
       },
       {
         path: 'login',
@@ -53,15 +57,15 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'requestConfirm',
-        element: <RequestConfirm></RequestConfirm>
+        element: <PrivateRoute><RequestConfirm></RequestConfirm></PrivateRoute>
       },
       {
         path: 'post',
-        element: <Post></Post>
+        element: <PrivateRoute><Post></Post></PrivateRoute>
       },
       {
         path: 'myPost', 
-        element: <MyPost></MyPost>
+        element: <PrivateRoute><MyPost></MyPost></PrivateRoute>
       },
     ]
   }
